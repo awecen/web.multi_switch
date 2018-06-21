@@ -1,8 +1,5 @@
 let TimerLogs = {
 
-    /* 全スイッチタイプ */
-    switchTypes: null,
-
     /* 全ログ */
     allLogs: null,
 
@@ -11,9 +8,9 @@ let TimerLogs = {
 
     /* 初期処理 */
     init: function(){
-        $('#screen-name').text('いままでのきろく');
+        $('#screen-name').text(CONST.SCREEN_NAME.LOGS);
         TimerLogs.attachEvents();
-        TimerLogs.getSwitchTypes(function(){
+        switchTypeTools.getSwitchTypes(function(){
             TimerLogs.getLogs(function(){
                 //初期表示は本日分
                 let targetDate = new Date();
@@ -55,7 +52,7 @@ let TimerLogs = {
                             new Date($('.date-selector .now-date').attr('data-date')));
                         $('.log-detail').hide();
                         Base.toggleLoadingScreen("hide");
-                        Tools.popSimpleToast('ログ情報を更新しました。');
+                        libraryTools.popSimpleToast('ログ情報を更新しました。');
                     });
                 });
         });
@@ -123,22 +120,6 @@ let TimerLogs = {
         });
     },
 
-    /* スイッチ種類取得 */
-    getSwitchTypes: function(after){
-        $.ajax({
-            "url": "/multi_switch/api/switch_type_list/",
-            "cache": false,
-            "dataType": "json",
-            "success": function (result) {
-                TimerLogs.switchTypes = result;
-                after();
-            },
-            "error": function (e) {
-                alert('Error:' + e.responseText);
-            }
-        });
-    },
-
     /* 全ログ取得 */
     getLogs: function(after){
         $.ajax({
@@ -167,8 +148,8 @@ let TimerLogs = {
         $target.find('.year').text(dateObject.getFullYear() + '年');
         $target.find('.month').text(dateObject.getMonth() + 1);
         $target.find('.day').text(dateObject.getDate());
-        $target.find('.weekday').text('(' + Tools.convertWeekdayString(dateObject.getDay()) + ')');
-        if (Tools.compareDate(new Date(), dateObject)) {
+        $target.find('.weekday').text('(' + datetimeTools.convertWeekdayString(dateObject.getDay()) + ')');
+        if (datetimeTools.compareDate(new Date(), dateObject)) {
             // ボタン disabled
             $('.next-date i').addClass('disabled');
         }else{
@@ -196,7 +177,7 @@ let TimerLogs = {
         // 指定日付分だけ抽出
         let targetLogs = [];
         TimerLogs.allLogs.forEach(function(log){
-           if(Tools.compareDate(
+           if(datetimeTools.compareDate(
                selectedDateObject, new Date(log.switch_time))){
                targetLogs.push(log);
            }
@@ -242,24 +223,24 @@ let TimerLogs = {
     /* <div class="graph-icon milk" style="top:180px;left:40px;"><i></i></div> */
     createIconElement: function(switch_type){
         let $div = $('<div></div>');
-        TimerLogs.switchTypes.some(function(type){
+        switchTypeTools.switchTypes.some(function(type){
             if(type.id === switch_type){
-                $div.addClass('graph-icon')
+                $div.addClass('graph-icon');
 
                 switch(type.name){
-                    case 'helmet':
-                    case 'napping':
-                    case 'night':
+                    case CONST.TYPE_ID.HELMET:
+                    case CONST.TYPE_ID.NAPPING:
+                    case CONST.TYPE_ID.NIGHT:
                         $div.addClass(type.name + (type.is_on ? "-on" : "-off"));
                         break;
                     default:
                         $div.addClass(type.name);
-                };
+                }
 
                 $div.append($('<i></i>'));
                 return true;
             }
-        })
+        });
         return $div;
     },
 
@@ -292,8 +273,7 @@ let TimerLogs = {
         let m = dateObject.getMinutes();
         let s = dateObject.getSeconds();
 
-        let height = (h * 40) + Math.floor(((m * 60) + s) / 90);
-        return height;
+        return (h * 40) + Math.floor(((m * 60) + s) / 90);
     },
 
     /* 出現アニメーション */
@@ -323,17 +303,17 @@ let TimerLogs = {
         $('#adding-form-switch-type')
             .empty()
             .append($('<option value="" disabled selected>種類を選んでください</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('milk', true) + '" value="milk">みるく</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('poo', true) + '" value="poo">うんち</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('pee', true) + '" value="pee">おしっこ</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('food', true) + '" value="food">ごはん</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('shower', true) + '" value="shower">しゃわー</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('helmet', true) + '" value="helmet-on">へるめっと(装着)</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('helmet', false) + '" value="helmet-off">へるめっと(休憩)</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('napping', true) + '" value="napping-on">ひるね(開始)</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('napping', false) + '" value="napping-off">ひるね(終了)</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('night', true) + '" value="night-on">よるね(開始)</option>'))
-            .append($('<option switch-type="' + Tools.getTypeId('night', false) + '" value="night-off">よるね(終了)</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.MILK, true) + '" value="' + CONST.TYPE_ID.MILK + '">' + CONST.TYPE_NAME.MILK + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.POO, true) + '" value="' + CONST.TYPE_ID.POO + '">' + CONST.TYPE_NAME.POO + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.PEE, true) + '" value="' + CONST.TYPE_ID.PEE + '">' + CONST.TYPE_NAME.PEE + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.FOOD, true) + '" value="' + CONST.TYPE_ID.FOOD + '">' + CONST.TYPE_NAME.FOOD + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.SHOWER, true) + '" value="' + CONST.TYPE_ID.SHOWER + '">' + CONST.TYPE_NAME.SHOWER + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.HELMET, true) + '" value="' + CONST.TYPE_ID.HELMET_ON + '">' + CONST.TYPE_NAME.HELMET_ON + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.HELMET, false) + '" value="' + CONST.TYPE_ID.HELMET_OFF + '">' + CONST.TYPE_NAME.HELMET_OFF + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NAPPING, true) + '" value="' + CONST.TYPE_ID.NAPPING_ON + '">' + CONST.TYPE_NAME.NAPPING_ON + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NAPPING, false) + '" value="' + CONST.TYPE_ID.NAPPING_OFF + '">' + CONST.TYPE_NAME.NAPPING_OFF + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, true) + '" value="' + CONST.TYPE_ID.NIGHT_ON + '">' + CONST.TYPE_NAME.NIGHT_ON + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, false) + '" value="' + CONST.TYPE_ID.NIGHT_OFF + '">' + CONST.TYPE_NAME.NIGHT_OFF + '</option>'))
 
         // 各Inputに表示
         $('#adding-form-switch-type').children('[switch-type="' + targetLog.type + '"]').attr('selected', 'selected');
@@ -353,7 +333,7 @@ let TimerLogs = {
             $('.flatpickr-mobile').val($('.flatpickr-mobile').val().slice(0, -3));
         }
         $('#adding-form-datetime-seconds').val(
-            Tools.padZero(targetLogDatetimeObject.getSeconds())
+            datetimeTools.padZero(targetLogDatetimeObject.getSeconds(), 2)
         );
         $('#adding-form-note').val(targetLog.note);
 
@@ -369,7 +349,7 @@ let TimerLogs = {
 
         let updateData = {
             type: type,
-            switch_time: Tools.convertToDbFormat(date),
+            switch_time: datetimeTools.convertToDbFormat(date),
             note: note,
         }
         $.ajax({
@@ -389,169 +369,6 @@ let TimerLogs = {
             }
         });
     }
-
-};
-
-
-let Tools = {
-    // タイマー用数値の0パディング
-    padZero: function(number){
-       return ( '00' + number ).slice( -2 );
-    },
-
-    // DB登録用DateTimeフォーマットへ変換
-    convertToDbFormat: function(date){
-        return date.getFullYear() + "-" +
-            Tools.padZero((date.getMonth() + 1)) + "-" +
-            Tools.padZero(date.getDate()) + "T" +
-            Tools.padZero(date.getHours()) + ":" +
-            Tools.padZero(date.getMinutes()) + ":" +
-            Tools.padZero(date.getSeconds()) +
-            ( 0 - (date.getTimezoneOffset() / 60) < 0 ?
-                '-' + Tools.padZero(date.getTimezoneOffset() / 60) + ":00"
-                : '+' + Tools.padZero(0 - (date.getTimezoneOffset() / 60)) + ":00");
-    },
-
-    // 表示用フォーマット(yyyy/MM/DD HH:MM:SS)
-    convertToStringFormat: function(date){
-        return date.getFullYear() + "/" +
-            Tools.padZero(date.getMonth() + 1) + "/" +
-            Tools.padZero(date.getDate()) + " " +
-            Tools.padZero(date.getHours()) + ":" +
-            Tools.padZero(date.getMinutes()) + ":" +
-            Tools.padZero(date.getSeconds());
-    },
-
-    // Materializeのトースター
-    popSimpleToast: function(str){
-        M.toast({
-            'html': str,
-        });
-    },
-
-    // スイッチタイプのIDを返す（登録用）
-    getTypeId: function(type_name, is_on){
-        let id = 0;
-        TimerLogs.switchTypes.some(function(switchType){
-            if(switchType.name === type_name &&
-              switchType.is_on === is_on){
-                id = switchType.id;
-                return true;
-            }
-        });
-        return id;
-    },
-
-    // 年月日一致確認
-    compareDate: function(a, b){
-        return (a.getFullYear() === b.getFullYear() &&
-            a.getMonth() === b.getMonth() &&
-            a.getDate() === b.getDate());
-    },
-
-    getJapaneseTypeName: function(type_name){
-        let name = "";
-        switch(type_name){
-            case 'milk':
-                name = 'おっぱい';
-                break;
-            case 'poo':
-                name = 'うんち';
-                break;
-            case 'pee':
-                name = 'おしっこ';
-                break;
-            case 'food':
-                name = 'ごはん';
-                break;
-            case 'shower':
-                name = 'おふろ';
-                break;
-            case 'helmet':
-                name = 'へるめっと';
-                break;
-            case 'napping':
-                name = 'ひるね';
-                break;
-            case 'night':
-                name = 'よるね';
-                break;
-        }
-        return name;
-    },
-
-    // newerDateObjectとolderDateObjectとの差分取得
-    getDelta: function(newer, older){
-
-        let dd = newer.getDate() - older.getDate();
-        let dh = newer.getHours() - older.getHours();
-        let dm = newer.getMinutes() - older.getMinutes();
-        let ds = newer.getSeconds() - older.getSeconds();
-
-        // 負値調節(秒)
-        if(ds < 0){
-          ds += 60;
-          dm -= 1;
-        }
-
-        // 負値調節(分)
-        if(dm < 0){
-            dm += 60;
-            dh -= 1;
-        }
-
-        // 負値調節(時)
-        if(dh < 0){
-            dh += 24;
-            dd -= 1;
-        }
-
-        return {
-            deltaDate : dd,
-            deltaHours : dh,
-            deltaMinutes : dm,
-            deltaSeconds : ds,
-        };
-
-    },
-
-    // 繰り上げ処理
-    movingUpDeltaValue: function(delta){
-         let result = {
-            hours : 0,
-            minutes : 0,
-            seconds : 0,
-        };
-
-        result.hours = delta.hours + (delta.minutes / 60 | 0);
-        result.minutes = delta.minutes % 60 + (delta.seconds / 60 | 0);
-        result.seconds = delta.seconds % 60;
-
-        return result;
-    },
-
-    // 秒換算 ([hours, minutes, seconds])
-    convertToSeconds: function(log){
-        return log.hours * 60 * 60 + log.minutes * 60 + log.seconds;
-    },
-
-    // 秒から時分秒へ換算
-    convertToHMS: function(seconds){
-        let h = seconds / 3600 | 0;
-        let m = (seconds - (h * 3600)) / 60 | 0;
-        let s = seconds - (h * 3600) - (m * 60);
-
-        return {
-            'hours': h,
-            'minutes': m,
-            'seconds': s,
-        };
-    },
-
-    // 曜日変換
-    convertWeekdayString: function(dayOfWeek){
-        return [ "日", "月", "火", "水", "木", "金", "土" ][dayOfWeek] ;
-    },
 
 };
 

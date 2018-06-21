@@ -1,10 +1,8 @@
 let Whatsnew = {
 
-    screen_title: "こうしんりれき",
-
     /* 初期処理 */
     init: function(){
-        $('#screen-name').text(Whatsnew.screen_title);
+        $('#screen-name').text(CONST.SCREEN_NAME.WHATSNEW);
         Base.toggleLoadingScreen("hide");//ロード画面
     },
 };
