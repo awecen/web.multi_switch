@@ -1,0 +1,26 @@
+{% extends "multi_switch/base.html" %}
+{% load i18n static %}
+
+{% block title %}LIFE TIMER{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'multi_switch/css/whatsnew.css' %}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+    {% csrf_token %}
+    <div class="new-release-body">
+        <div class="new-release-row">
+            <div class="title">1.0.0</div>
+            <div class="features">
+                <div class="feature-item">公開＆運用開始</div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'multi_switch/js/whatsnew.js' %}"></script>
+{% endblock extra_js %}

@@ -1,0 +1,421 @@
+{% extends "multi_switch/base.html" %}
+{% load i18n static %}
+
+{% block title %}LIFE TIMER{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'multi_switch/css/main.css' %}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+    {% csrf_token %}
+    <div class="timer-body">
+
+        {### おっぱい ###}
+        <div class="timer-row milk" type="milk">
+            <div class="row-title">おっぱい</div>
+            <div class="timer-contents">
+                <div class="info">
+                    <div class="basic-info">
+                        <div class="info-item previous-time">
+                            <div class="title">ぜんかい</div>
+                            <div class="time">0000/00/00 00:00:00</div>
+                        </div>
+                        <div class="info-item note">
+                            <div class="title">めも</div>
+                            <div class="input input-field col s12 note">
+                                <textarea class="materialize-textarea note-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-info invisible">
+                        <div class="info-item today-total">
+                            <div class="title">ほんじつ</div>
+                            <div class="value">1かい</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timer-btn">
+                    <div class="btn-image" is_on="true">
+                        <img src="{% static 'multi_switch/img/milk_64.png' %}">
+                    </div>
+                </div>
+            </div>
+            <div class="show-more">
+                <div class="btn-show-more">
+                    <i class="tiny material-icons">expand_more</i>
+                    くわしく
+                </div>
+            </div>
+        </div>
+        {### おっぱい ###}
+
+        {### うんち ###}
+        <div class="timer-row poo" type="poo">
+            <div class="row-title">うんち</div>
+            <div class="timer-contents">
+                <div class="info">
+                    <div class="basic-info">
+                        <div class="info-item previous-time">
+                            <div class="title">ぜんかい</div>
+                            <div class="time">0000/00/00 00:00:00</div>
+                        </div>
+                        <div class="info-item note">
+                            <div class="title">めも</div>
+                            <div class="input input-field col s12 note">
+                                <textarea class="materialize-textarea note-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-info invisible">
+                        <div class="info-item today-total">
+                            <div class="title">ほんじつ</div>
+                            <div class="value">1かい</div>
+                        </div>
+                        <div class="info-item continuation">
+                            <div class="title">れんぞくきろく</div>
+                            <div class="value">1にち</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timer-btn">
+                    <div class="btn-image" is_on="true">
+                        <img src="{% static 'multi_switch/img/poo_64.png' %}">
+                    </div>
+                </div>
+            </div>
+            <div class="show-more">
+                <div class="btn-show-more">
+                    <i class="tiny material-icons">expand_more</i>
+                    くわしく
+                </div>
+            </div>
+        </div>
+        {### うんち ###}
+
+        {### おしっこ ###}
+        <div class="timer-row pee" type="pee">
+            <div class="row-title">おしっこ</div>
+            <div class="timer-contents">
+                <div class="info">
+                    <div class="basic-info">
+                        <div class="info-item previous-time">
+                            <div class="title">ぜんかい</div>
+                            <div class="time">0000/00/00 00:00:00</div>
+                        </div>
+                        <div class="info-item note">
+                            <div class="title">めも</div>
+                            <div class="input input-field col s12 note">
+                                <textarea class="materialize-textarea note-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-info invisible">
+                        <div class="info-item today-total">
+                            <div class="title">ほんじつ</div>
+                            <div class="value">５かい</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timer-btn">
+                    <div class="btn-image" is_on="true">
+                        <img src="{% static 'multi_switch/img/pee_64.png' %}">
+                    </div>
+                </div>
+            </div>
+            <div class="show-more">
+                <div class="btn-show-more">
+                    <i class="tiny material-icons">expand_more</i>
+                    くわしく
+                </div>
+            </div>
+        </div>
+        {### おしっこ ###}
+
+        {### ごはん ###}
+        <div class="timer-row food" type="food">
+            <div class="row-title">ごはん</div>
+            <div class="timer-contents">
+                <div class="info">
+                    <div class="basic-info">
+                        <div class="info-item previous-time">
+                            <div class="title">ぜんかい</div>
+                            <div class="time">0000/00/00 00:00:00</div>
+                        </div>
+                        <div class="info-item note">
+                            <div class="title">めも</div>
+                            <div class="input input-field col s12 note">
+                                <textarea class="materialize-textarea note-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-info invisible">
+                    <!--
+                        <div class="info-item today-total">
+                            <div class="title">ほんじつ</div>
+                            <div class="value">02:31:44</div>
+                        </div>
+                    -->
+                    </div>
+
+                </div>
+                <div class="timer-btn">
+                    <div class="btn-image" is_on="true">
+                        <img src="{% static 'multi_switch/img/food_64.png' %}">
+                    </div>
+                </div>
+            </div>
+            <div class="show-more">
+                <div class="btn-show-more">
+                    <i class="tiny material-icons">expand_more</i>
+                    くわしく
+                </div>
+            </div>
+        </div>
+        {### ごはん ###}
+
+        {### おふろ ###}
+        <div class="timer-row shower" type="shower">
+            <div class="row-title">おふろ</div>
+            <div class="timer-contents">
+                <div class="info">
+                    <div class="basic-info">
+                        <div class="info-item previous-time">
+                            <div class="title">ぜんかい</div>
+                            <div class="time">0000/00/00 00:00:00</div>
+                        </div>
+                        <div class="info-item note">
+                            <div class="title">めも</div>
+                            <div class="input input-field col s12 note">
+                                <textarea class="materialize-textarea note-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-info invisible">
+                        <!--
+                        <div class="info-item average">
+                            <div class="title">へいきん</div>
+                            <div class="value">11:19:53</div>
+                        </div>
+                        -->
+                    </div>
+                </div>
+                <div class="timer-btn">
+                    <div class="btn-image" is_on="true">
+                        <img src="{% static 'multi_switch/img/shower_64.png' %}">
+                    </div>
+                </div>
+            </div>
+            <div class="show-more">
+                <div class="btn-show-more">
+                    <i class="tiny material-icons">expand_more</i>
+                    くわしく
+                </div>
+            </div>
+        </div>
+        {### おふろ ###}
+
+        {### めっと ###}
+        <div class="timer-row helmet" type="helmet">
+            <div class="row-title">へるめっと</div>
+            <div class="timer-contents">
+                <div class="info">
+                    <div class="basic-info">
+                        <div class="info-item status">
+                            <div class="title">じょうたい</div>
+                            <div class="value">
+                                <span class="label">---</span>
+                            </div>
+                        </div>
+                        <div class="info-item elapsed-time">
+                            <div class="title">けいかじかん</div>
+                            <div class="time">
+                                <div class="hours">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="minutes">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="seconds">00</div>
+                            </div>
+                        </div>
+                        <div class="info-item note">
+                            <div class="title">めも</div>
+                            <div class="input input-field col s12 note">
+                                <textarea class="materialize-textarea note-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-info invisible">
+                        <div class="info-item today-on-total">
+                            <div class="title">ほんじつ</div>
+                            <div class="status">
+                                <span class="label label-success">装着</span>
+                            </div>
+                            <div class="time">
+                                <div class="hours">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="minutes">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="seconds">00</div>
+                            </div>
+                        </div>
+                        <div class="info-item today-off-total">
+                            <div class="title" >とーたる</div>
+                            <div class="status">
+                                <span class="label label-warning">休憩</span>
+                            </div>
+                            <div class="time">
+                                <div class="hours">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="minutes">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="seconds">00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timer-btn">
+                    <div class="btn-image on disabled" is_on="true">
+                        <img src="{% static 'multi_switch/img/helmet_64.png' %}">
+                    </div>
+                    <div class="btn-image off disabled" is_on="false">
+                        <img src="{% static 'multi_switch/img/helmet_64.png' %}">
+                    </div>
+                </div>
+            </div>
+            <div class="show-more">
+                <div class="btn-show-more">
+                    <i class="tiny material-icons">expand_more</i>
+                    くわしく
+                </div>
+            </div>
+        </div>
+        {### めっと ###}
+
+        {### ひるね ###}
+        <div class="timer-row napping" type="napping" is_on="false">
+            <div class="row-title">ひるね</div>
+            <div class="timer-contents">
+                <div class="info">
+                    <div class="basic-info">
+                        <div class="info-item status">
+                            <div class="title">じょうたい</div>
+                            <div class="value">
+                                <span class="label label-default">起きてる</span>
+                            </div>
+                        </div>
+                        <div class="info-item elapsed-time">
+                            <div class="title">けいかじかん</div>
+                            <div class="time">
+                                <div class="hours">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="minutes">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="seconds">00</div>
+                            </div>
+                        </div>
+                        <div class="info-item note">
+                            <div class="title">めも</div>
+                            <div class="input input-field col s12 note">
+                                <textarea class="materialize-textarea note-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-info invisible">
+                        <div class="info-item today-total">
+                            <div class="title">ほんじつとーたる</div>
+                            <div class="time">
+                                <div class="hours">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="minutes">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="seconds">00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timer-btn">
+                    <div class="btn-image on disabled" is_on="true">
+                        <img src="{% static 'multi_switch/img/napping_64.png' %}">
+                    </div>
+                    <div class="btn-image off disabled" is_on="false">
+                        <img src="{% static 'multi_switch/img/napping_64.png' %}">
+                    </div>
+                </div>
+            </div>
+            <div class="show-more">
+                <div class="btn-show-more">
+                    <i class="tiny material-icons">expand_more</i>
+                    くわしく
+                </div>
+            </div>
+        </div>
+        {### ひるね ###}
+
+        {### よるね ###}
+        <div class="timer-row night" type="night" is_on="false">
+            <div class="row-title">よるね</div>
+            <div class="timer-contents">
+                <div class="info">
+                    <div class="basic-info">
+                        <div class="info-item status">
+                            <div class="title">じょうたい</div>
+                            <div class="value">
+                                <span class="label label-default">起きてる</span>
+                            </div>
+                        </div>
+                        <div class="info-item elapsed-time">
+                            <div class="title">けいかじかん</div>
+                            <div class="time">
+                                <div class="hours">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="minutes">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="seconds">00</div>
+                            </div>
+                        </div>
+                        <div class="info-item note">
+                            <div class="title">めも</div>
+                            <div class="input input-field col s12 note">
+                                <textarea class="materialize-textarea note-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-info invisible">
+                        <div class="info-item average">
+                            <div class="title">へいきん</div>
+                            <div class="time">
+                                <div class="hours">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="minutes">00</div>
+                                <div class="time-separator">:</div>
+                                <div class="seconds">00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timer-btn">
+                    <div class="btn-image on disabled" is_on="true">
+                        <img src="{% static 'multi_switch/img/night_64.png' %}">
+                    </div>
+                    <div class="btn-image off disabled" is_on="false">
+                        <img src="{% static 'multi_switch/img/night_64.png' %}">
+                    </div>
+                </div>
+            </div>
+            <div class="show-more">
+                <div class="btn-show-more">
+                    <i class="tiny material-icons">expand_more</i>
+                    くわしく
+                </div>
+            </div>
+        </div>
+        {### よるね ###}
+
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'multi_switch/js/main.js' %}"></script>
+{% endblock extra_js %}

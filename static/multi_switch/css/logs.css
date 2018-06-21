@@ -1,0 +1,442 @@
+/**********/
+/** BODY **/
+/**********/
+.timer-body{
+    /* 本体 */
+    padding: 8px 0px;
+}
+
+/************/
+/** HEADER **/
+/************/
+.timer-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    border-bottom: 2px #e8e8e8 dotted;
+    height: 48px;
+
+}
+
+.app-title{
+    font-size: 24px;
+    color: #666666;
+}
+
+.logs-icon i{
+    font-size: 3rem !important;
+    border-radius: 50%;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.logs-icon i:hover{
+    background-color: #e8e8e8;
+}
+
+/*****************/
+/* Date Selector */
+/*****************/
+.date-selector{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #fff3e0;
+    padding: 4px;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+}
+
+.date-selector .previous-date i.disabled{
+    background-color: #f0f0f0;
+    color: #999999;
+    border-radius: 50%;
+    cursor: default;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.date-selector .previous-date i{
+    background-color: #e1f5fe;
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    font-size: 3rem;
+}
+.date-selector .previous-date i:hover{
+    background-color: #81d4fa;
+}
+
+.date-selector .previous-date i.disabled:hover{
+    color: #999999;
+    background-color: #f0f0f0;
+}
+
+.date-selector .now-date{
+     display: flex;
+    /* flex-direction: column; */
+    width: 200px;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.date-selector .now-date .year{
+    font-size: 16px;
+    margin: 0 2px;
+}
+.date-selector .now-date .date{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+.date-selector .now-date .date .number{
+    font-size: 24px;
+    margin: 0 2px;
+}
+
+.date-selector .now-date .date .character{
+    font-size: 16px;
+    margin: 0 2px;
+}
+
+.date-selector .now-date .date .weekday{
+    font-size: 16px;
+    margin: 0 2px;
+}
+
+.date-selector .next-date i{
+    background-color: #e1f5fe;
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    font-size: 3rem;
+}
+.date-selector .next-date i.disabled{
+    background-color: #f0f0f0;
+    color: #999999;
+    border-radius: 50%;
+    cursor: default;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.date-selector .next-date i:hover{
+    background-color: #81d4fa;
+}
+.date-selector .next-date i.disabled:hover{
+    color: #999999;
+    background-color: #f0f0f0;
+}
+
+/************************/
+/* Log Content - Common */
+/************************/
+.log-contents{
+    padding: 0px 8px 8px 8px;
+    display: flex;
+    flex-direction: row;
+    overflow-y: scroll;
+    height: 440px;
+    border-left: 1px #f0f0f0 solid;
+    border-right: 1px #f0f0f0 solid;
+    border-bottom: 1px #f0f0f0 solid;
+    border-radius: 0 0 8px 8px;
+}
+
+/***********************/
+/* Log Content - Graph */
+/***********************/
+.log-contents .graph{
+    display: flex;
+    flex-direction: row;
+    width: 292px;
+}
+.log-contents .graph .graph-scales{
+    display: flex;
+    flex-direction: column;
+    height: 1000px;
+}
+.log-contents .graph .graph-scales .scale-1{
+    color: #666666;
+    font-size: 16px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.log-contents .graph .graph-scales .scale-2{
+    color: #999999;
+    font-size: 12px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.log-contents .graph .graph-body{
+    height: 1000px;
+    width: 240px;
+    margin-left: 12px;
+    padding: 20px 0;
+}
+.log-contents .graph .graph-body .graph-base {
+    height: 960px;
+    width: inherit;
+    border-radius: 4px;
+    background-color: #f1f8e9;
+}
+.log-contents .graph .graph-lines{
+    width: 240px;
+    height: 900px;
+    padding-top: 18px;
+    position: relative;
+    left: -240px;
+}
+.log-contents .graph .graph-lines .scale-1{
+    color: #666666;
+    height: 40px;
+    border-bottom: 2px #999999 dotted;
+    width: inherit;
+}
+.log-contents .graph .graph-lines .scale-2{
+    color: #999999;
+    height: 40px;
+    border-bottom: 1px #cccccc dotted;
+    width: inherit;
+}
+/*****************+*****/
+/* Log Contents - Icon */
+/*****************+*****/
+.icons{
+    position: relative;
+    top: 0;
+    left: -240px;
+}
+.graph-icon{
+    position: absolute;
+    transform: scale(0);
+    transition: transform 0.5s cubic-bezier(.2,.8,.46,1.29);
+}
+
+.graph-icon i{
+    border-radius: 50%;
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+    padding: 8px;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+
+.graph-icon.milk i{
+    content: url(/static/star_timer/img/milk_64.png);
+    background-color: #ffcdd2;
+}
+.graph-icon.milk i:hover{
+    background-color: #ef9a9a;
+}
+
+.graph-icon.poo i{
+    content: url(/static/star_timer/img/poo_64.png);
+    background-color: #ffcc80;
+}
+.graph-icon.poo i:hover{
+    background-color: #ffb74d;
+}
+
+.graph-icon.pee i{
+    content: url(/static/star_timer/img/pee_64.png);
+    background-color: #fff59d;
+}
+.graph-icon.pee i:hover{
+    background-color: #fff176;
+}
+
+.graph-icon.food i{
+    content: url(/static/star_timer/img/food_64.png);
+    background-color: #80cbc4;
+}
+.graph-icon.food i:hover{
+    background-color: #4db6ac;
+}
+
+.graph-icon.shower i{
+    content: url(/static/star_timer/img/shower_64.png);
+    background-color: #9fa8da;
+}
+.graph-icon.shower i:hover{
+    background-color: #7986cb;
+}
+
+.graph-icon.helmet-on i{
+    content: url(/static/star_timer/img/helmet_64.png);
+    background-color: #90caf9;
+}
+.graph-icon.helmet-on i:hover{
+    background-color: #64b5f6;
+}
+
+.graph-icon.helmet-off i{
+    content: url(/static/star_timer/img/helmet_64.png);
+    background-color: #ef9a9a;
+}
+.graph-icon.helmet-off i:hover{
+    background-color: #e57373;
+}
+
+.graph-icon.napping-on i{
+    content: url(/static/star_timer/img/napping_64.png);
+    background-color: #c5e1a5;
+}
+.graph-icon.napping-on i:hover{
+    background-color: #aed581;
+}
+
+.graph-icon.napping-off i{
+    content: url(/static/star_timer/img/napping_64.png);
+    background-color: #ffe082;
+}
+.graph-icon.napping-off i:hover{
+    background-color: #ffd54f;
+}
+
+.graph-icon.night-on i{
+    content: url(/static/star_timer/img/night_64.png);
+    background-color: #ce93d8;
+}
+.graph-icon.night-on i:hover{
+    background-color: #ba68c8;
+}
+
+.graph-icon.night-off i{
+    content: url(/static/star_timer/img/night_64.png);
+    background-color: #bcaaa4;
+}
+.graph-icon.night-off i:hover{
+    background-color: #a1887f;
+}
+
+/*****************+*******/
+/* Log Contents - Detail */
+/*****************+*******/
+.log-detail{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.2);
+    height: 100%;
+    width: 100%;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*align-items: center;*/
+    /*padding-top: 10%;*/
+}
+.log-detail .detail-body{
+    background-color: #ffffff;
+    width: 360px;
+    border-radius: 8px;
+    margin: 0 auto;
+    margin-top: 24px;
+}
+
+.log-detail .detail-body .header{
+    color: #ffffff;
+    padding: 8px;
+    background-color: #f57f17;
+    border-radius: 8px 8px 0 0;
+    font-size: 16px;
+}
+
+.log-detail .detail-body .contents{
+    color: #333333;
+    padding: 8px;
+    font-size: 12px;
+}
+
+.log-detail .detail-body .contents .row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.log-detail .detail-body .contents .row .title{
+    width: 50%;
+    text-align: left;
+}
+
+.log-detail .detail-body .contents .row .input{
+    width: 50%;
+    text-align: right;
+}
+
+.log-detail .detail-body .contents .row .input.switch_type select{
+    border: 0;
+    border-bottom: 1px #9e9e9e solid;
+}
+.log-detail .detail-body .contents .row .input.switch_type select:focus{
+    outline:none;
+    border-bottom: 1px #c9f3ef solid;
+}
+
+.log-detail .detail-body .contents .row .input.datetime-input-items .item-input{
+    /*border-bottom: 1px #9e9e9e solid;*/
+}
+
+#adding-form-datetime{
+    /*border: 0;*/
+    padding: 0 4px;
+    width: 152px;
+    margin-bottom: 0;
+    text-align: right;
+    color: #333333;
+}
+.input-seconds{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-bottom: 1px #9e9e9e solid;
+    margin-left: 8px;
+    margin-top: -8px;
+}
+
+.input-seconds .input.input-field{
+    margin: 0;
+    width: 40px !important;
+}
+
+#adding-form-datetime-seconds{
+    text-align: right;
+    width: 40px;
+    border: 0;
+    margin: 0;
+    font-size: 16px;
+}
+.label-seconds{
+    color: #999999;
+    font-size: 10px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    width: 16px;
+    padding: 0 4px;
+}
+
+.log-detail .detail-body .contents .row .input.note{
+    width: 520px !important;
+}
+
+.log-detail .detail-body .footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 8px;
+    border-radius: 0 0 8px 8px;
+    border-top: 1px #e8e8e8 solid;
+}
+
+.log-detail .detail-body .footer .btn{
+    margin: 0 4px;
+}
+

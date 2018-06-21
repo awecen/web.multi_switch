@@ -1,0 +1,30 @@
+.new-release-body{
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+}
+
+.new-release-row{
+    display: flex;
+    flex-direction: column;
+}
+
+.new-release-row .title{
+    color: #666666;
+    font-size: 16px;
+    padding-left: 4px;
+    border-left: 3px #1de9b6 solid;
+    margin: 8px 0;
+}
+.new-release-row .features{
+    display: flex;
+    flex-direction: column;
+    color: #333333;
+    font-size: 14px;
+}
+
+.new-release-row .features .feature-item:before{
+    content: "◆ ";
+}
+
+

@@ -1,0 +1,190 @@
+{% extends "multi_switch/base.html" %}
+{% load i18n static %}
+
+{% block title %}LIFE TIMER{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'multi_switch/css/logs.css' %}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+    {% csrf_token %}
+    <div class="timer-body">
+        <!--
+        <div class="timer-header">
+            <div class="app-title">これまでのきろく</div>
+            <div class="logs-icon">
+                 <i class="small material-icons">access_time</i>
+            </div>
+        </div>
+        -->
+        <!-- 日付セレクタ -->
+        <div class="date-selector">
+            <div class="previous-date">
+                <i class="medium material-icons">chevron_left</i>
+            </div>
+            <div class="now-date" data-date="YYYY/MM/DD">
+                <div class="year">YYYY年</div>
+                <div class="date">
+                    <div class="number month">MM</div>
+                    <div class="character">月</div>
+                    <div class="number day">DD</div>
+                    <div class="character">日</div>
+                    <div class="weekday">(AAA)</div>
+                </div>
+            </div>
+            <div class="next-date">
+                <i class="medium material-icons">chevron_right</i>
+            </div>
+        </div>
+
+        <!-- データ 領域 -->
+        <div class="log-contents">
+            <!-- グラフ -->
+            <div class="graph">
+                <div class="graph-scales">
+                    <div class="scale-1">00:00</div>
+                    <div class="scale-2">01:00</div>
+                    <div class="scale-2">02:00</div>
+                    <div class="scale-1">03:00</div>
+                    <div class="scale-2">04:00</div>
+                    <div class="scale-2">05:00</div>
+                    <div class="scale-1">06:00</div>
+                    <div class="scale-2">07:00</div>
+                    <div class="scale-2">08:00</div>
+                    <div class="scale-1">09:00</div>
+                    <div class="scale-2">10:00</div>
+                    <div class="scale-2">11:00</div>
+                    <div class="scale-1">12:00</div>
+                    <div class="scale-2">13:00</div>
+                    <div class="scale-2">14:00</div>
+                    <div class="scale-1">15:00</div>
+                    <div class="scale-2">16:00</div>
+                    <div class="scale-2">17:00</div>
+                    <div class="scale-1">18:00</div>
+                    <div class="scale-2">19:00</div>
+                    <div class="scale-2">20:00</div>
+                    <div class="scale-1">21:00</div>
+                    <div class="scale-2">22:00</div>
+                    <div class="scale-2">23:00</div>
+                    <div class="scale-1">24:00</div>
+                </div>
+                <div class="graph-body">
+                    <div class="graph-base">
+
+                    </div>
+                </div>
+                <div class="graph-lines">
+                    <div class="scale-2"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-1"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-1"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-1"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-1"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-1"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-1"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-1"></div>
+                    <div class="scale-2"></div>
+                    <div class="scale-2"></div>
+                </div>
+            </div>
+            <!-- アイコン -->
+            <div class="icons">
+{#                <div class="graph-icon milk" style="top:180px;left:40px;"><i></i></div>#}
+{#                <div class="graph-icon milk" style="top:420px;left:80px;"><i></i></div>#}
+{#                <div class="graph-icon milk" style="top:520px;left:0px;"><i></i></div>#}
+{#                <div class="graph-icon milk" style="top:620px;left:0px;"><i></i></div>#}
+{#                <div class="graph-icon milk" style="top:740px;left:120px;"><i></i></div>#}
+{#                <div class="graph-icon poo" style="top:640px;left:80px;"><i></i></div>#}
+{#                <div class="graph-icon pee" style="top:190px;left:80px;"><i></i></div>#}
+{#                <div class="graph-icon pee" style="top:330px;left:0px;"><i></i></div>#}
+{#                <div class="graph-icon pee" style="top:410px;left:40px;"><i></i></div>#}
+{#                <div class="graph-icon pee" style="top:640px;left:40px;"><i></i></div>#}
+{#                <div class="graph-icon pee" style="top:560px;left:0px;"><i></i></div>#}
+{#                <div class="graph-icon food" style="top:400px;left:0px;"><i></i></div>#}
+{#                <div class="graph-icon shower" style="top:700px;left:0px;"><i></i></div>#}
+{#                <div class="graph-icon helmet-on" style="top:720px;left:80px;"><i></i></div>#}
+{#                <div class="graph-icon helmet-off" style="top:700px;left:40px;"><i></i></div>#}
+{#                <div class="graph-icon napping-on" style="top:460px;left:0px;"><i></i></div>#}
+{#                <div class="graph-icon napping-off" style="top:480px;left:40px;"><i></i></div>#}
+{#                <div class="graph-icon night-on" style="top:160px;left:0px;"><i></i></div>#}
+{#                <div class="graph-icon night-off" style="top:760px;left:0px;"><i></i></div>#}
+            </div>
+            <!-- ログ詳細ダイアログ -->
+            <div class="log-detail">
+
+                <div class="detail-body" data-val="0">
+                    <div class="header">
+                        しょうさい
+                    </div>
+                    <div class="contents">
+                        <div class="row">
+                            <div class="title">すいっちたいぷ</div>
+                            <div class="input switch_type">
+{#                                <label>Browser Select</label>#}
+                                <select id="adding-form-switch-type" class="browser-default" disabled>
+{#                                    <option value="" disabled selected>種類を選んでください</option>#}
+{#                                    <option value="milk">みるく</option>#}
+{#                                    <option value="poo">うんち</option>#}
+{#                                    <option value="pee">おしっこ</option>#}
+{#                                    <option value="food">ごはん</option>#}
+{#                                    <option value="shower">しゃわー</option>#}
+{#                                    <option value="helmet-on">へるめっと(装着)</option>#}
+{#                                    <option value="helmet-off">へるめっと(休憩)</option>#}
+{#                                    <option value="napping-on">ひるね(開始)</option>#}
+{#                                    <option value="napping-off">ひるね(終了)</option>#}
+{#                                    <option value="night-on">よるね(開始)</option>#}
+{#                                    <option value="night-off">よるね(終了)</option>#}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="title">にちじ</div>
+                            <div class="input datetime-input-items">
+                                <div class="item-input">
+                                    <input id="adding-form-datetime" class="flatpickr flatpickr-input" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="input-seconds">
+                                <div class="input input-field">
+                                    <input id="adding-form-datetime-seconds" type="number" value="0" min="0" max="59">
+                                </div>
+                                <div class="label-seconds">
+                                    <span>秒</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="title">めも</div>
+                            <div class="input note">
+                                <textarea id="adding-form-note" class="materialize-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <div class="btn-save waves-effect waves-light btn blue darken-2">保存</div>
+                        <div class="btn-cancel waves-effect waves-light btn grey darken-1">きゃんせる</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'multi_switch/js/logs.js' %}"></script>
+{% endblock extra_js %}

@@ -1,0 +1,77 @@
+{% load i18n static %}
+<!DOCTYPE html>{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="{% static 'multi_switch/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'multi_switch/css/bootstrap-theme.min.css' %}">
+<link rel="stylesheet" href="{% static 'multi_switch/css/materialize.min.css' %}">
+<link rel="stylesheet" href="{% static 'multi_switch/css/flatpickr.min.css' %}">
+<link rel="stylesheet" href="{% static 'multi_switch/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'multi_switch/css/loaders.min.css' %}">
+<link rel="shortcut icon" href="{% static 'multi_switch/img/favicon.ico' %}" />
+{% block extra_css %}{% endblock %}
+<title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <div class="global-bar">
+        <div id="screen-name">Screen Name</div>
+        <div class="menu-open-icon"><i class="small material-icons">apps</i></div>
+    </div>
+    <div class="app-menu invisible">
+        <div class="body">
+            <div class="item-row">
+                <div class="menu-item home">
+                    <i class="medium material-icons">access_time</i>
+                    <div class="title">とっぷ</div>
+                </div>
+                <div class="menu-item logs">
+                    <i class="medium material-icons">event_note</i>
+                    <div class="title">きろく</div>
+                </div>
+                <div class="menu-item stat disabled">
+                    <i class="medium material-icons">equalizer</i>
+                    <div class="title">とうけい</div>
+                </div>
+            </div>
+            <div class="item-row">
+                <div class="menu-item whatsnew">
+                    <i class="medium material-icons">info</i>
+                    <div class="title">わっつにゅう</div>
+                </div>
+                <div class="menu-item print disabled">
+                    <i class="medium material-icons">print</i>
+                    <div class="title">いんさつ</div>
+                </div>
+                <div class="menu-item setting disabled">
+                    <i class="medium material-icons">settings</i>
+                    <div class="title">せってい</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        {% block content %}
+          {{ content }}
+        {% endblock %}
+    </div>
+    <div class="signature">
+        <div class="water-mark">Copyright © 2018 Awecen All Rights Reserved</div>
+        <div class="version">version 2.2.1</div>
+    </div>
+    <!-- ロード画面 -->
+    <div id="loading-overlay">
+        <div class="loader-inner pacman"></div>
+    </div>
+
+<script src="{% static 'multi_switch/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'multi_switch/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'multi_switch/js/materialize.min.js' %}"></script>
+<script src="{% static 'multi_switch/js/flatpickr.min.js' %}"></script>
+<script src="{% static 'multi_switch/js/flatpickr-ja.js' %}"></script>
+<script src="{% static 'multi_switch/js/loaders.css.js' %}"></script>
+<script src="{% static 'multi_switch/js/base.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,415 @@
+.timer-body{
+    /* 本体 */
+    padding: 8px 0px;
+}
+/** HEADER **/
+.timer-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 2px #e8e8e8 dotted;
+    height: 48px;
+}
+
+.app-title{
+    font-size: 24px;
+    color: #666666;
+}
+
+.logs-icon i{
+    font-size: 3rem !important;
+    border-radius: 50%;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.logs-icon i:hover{
+    background-color: #e8e8e8;
+}
+
+
+.timer-row .timer-contents{
+    /* 各項目 */
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px #e8e8e8 dotted;
+    padding: 8px 0;
+    justify-content: space-around;
+}
+
+.row-title{
+    font-weight: bold;
+    padding-left: 6px;
+    border-left: 3px #cccccc solid;
+}
+
+/* Row Title Color Variation */
+.milk .row-title{
+    border-color: #ef9a9a;
+}
+.poo .row-title{
+    border-color: #ffb74d;
+}
+.pee .row-title{
+    border-color: #fff176;
+}
+.napping .row-title{
+    border-color: #aed581;
+}
+.food .row-title{
+    border-color: #4db6ac;
+}
+.helmet .row-title{
+    border-color: #64b5f6;
+}
+.shower .row-title{
+    border-color: #7986cb;
+}
+.night .row-title{
+    border-color: #ba68c8;
+}
+
+
+/*** Main Button ***/
+.timer-btn .btn-image{
+    background-color: #cccccc;
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.timer-btn .btn-image img{
+    height: 48px;
+    width: 48px;
+}
+
+/* Main Button Color Variation */
+.timer-row.milk .btn-image{
+    /* おっぱい */
+    background-color: #ffcdd2;
+}
+
+.timer-row.milk .btn-image:hover{
+    /* おっぱい  */
+    background-color: #ef9a9a;
+}
+.timer-row.poo .btn-image{
+    /* うんち */
+    background-color: #ffcc80;
+}
+
+.timer-row.poo .btn-image:hover{
+    /* うんち */
+    background-color: #ffb74d;
+}
+
+.timer-row.pee .btn-image{
+    /* おしっこ */
+    background-color: #fff59d;
+}
+
+.timer-row.pee .btn-image:hover{
+    /* おしっこ */
+    background-color: #fff176;
+}
+
+.timer-row.napping .btn-image.on{
+    /* ひるね(on) */
+    background-color: #c5e1a5;
+    height: 40px;
+    border-radius: 40px 40px 0 0;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.timer-row.napping .btn-image.on:hover{
+    /* ひるね(on) */
+    background-color: #aed581;
+}
+
+.timer-row.napping .btn-image.on img{
+    /* ひるね(on) */
+    position: relative;
+    top: calc(50% + 2px);
+}
+
+.timer-row.napping .btn-image.off{
+    /* ひるね(off) */
+    background-color: #ffe082;
+    height: 40px;
+    border-radius: 0 0 40px 40px;
+    overflow: hidden;
+}
+
+.timer-row.napping .btn-image.off:hover{
+    /* ひるね(off) */
+    background-color: #ffd54f;
+}
+
+.timer-row.napping .btn-image.off img{
+    /* ひるね(off) */
+    position: relative;
+    top: calc(-50% - 2px);
+}
+
+.timer-row.napping .btn-image.disabled{
+    /* ひるね(disabled) */
+    background-color: #f0f0f0;
+    cursor: initial;
+    box-shadow: none;
+}
+
+.timer-row.napping .btn-image.disabled:hover{
+    /* ひるね(disabled) */
+    background-color: #f0f0f0;
+}
+
+.timer-row.food .btn-image{
+    /* ごはん */
+    background-color: #80cbc4;
+}
+
+.timer-row.food .btn-image:hover{
+    /* ごはん */
+    background-color: #4db6ac;
+}
+
+.timer-row.helmet .btn-image.on{
+    /* めっと(on) */
+    background-color: #90caf9;
+    height: 40px;
+    border-radius: 40px 40px 0 0;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.timer-row.helmet .btn-image.on:hover{
+    /* めっと(on) */
+    background-color: #64b5f6;
+}
+
+.timer-row.helmet .btn-image.on img{
+    /* めっと(on) */
+    position: relative;
+    top: calc(50% + 2px);
+}
+
+.timer-row.helmet .btn-image.off{
+    /* めっと(off) */
+    background-color: #ef9a9a;
+    height: 40px;
+    border-radius: 0 0 40px 40px;
+    overflow: hidden;
+}
+
+.timer-row.helmet .btn-image.off:hover{
+    /* めっと(off) */
+    background-color: #e57373;
+}
+
+.timer-row.helmet .btn-image.off img{
+    /* めっと(off) */
+    position: relative;
+    top: calc(-50% - 2px);
+}
+
+.timer-row.helmet .btn-image.disabled{
+    /* めっと(disabled) */
+    background-color: #f0f0f0;
+    cursor: initial;
+    box-shadow: none;
+}
+
+.timer-row.helmet .btn-image.disabled:hover{
+    /* めっと(disabled) */
+    background-color: #f0f0f0;
+}
+
+.timer-row.shower .btn-image{
+    /* しゃわー */
+    background-color: #9fa8da;
+}
+
+.timer-row.shower .btn-image:hover{
+    /* しゃわー */
+    background-color: #7986cb;
+}
+
+.timer-row.night .btn-image.on{
+    /* よるね(on) */
+    background-color: #ce93d8;
+    height: 40px;
+    border-radius: 40px 40px 0 0;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.timer-row.night .btn-image.on:hover{
+    /* よるね(on) */
+    background-color: #ba68c8;
+}
+
+.timer-row.night .btn-image.on img{
+    /* よるね(on) */
+    position: relative;
+    top: calc(50% + 2px);
+}
+
+.timer-row.night .btn-image.off{
+    /* よるね(off) */
+    background-color: #bcaaa4;
+    height: 40px;
+    border-radius: 0 0 40px 40px;
+    overflow: hidden;
+}
+
+.timer-row.night .btn-image.off:hover{
+    /* よるね(off) */
+    background-color: #a1887f;
+}
+
+.timer-row.night .btn-image.off img{
+    /* よるね(off) */
+    position: relative;
+    top: calc(-50% - 2px);
+}
+
+.timer-row.night .btn-image.disabled{
+    /* よるね(disabled) */
+    background-color: #f0f0f0;
+    cursor: initial;
+    box-shadow: none;
+}
+
+.timer-row.night .btn-image.disabled:hover{
+    /* よるね(disabled) */
+    background-color: #f0f0f0;
+}
+
+
+/*** Basic Info ***/
+.info{
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    margin-right: 24px;
+}
+
+.basic-info .previous-time {
+    display: flex;
+    flex-direction: row;
+}
+
+.basic-info .info-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.basic-info .info-item.note {
+    display: flex;
+    flex-direction: column;
+}
+
+.basic-info .info-item .title{
+    font-size: 12px;
+    color: #999999;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.basic-info .info-item .time{
+    display: flex;
+    flex-direction: row;
+}
+
+.info-item.note .input{
+    margin:0;
+    width: 224px;
+}
+
+.note-textarea{
+    /*Libä¸Šæ›¸ã*/
+    border: 1px #e8e8e8 solid !important;
+    padding: 10px 8px !important;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)  !important;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)  !important;
+}
+
+.note-textarea:focus{
+    /*Libä¸Šæ›¸ã*/
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)  !important;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)  !important;
+    border-bottom: none !important;
+    border: 1px #26a69a solid !important;
+}
+
+.elapsed-time{
+    font-size: 16px;
+}
+
+/*** Detail Info ***/
+.detail-info{
+    height: 0;
+    opacity: 0;
+    display: initial;
+}
+.detail-info.invisible{
+    display: none;
+}
+.detail-info .info-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.detail-info .info-item .title{
+    color: #999999;
+    font-size: 12px;
+    font-weight: bold;
+}
+.detail-info .info-item .time{
+    display: flex;
+    flex-direction: row;
+}
+/*** Show More Button ***/
+.show-more{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.btn-show-more{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #e8e8e8;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    width: 120px;
+    font-size: 12px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.btn-show-more:hover{
+    background-color: #cccccc;
+}
+
+.btn-show-more.disabled{
+    color: #cccccc;
+    background-color: #f0f0f0;
+    cursor: initial;
+}
