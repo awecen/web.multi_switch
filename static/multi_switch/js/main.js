@@ -1,7 +1,5 @@
 let Main = {
 
-    screen_title: "みつき すいっち",
-
     switchTypes: {},
 
     allLogs: [],
@@ -37,10 +35,10 @@ let Main = {
 
     /* 初期処理 */
     init: function(){
-        $('#screen-name').text(Main.screen_title);
+        $('#screen-name').text(CONST.SCREEN_NAME.MAIN);
         Main.setShowMoreDisabled(); // attachEventsより前
         Main.attachEvents();
-        Main.getSwitchTypes(function(){
+        switchTypeTools.getSwitchTypes(function(){
             Main.getTemporaryNotes(function(){
                 Main.setTemporaryNotes();
             });
@@ -74,31 +72,31 @@ let Main = {
             let switch_type = $e.parent().parent().parent().attr('type');
             let is_on = $e.attr('is_on');
             let afterFunction = null;
-            if(switch_type === 'helmet'){
+            if(switch_type === CONST.TYPE_ID.HELMET){
                 // めっとスイッチ
                 afterFunction = function(){
                     Main.changeHelmetStatus(is_on);
-                    Tools.popSimpleToast(is_on === "false" ? '【へるめっと装着】を解除しました': '【へるめっと装着】を開始しました');
+                    libraryTools.popSimpleToast(is_on === "false" ? '【' + CONST.TYPE_NAME.HELMET_ON + '】を解除しました': '【' + CONST.TYPE_NAME.HELMET_ON + '】を開始しました');
                     Base.toggleLoadingScreen("hide");
                 };
-            }else if(switch_type === 'napping'){
+            }else if(switch_type === CONST.TYPE_ID.NAPPING){
                 // ひるねスイッチ
                 afterFunction = function(){
                     Main.changeNappingStatus(is_on);
-                    Tools.popSimpleToast(is_on  === "false" ? '【ひるね】を解除しました' : '【ひるね】を記録開始しました' );
+                    libraryTools.popSimpleToast(is_on  === "false" ? '【' + CONST.TYPE_NAME.NAPPING + '】を解除しました' : '【' + CONST.TYPE_NAME.NAPPING + '】を記録開始しました' );
                     Base.toggleLoadingScreen("hide");
                 };
-            }else if(switch_type === 'night'){
+            }else if(switch_type === CONST.TYPE_ID.NIGHT){
                 // よるねスイッチ
                 afterFunction = function(){
                     Main.changeNightStatus(is_on);
-                    Tools.popSimpleToast(is_on  === "false" ? '【よるね】を解除しました' : '【よるね】を記録開始しました');
+                    libraryTools.popSimpleToast(is_on  === "false" ? '【' + CONST.TYPE_NAME.NIGHT + '】を解除しました' : '【' + CONST.TYPE_NAME.NIGHT + '】を記録開始しました');
                     Base.toggleLoadingScreen("hide");
                 };
             }else{
                 // その他
                 afterFunction = function(){
-                    Tools.popSimpleToast('【' + Tools.getJapaneseTypeName(switch_type) + '】 を記録しました');
+                    libraryTools.popSimpleToast('【' + switchTypeTools.getJapaneseTypeName(switch_type) + '】 を記録しました');
                     Base.toggleLoadingScreen("hide");
                 };
             }
@@ -163,7 +161,7 @@ let Main = {
     /* 登録API */
     registerLog: function(log_type, is_on, after){
         let newData = {
-            "switch_time": Tools.convertToDbFormat(new Date()),
+            "switch_time": datetimeTools.convertToDbFormat(new Date()),
             "note": $('.timer-row[type="' + log_type + '"]')
                 .find('.timer-contents')
                 .find('.info')
@@ -172,7 +170,7 @@ let Main = {
                 .find('.input')
                 .find('textarea')
                 .val(),
-            "type": Tools.getTypeId(log_type, is_on),
+            "type": switchTypeTools.getTypeId(log_type, is_on),
         };
 
         // 新規作成API
@@ -194,7 +192,7 @@ let Main = {
                 });
 
                 // 最新情報再取得
-                Main.getSwitchTypes(function(){
+                switchTypeTools.getSwitchTypes(function(){
                     Main.getLogs(function(){
                         Main.setInfoAll();
                     });
@@ -205,22 +203,6 @@ let Main = {
             "error": function (e) {
                 alert('Error: ログ新規追加APIエラー\r' + e.responseText);
 
-            }
-        });
-    },
-
-    /* スイッチ種類取得 */
-    getSwitchTypes: function(after){
-        $.ajax({
-            "url": "/multi_switch/api/switch_type_list/",
-            "cache": false,
-            "dataType": "json",
-            "success": function (result) {
-                Main.switchTypes = result;
-                after();
-            },
-            "error": function (e) {
-                alert('Error:' + e.responseText);
             }
         });
     },
@@ -255,7 +237,7 @@ let Main = {
 
     /* Info:おっぱい  */
     setInfoMilk: function(){
-        let switchType = "milk";
+        let switchType = CONST.TYPE_ID.MILK;
 
         /* 前回時間 */
         Main.setInfoCommonPreviousTime(switchType);
@@ -264,9 +246,9 @@ let Main = {
         let num = 0;
         Main.allLogs.forEach(function(log){
             // タイプ一致(※on/offについては現状全部onなので)
-            let typeId = Tools.getTypeId(switchType, true);
+            let typeId = switchTypeTools.getTypeId(switchType, true);
             if(log.type === typeId &&
-                Tools.compareDate(new Date(log.switch_time), new Date())){
+                datetimeTools.compareDate(new Date(log.switch_time), new Date())){
                 num += 1;
             }
         });
@@ -281,7 +263,7 @@ let Main = {
 
     /* Info:うんち */
     setInfoPoo: function(){
-        let switchType = "poo";
+        let switchType = CONST.TYPE_ID.POO;
 
         /* 前回時間 */
         Main.setInfoCommonPreviousTime(switchType);
@@ -290,9 +272,9 @@ let Main = {
         let num = 0;
         Main.allLogs.forEach(function(log){
             // タイプ一致(※on/offについては現状全部onなので)
-            let typeId = Tools.getTypeId(switchType, true);
+            let typeId = switchTypeTools.getTypeId(switchType, true);
             if(log.type === typeId &&
-                Tools.compareDate(new Date(log.switch_time), new Date())){
+                datetimeTools.compareDate(new Date(log.switch_time), new Date())){
                 num += 1;
             }
         });
@@ -310,7 +292,7 @@ let Main = {
         let doDate = "";
         Main.allLogs.forEach(function(log){
             // タイプ一致(※on/offについては現状全部onなので)
-            let typeId = Tools.getTypeId(switchType, true);
+            let typeId = switchTypeTools.getTypeId(switchType, true);
             if(log.type === typeId){
                 if(!doDate){
                     doDate = new Date(log.switch_time);
@@ -340,7 +322,7 @@ let Main = {
 
     /* Info:おしっこ */
     setInfoPee: function(){
-        let switchType = "pee";
+        let switchType = CONST.TYPE_ID.PEE;
 
         /* 前回時間 */
         Main.setInfoCommonPreviousTime(switchType);
@@ -349,9 +331,9 @@ let Main = {
         let num = 0;
         Main.allLogs.forEach(function(log){
             // タイプ一致(※on/offについては現状全部onなので)
-            let typeId = Tools.getTypeId(switchType, true);
+            let typeId = switchTypeTools.getTypeId(switchType, true);
             if(log.type === typeId &&
-                Tools.compareDate(new Date(log.switch_time), new Date())){
+                datetimeTools.compareDate(new Date(log.switch_time), new Date())){
                 num += 1;
             }
         });
@@ -366,7 +348,7 @@ let Main = {
 
     /* Info:ごはん */
     setInfoFood: function(){
-        let switchType = "food";
+        let switchType = CONST.TYPE_ID.FOOD;
 
         /* 前回時間 */
         Main.setInfoCommonPreviousTime(switchType);
@@ -374,7 +356,7 @@ let Main = {
 
     /* Info:おふろ */
     setInfoShower: function(){
-        let switchType = "shower";
+        let switchType = CONST.TYPE_ID.SHOWER;
 
         /* 前回時間 */
         Main.setInfoCommonPreviousTime(switchType);
@@ -382,9 +364,9 @@ let Main = {
 
     /* Info: へるめっと */
     setInfoHelmet: function(){
-        let switchType = "helmet";
-        let typeId_on = Tools.getTypeId(switchType, true);
-        let typeId_off = Tools.getTypeId(switchType, false);
+        let switchType = CONST.TYPE_ID.HELMET;
+        let typeId_on = switchTypeTools.getTypeId(switchType, true);
+        let typeId_off = switchTypeTools.getTypeId(switchType, false);
 
         // 対象ログ抽出
         let targetLogs = [];
@@ -417,7 +399,7 @@ let Main = {
 
         // 本日分ログを抽出
         targetLogs.forEach(function(log){
-            if(Tools.compareDate(new Date, new Date(log.switch_time))){
+            if(datetimeTools.compareDate(new Date, new Date(log.switch_time))){
                 totalLogs.push(log);
             }
         });
@@ -442,11 +424,11 @@ let Main = {
             if(i === totalLogs.length - 1){
                 // 最後のログは午前０時との差分
                 let midnightDateObject = new Date(new Date(log.switch_time).setHours(0, 0, 0, 0));
-                delta = Tools.getDelta(new Date(log.switch_time), midnightDateObject);
+                delta = datetimeTools.getDelta(new Date(log.switch_time), midnightDateObject);
             } else {
                 // その他のログは次(一つ過去)のログとの差分
                 let nextLog = totalLogs[i+1];
-                delta = Tools.getDelta(new Date(log.switch_time), new Date(nextLog.switch_time));
+                delta = datetimeTools.getDelta(new Date(log.switch_time), new Date(nextLog.switch_time));
             }
 
             // 積み上げ計算
@@ -464,8 +446,8 @@ let Main = {
         }
 
         // 繰り上げ処理
-        let on_total_m = Tools.movingUpDeltaValue(on_total);
-        let off_total_m = Tools.movingUpDeltaValue(off_total);
+        let on_total_m = datetimeTools.movingUpDeltaValue(on_total);
+        let off_total_m = datetimeTools.movingUpDeltaValue(off_total);
 
         // 画面表示セット
         let $timer_row_switch_type = $('.timer-row[type="' + switchType + '"]');
@@ -474,18 +456,18 @@ let Main = {
                 .find('.detail-info')
                 .find('.info-item.today-on-total')
                 .find('.time');
-        $target_on.find('.hours').text(Tools.padZero(on_total_m.hours));
-        $target_on.find('.minutes').text(Tools.padZero(on_total_m.minutes));
-        $target_on.find('.seconds').text(Tools.padZero(on_total_m.seconds));
+        $target_on.find('.hours').text(datetimeTools.padZero(on_total_m.hours, 2));
+        $target_on.find('.minutes').text(datetimeTools.padZero(on_total_m.minutes, 2));
+        $target_on.find('.seconds').text(datetimeTools.padZero(on_total_m.seconds, 2));
 
         let $target_off = $timer_row_switch_type.find('.timer-contents')
                 .find('.info')
                 .find('.detail-info')
                 .find('.info-item.today-off-total')
                 .find('.time');
-        $target_off.find('.hours').text(Tools.padZero(off_total_m.hours));
-        $target_off.find('.minutes').text(Tools.padZero(off_total_m.minutes));
-        $target_off.find('.seconds').text(Tools.padZero(off_total_m.seconds));
+        $target_off.find('.hours').text(datetimeTools.padZero(off_total_m.hours, 2));
+        $target_off.find('.minutes').text(datetimeTools.padZero(off_total_m.minutes, 2));
+        $target_off.find('.seconds').text(datetimeTools.padZero(off_total_m.seconds, 2));
 
         // タイマー処理用
         Main.totalTime.helmet.on = on_total_m;
@@ -504,12 +486,12 @@ let Main = {
 
     /* Info: へるめっと(タイマー処理用) */
     setInfoHelmetForTimer: function(){
-        let switchType = 'helmet';
+        let switchType = CONST.TYPE_ID.HELMET;
 
         // 最新ログ時刻
         let latestDateObject = new Date(Main.latestLogs.helmet.switch_time);
         let nowDateObject = new Date();
-        let delta = Tools.getDelta(nowDateObject, latestDateObject);
+        let delta = datetimeTools.getDelta(nowDateObject, latestDateObject);
 
         let $timer_row_switch_type  = $('.timer-row[type="' + switchType + '"]');
         let $targetElement = $timer_row_switch_type.find('.timer-contents')
@@ -517,19 +499,19 @@ let Main = {
                 .find('.basic-info')
                 .find('.info-item.elapsed-time')
                 .find('.time');
-        $targetElement.find('.hours').text(Tools.padZero((delta.deltaDate * 24) + delta.deltaHours));
-        $targetElement.find('.minutes').text(Tools.padZero(delta.deltaMinutes));
-        $targetElement.find('.seconds').text(Tools.padZero(delta.deltaSeconds));
+        $targetElement.find('.hours').text(datetimeTools.padZero((delta.deltaDate * 24) + delta.deltaHours, 2));
+        $targetElement.find('.minutes').text(datetimeTools.padZero(delta.deltaMinutes, 2));
+        $targetElement.find('.seconds').text(datetimeTools.padZero(delta.deltaSeconds, 2));
 
         // ↓↓↓以下、累計時間↓↓↓
-        let typeId_on = Tools.getTypeId(switchType, true);
+        let typeId_on = switchTypeTools.getTypeId(switchType, true);
         let comparedDateObject = latestDateObject;
-        if(!Tools.compareDate(new Date, latestDateObject)){
+        if(!datetimeTools.compareDate(new Date, latestDateObject)){
             // 最新ログが本日日付じゃない(最後にログを記録してから日をまたいでる)場合
             // 累計時間は本日日付午前0時からの差分を表示する
             comparedDateObject = new Date(new Date().setHours(0,0,0,0));
         }
-        let totalDelta = Tools.getDelta(new Date(), comparedDateObject);
+        let totalDelta = datetimeTools.getDelta(new Date(), comparedDateObject);
         // 表示する要素のクラス名(タイマーで動かす方だけで十分なので)
         let targetTotalClassName = "";
 
@@ -551,7 +533,7 @@ let Main = {
             timerTotalForDisplay.minutes = Main.totalTime.helmet.off.minutes + totalDelta.deltaMinutes;
             timerTotalForDisplay.seconds = Main.totalTime.helmet.off.seconds + totalDelta.deltaSeconds;
         }
-        let timerTotalForDisplay_m = Tools.movingUpDeltaValue(timerTotalForDisplay);
+        let timerTotalForDisplay_m = datetimeTools.movingUpDeltaValue(timerTotalForDisplay);
 
         // 表示
         let $targetTotal = $timer_row_switch_type.find('.timer-contents')
@@ -559,14 +541,14 @@ let Main = {
                 .find('.detail-info')
                 .find('.info-item' + targetTotalClassName)
                 .find('.time');
-        $targetTotal.find('.hours').text(Tools.padZero(timerTotalForDisplay_m.hours));
-        $targetTotal.find('.minutes').text(Tools.padZero(timerTotalForDisplay_m.minutes));
-        $targetTotal.find('.seconds').text(Tools.padZero(timerTotalForDisplay_m.seconds));
+        $targetTotal.find('.hours').text(datetimeTools.padZero(timerTotalForDisplay_m.hours, 2));
+        $targetTotal.find('.minutes').text(datetimeTools.padZero(timerTotalForDisplay_m.minutes, 2));
+        $targetTotal.find('.seconds').text(datetimeTools.padZero(timerTotalForDisplay_m.seconds, 2));
     },
 
     /* Info: へるめっと(スイッチ切り替え) */
     changeHelmetStatus: function(is_on){
-        let switch_type = 'helmet';
+        let switch_type = CONST.TYPE_ID.HELMET;
 
         // ボタン切り替え
         let $timer_row_switch_type = $('.timer-row[type="' + switch_type + '"]');
@@ -593,9 +575,9 @@ let Main = {
 
     /* Info: ひるね */
     setInfoNapping: function(){
-        let switchType = "napping";
-        let typeId_on = Tools.getTypeId(switchType, true);
-        let typeId_off = Tools.getTypeId(switchType, false);
+        let switchType = CONST.TYPE_ID.NAPPING;
+        let typeId_on = switchTypeTools.getTypeId(switchType, true);
+        let typeId_off = switchTypeTools.getTypeId(switchType, false);
 
         // 対象ログ抽出
         let targetLogs = [];
@@ -627,7 +609,7 @@ let Main = {
 
         // 本日分ログを抽出
         targetLogs.forEach(function(log){
-            if(Tools.compareDate(new Date, new Date(log.switch_time))){
+            if(datetimeTools.compareDate(new Date, new Date(log.switch_time))){
                 totalLogs.push(log);
             }
         });
@@ -647,11 +629,11 @@ let Main = {
             if(i === totalLogs.length - 1){
                 // 最後のログは午前０時との差分
                 let midnightDateObject = new Date(new Date(log.switch_time).setHours(0, 0, 0, 0));
-                delta = Tools.getDelta(new Date(log.switch_time), midnightDateObject);
+                delta = datetimeTools.getDelta(new Date(log.switch_time), midnightDateObject);
             } else {
                 // その他のログは次(一つ過去)のログとの差分
                 let nextLog = totalLogs[i+1];
-                delta = Tools.getDelta(new Date(log.switch_time), new Date(nextLog.switch_time));
+                delta = datetimeTools.getDelta(new Date(log.switch_time), new Date(nextLog.switch_time));
             }
 
             // 積み上げ計算
@@ -664,7 +646,7 @@ let Main = {
         }
 
         // 繰り上げ処理
-        let on_total_m = Tools.movingUpDeltaValue(on_total);
+        let on_total_m = datetimeTools.movingUpDeltaValue(on_total);
 
         // 画面表示セット
         let $target_on = $('.timer-row[type="' + switchType +'"]')
@@ -673,9 +655,9 @@ let Main = {
                 .find('.detail-info')
                 .find('.info-item.today-total')
                 .find('.time');
-        $target_on.find('.hours').text(Tools.padZero(on_total_m.hours));
-        $target_on.find('.minutes').text(Tools.padZero(on_total_m.minutes));
-        $target_on.find('.seconds').text(Tools.padZero(on_total_m.seconds));
+        $target_on.find('.hours').text(datetimeTools.padZero(on_total_m.hours, 2));
+        $target_on.find('.minutes').text(datetimeTools.padZero(on_total_m.minutes, 2));
+        $target_on.find('.seconds').text(datetimeTools.padZero(on_total_m.seconds, 2));
 
         // タイマー処理用
         Main.totalTime.napping.on = on_total_m;
@@ -693,7 +675,7 @@ let Main = {
 
     /* Info: ひるね(タイマー処理用) */
     setInfoNappingForTimer: function(){
-        let switchType = 'napping';
+        let switchType = CONST.TYPE_ID.NAPPING;
 
         // 最新ログ時刻
         let latestDateObject = new Date(Main.latestLogs.napping.switch_time);
@@ -707,8 +689,8 @@ let Main = {
 
         // スイッチ・オンのときだけ タイマーでくるくるする
         // (おふのときは 0加算 をくるくるしてる)
-        if(Main.latestLogs.napping.type === Tools.getTypeId(switchType, true)){
-            delta = Tools.getDelta(nowDateObject, latestDateObject);
+        if(Main.latestLogs.napping.type === switchTypeTools.getTypeId(switchType, true)){
+            delta = datetimeTools.getDelta(nowDateObject, latestDateObject);
         }
 
         let $timer_row_switch_type = $('.timer-row[type="' + switchType + '"]');
@@ -717,12 +699,12 @@ let Main = {
                 .find('.basic-info')
                 .find('.info-item.elapsed-time')
                 .find('.time');
-        $targetElement.find('.hours').text(Tools.padZero((delta.deltaDate * 24) + delta.deltaHours));
-        $targetElement.find('.minutes').text(Tools.padZero(delta.deltaMinutes));
-        $targetElement.find('.seconds').text(Tools.padZero(delta.deltaSeconds));
+        $targetElement.find('.hours').text(datetimeTools.padZero((delta.deltaDate * 24) + delta.deltaHours, 2));
+        $targetElement.find('.minutes').text(datetimeTools.padZero(delta.deltaMinutes, 2));
+        $targetElement.find('.seconds').text(datetimeTools.padZero(delta.deltaSeconds, 2));
 
         // ↓↓↓以下、累計時間↓↓↓
-        let typeId_on = Tools.getTypeId(switchType, true);
+        let typeId_on = switchTypeTools.getTypeId(switchType, true);
 
         // 表示用の値
         let timerTotalForDisplay = {
@@ -738,7 +720,7 @@ let Main = {
             timerTotalForDisplay.minutes += delta.deltaMinutes;
             timerTotalForDisplay.seconds += delta.deltaSeconds;
         }
-        let timerTotalForDisplay_m = Tools.movingUpDeltaValue(timerTotalForDisplay);
+        let timerTotalForDisplay_m = datetimeTools.movingUpDeltaValue(timerTotalForDisplay);
 
         // 表示
         let $targetTotal = $timer_row_switch_type.find('.timer-contents')
@@ -746,15 +728,15 @@ let Main = {
                 .find('.detail-info')
                 .find('.info-item' + targetTotalClassName)
                 .find('.time');
-        $targetTotal.find('.hours').text(Tools.padZero(timerTotalForDisplay_m.hours));
-        $targetTotal.find('.minutes').text(Tools.padZero(timerTotalForDisplay_m.minutes));
-        $targetTotal.find('.seconds').text(Tools.padZero(timerTotalForDisplay_m.seconds));
+        $targetTotal.find('.hours').text(datetimeTools.padZero(timerTotalForDisplay_m.hours, 2));
+        $targetTotal.find('.minutes').text(datetimeTools.padZero(timerTotalForDisplay_m.minutes, 2));
+        $targetTotal.find('.seconds').text(datetimeTools.padZero(timerTotalForDisplay_m.seconds, 2));
 
     },
 
     /* Info: ひるね(スイッチ切り替え) */
     changeNappingStatus: function(is_on){
-        let switch_type = 'napping';
+        let switch_type = CONST.TYPE_ID.NAPPING;
 
         // ボタン切り替え
         let $timer_row_switch_type = $('.timer-row[type="' + switch_type + '"]');
@@ -780,9 +762,9 @@ let Main = {
 
     /* Info: よるね */
     setInfoNight: function(){
-        let switchType = "night";
-        let typeId_on = Tools.getTypeId(switchType, true);
-        let typeId_off = Tools.getTypeId(switchType, false);
+        let switchType = CONST.TYPE_ID.NIGHT;
+        let typeId_on = switchTypeTools.getTypeId(switchType, true);
+        let typeId_off = switchTypeTools.getTypeId(switchType, false);
 
         // 対象ログ抽出
         let targetLogs = [];
@@ -820,22 +802,22 @@ let Main = {
             let log_date_obj = new Date(log.switch_time);
             // ログがスイッチOFFなら計算対象
             // = ON→OFF の差分を取る
-            if(log.type === Tools.getTypeId(switchType, false)){
+            if(log.type === switchTypeTools.getTypeId(switchType, false)){
                 let nextLog = targetLogs[i+1];
-                let delta = Tools.getDelta(new Date(log.switch_time), new Date(nextLog.switch_time));
+                let delta = datetimeTools.getDelta(new Date(log.switch_time), new Date(nextLog.switch_time));
                 let deltaTime = {
                     'date': delta.deltaDate,
                     'hours': delta.deltaHours,
                     'minutes': delta.deltaMinutes,
                     'seconds': delta.deltaSeconds,
                 }
-                totalTimeAsSeconds += Tools.convertToSeconds(deltaTime);
+                totalTimeAsSeconds += datetimeTools.convertToSeconds(deltaTime);
             }
 
             // 日毎の配列（平均の分母）
             // ログがスイッチONのログ(記録起点)の日付を集計
-            if(log.type === Tools.getTypeId(switchType, true)
-                &&!Tools.compareDate(log_date_obj, previousDate)){
+            if(log.type === switchTypeTools.getTypeId(switchType, true)
+                &&!datetimeTools.compareDate(log_date_obj, previousDate)){
                 logsByDate.push(log_date_obj);
                 previousDate = log_date_obj;
             }
@@ -844,7 +826,7 @@ let Main = {
         // 合計÷配列長
         let averageAsSeconds
             = Math.floor(totalTimeAsSeconds / logsByDate.length);
-        let average = Tools.convertToHMS(averageAsSeconds);
+        let average = datetimeTools.convertToHMS(averageAsSeconds);
 
         // 画面表示セット
         let $target_on = $('.timer-row[type="' + switchType +'"]')
@@ -853,9 +835,9 @@ let Main = {
                 .find('.detail-info')
                 .find('.info-item.average')
                 .find('.time');
-        $target_on.find('.hours').text(Tools.padZero(average.hours));
-        $target_on.find('.minutes').text(Tools.padZero(average.minutes));
-        $target_on.find('.seconds').text(Tools.padZero(average.seconds));
+        $target_on.find('.hours').text(datetimeTools.padZero(average.hours, 2));
+        $target_on.find('.minutes').text(datetimeTools.padZero(average.minutes, 2));
+        $target_on.find('.seconds').text(datetimeTools.padZero(average.seconds, 2));
 
         // 最新ログ→現在時刻 タイマーくるくるスタート
         Main.latestLogs.night = targetLogs[0];
@@ -871,7 +853,7 @@ let Main = {
 
     /* Info: よるね(タイマー処理用) */
     setInfoNightForTimer: function()    {
-        let switchType = 'night';
+        let switchType = CONST.TYPE_ID.NIGHT;
 
         // 最新ログ時刻
         let latestDateObject = new Date(Main.latestLogs.night.switch_time);
@@ -884,8 +866,8 @@ let Main = {
         };
 
         // スイッチ＝オンのときだけタイマーが動くように
-        if(Main.latestLogs.night.type === Tools.getTypeId(switchType, true)){
-            delta = Tools.getDelta(nowDateObject, latestDateObject);
+        if(Main.latestLogs.night.type === switchTypeTools.getTypeId(switchType, true)){
+            delta = datetimeTools.getDelta(nowDateObject, latestDateObject);
         }
 
         let $targetElement = $('.timer-row[type="' + switchType + '"]')
@@ -894,15 +876,15 @@ let Main = {
                 .find('.basic-info')
                 .find('.info-item.elapsed-time')
                 .find('.time');
-        $targetElement.find('.hours').text(Tools.padZero((delta.deltaDate * 24) + delta.deltaHours));
-        $targetElement.find('.minutes').text(Tools.padZero(delta.deltaMinutes));
-        $targetElement.find('.seconds').text(Tools.padZero(delta.deltaSeconds));
+        $targetElement.find('.hours').text(datetimeTools.padZero((delta.deltaDate * 24) + delta.deltaHours, 2));
+        $targetElement.find('.minutes').text(datetimeTools.padZero(delta.deltaMinutes, 2));
+        $targetElement.find('.seconds').text(datetimeTools.padZero(delta.deltaSeconds, 2));
 
     },
 
     /* Info: よるね(スイッチ切り替え) */
     changeNightStatus: function(is_on){
-        let switch_type = 'night';
+        let switch_type = CONST.TYPE_ID.NIGHT;
 
         // ボタン切り替え
         let $timer_row_switch_type = $('.timer-row[type="' + switch_type + '"]');
@@ -931,7 +913,7 @@ let Main = {
         let targetLog = "";
         Main.allLogs.some(function(log){
             // タイプ一致(※on/offについては現状全部onなので)
-            let typeId = Tools.getTypeId(switchType, true);
+            let typeId = switchTypeTools.getTypeId(switchType, true);
             if(log.type === typeId){
                 targetLog = log;
                 return true;
@@ -943,7 +925,7 @@ let Main = {
                 .find('.basic-info')
                 .find('.info-item.previous-time')
                 .find('.time')
-                .text(Tools.convertToStringFormat(
+                .text(datetimeTools.convertToStringFormat(
                     new Date(targetLog.switch_time)));
     },
 
@@ -971,7 +953,7 @@ let Main = {
     /* 一時メモ 画面反映 */
     setTemporaryNotes: function(){
         Main.temporaryNotes.forEach(function(note){
-            let type_name = Tools.getTypeName(note.type);
+            let type_name = switchTypeTools.getTypeName(note.type);
             $('.timer-row[type="' + type_name.name + '"]').find('.note-textarea').val(note.note);
         });
     },
@@ -979,7 +961,7 @@ let Main = {
     /* 一時メモ 保存API */
     registerTemporaryNote: function(type_name, note, after){
         let targetNoteId = 0;
-        let type_id = Tools.getTypeId(type_name, true);
+        let type_id = switchTypeTools.getTypeId(type_name, true);
         Main.temporaryNotes.some(function(note){
             if(note.type === type_id){
                 targetNoteId = note.id;
@@ -1010,183 +992,7 @@ let Main = {
 
             }
         });
-
     },
-
-};
-
-
-let Tools = {
-    // タイマー用数値の0パディング
-    padZero: function(number){
-       return ( '00' + number ).slice( -2 );
-    },
-
-    // DB登録用DateTimeフォーマットへ変換
-    convertToDbFormat: function(date){
-        return date.getFullYear() + "-" +
-            Tools.padZero((date.getMonth() + 1)) + "-" +
-            Tools.padZero(date.getDate()) + "T" +
-            Tools.padZero(date.getHours()) + ":" +
-            Tools.padZero(date.getMinutes()) + ":" +
-            Tools.padZero(date.getSeconds()) +
-            ( 0 - (date.getTimezoneOffset() / 60) < 0 ?
-                '-' + Tools.padZero(date.getTimezoneOffset() / 60) + ":00"
-                : '+' + Tools.padZero(0 - (date.getTimezoneOffset() / 60)) + ":00");
-    },
-
-    // 表示用フォーマット(yyyy/MM/DD HH:MM:SS)
-    convertToStringFormat: function(date){
-        return date.getFullYear() + "/" +
-            Tools.padZero(date.getMonth() + 1) + "/" +
-            Tools.padZero(date.getDate()) + " " +
-            Tools.padZero(date.getHours()) + ":" +
-            Tools.padZero(date.getMinutes()) + ":" +
-            Tools.padZero(date.getSeconds());
-    },
-
-    // Materializeのトースター
-    popSimpleToast: function(str){
-        M.toast({
-            'html': str,
-        });
-    },
-
-    // スイッチタイプのIDを返す（登録用）
-    getTypeId: function(type_name, is_on){
-        let id = 0;
-        Main.switchTypes.some(function(switchType){
-            if(switchType.name === type_name &&
-              switchType.is_on === is_on){
-                id = switchType.id;
-                return true;
-            }
-        });
-        return id;
-    },
-
-    // スイッチタイプの名前を返す
-    getTypeName: function(type_id){
-        let result = {
-            'name': "",
-            'is_on': "",
-        };
-        Main.switchTypes.some(function(switchType){
-            if(switchType.id === type_id){
-                result.name = switchType.name;
-                result.is_on = switchType.is_on;
-                return true;
-            }
-        });
-        return result;
-    },
-
-    // 年月日一致確認
-    compareDate: function(a, b){
-        return (a.getFullYear() === b.getFullYear() &&
-            a.getMonth() === b.getMonth() &&
-            a.getDate() === b.getDate());
-    },
-
-    getJapaneseTypeName: function(type_name){
-        let name = "";
-        switch(type_name){
-            case 'milk':
-                name = 'おっぱい';
-                break;
-            case 'poo':
-                name = 'うんち';
-                break;
-            case 'pee':
-                name = 'おしっこ';
-                break;
-            case 'food':
-                name = 'ごはん';
-                break;
-            case 'shower':
-                name = 'おふろ';
-                break;
-            case 'helmet':
-                name = 'へるめっと';
-                break;
-            case 'napping':
-                name = 'ひるね';
-                break;
-            case 'night':
-                name = 'よるね';
-                break;
-        }
-        return name;
-    },
-
-    // newerDateObjectとolderDateObjectとの差分取得
-    getDelta: function(newer, older){
-
-        let dd = newer.getDate() - older.getDate();
-        let dh = newer.getHours() - older.getHours();
-        let dm = newer.getMinutes() - older.getMinutes();
-        let ds = newer.getSeconds() - older.getSeconds();
-
-        // 負値調節(秒)
-        if(ds < 0){
-          ds += 60;
-          dm -= 1;
-        }
-
-        // 負値調節(分)
-        if(dm < 0){
-            dm += 60;
-            dh -= 1;
-        }
-
-        // 負値調節(時)
-        if(dh < 0){
-            dh += 24;
-            dd -= 1;
-        }
-
-        return {
-            deltaDate : dd,
-            deltaHours : dh,
-            deltaMinutes : dm,
-            deltaSeconds : ds,
-        };
-
-    },
-
-    // 繰り上げ処理
-    movingUpDeltaValue: function(delta){
-         let result = {
-            hours : 0,
-            minutes : 0,
-            seconds : 0,
-        };
-
-        result.hours = delta.hours + (delta.minutes / 60 | 0);
-        result.minutes = delta.minutes % 60 + (delta.seconds / 60 | 0);
-        result.seconds = delta.seconds % 60;
-
-        return result;
-    },
-
-    // 秒換算 ([hours, minutes, seconds])
-    convertToSeconds: function(log){
-        return log.hours * 60 * 60 + log.minutes * 60 + log.seconds;
-    },
-
-    // 秒から時分秒へ換算
-    convertToHMS: function(seconds){
-        let h = seconds / 3600 | 0;
-        let m = (seconds - (h * 3600)) / 60 | 0;
-        let s = seconds - (h * 3600) - (m * 60);
-
-        return {
-            'hours': h,
-            'minutes': m,
-            'seconds': s,
-        };
-    },
-
 };
 
 Main.init();
