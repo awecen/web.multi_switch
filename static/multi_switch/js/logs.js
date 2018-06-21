@@ -4,7 +4,7 @@ let TimerLogs = {
     allLogs: null,
 
     /* アイコン配置制御用 */
-    limitsOfEveryLane : [0,0,0,0,0,0],
+    limitsOfEveryLane : [],
 
     /* 初期処理 */
     init: function(){
@@ -198,6 +198,47 @@ let TimerLogs = {
             return 0;
         });
 
+        // 1枠(40px=1時間)内に最大いくつアイコンが重なるかを算出
+        let basementTime = new Date(targetLogs[0].switch_time);
+        let max_icons_in_a_row = 1;
+        let icons_in_a_row = 1;
+
+        for(let i = 1; i < targetLogs.length; i++){
+            let nextLog = targetLogs[i];
+            let nextLogDateObject = new Date(nextLog.switch_time);
+            let delta = datetimeTools.getDelta(nextLogDateObject, basementTime);
+            let deltaSeconds = datetimeTools.convertToSeconds({
+                hours: delta.deltaHours,
+                minutes: delta.deltaMinutes,
+                seconds: delta.deltaSeconds,
+            });
+            if(deltaSeconds <= 3600){
+                icons_in_a_row += 1;
+                if(i === targetLogs.length - 1){
+                    max_icons_in_a_row = icons_in_a_row;
+                }
+            }else{
+                max_icons_in_a_row = max_icons_in_a_row < icons_in_a_row ? icons_in_a_row : max_icons_in_a_row;
+                icons_in_a_row = 1;
+                basementTime = new Date(targetLogs[i].switch_time);
+            };
+        }
+
+        TimerLogs.limitsOfEveryLane = [];
+        if(6 < max_icons_in_a_row){
+            for(let i = 0 ; i < max_icons_in_a_row ; i++){
+                TimerLogs.limitsOfEveryLane.push(0);
+            }
+        }else{
+            TimerLogs.limitsOfEveryLane.push(0);
+            TimerLogs.limitsOfEveryLane.push(0);
+            TimerLogs.limitsOfEveryLane.push(0);
+            TimerLogs.limitsOfEveryLane.push(0);
+            TimerLogs.limitsOfEveryLane.push(0);
+            TimerLogs.limitsOfEveryLane.push(0);
+        }
+
+
         // 各アイコン配置
         targetLogs.forEach(function(log){
             // アイコンdiv作成
@@ -211,7 +252,7 @@ let TimerLogs = {
         });
 
         // 制御値を初期化
-        TimerLogs.limitsOfEveryLane = [0,0,0,0,0,0];
+        TimerLogs.limitsOfEveryLane = [];
 
         // 出現アニメーションスタート
         TimerLogs.animateGraphIconAppearing(100);
@@ -245,17 +286,19 @@ let TimerLogs = {
     },
 
     /* アイコン配置位置算出 */
-    addPositionStyleOfIcon: function($element, dateObject){
+    addPositionStyleOfIcon: function($element, dateObject, logs){
         // Y軸は時分秒から出すだけ
         let top = TimerLogs.calculateYPositionOfIcon(dateObject);
         let left = 0;
+
+
 
         // X軸は重ならないように
         for(let i = 0; 0 < TimerLogs.limitsOfEveryLane.length; i++){
             let limit = TimerLogs.limitsOfEveryLane[i];
             if(limit <= top){
                 TimerLogs.limitsOfEveryLane[i] = top + 40;
-                left = i * 40;
+                left = i * (240 / TimerLogs.limitsOfEveryLane.length | 0);
                 break;
             }
         }
