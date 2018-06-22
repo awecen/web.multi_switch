@@ -198,10 +198,15 @@ let TimerLogs = {
             return 0;
         });
 
-        // 1枠(40px=1時間)内に最大いくつアイコンが重なるかを算出
+        // 一番左にくるログのID
+        // 重なりがあればいくつ重なるか
+        // この２つを算出
         let basementTime = new Date(targetLogs.length > 0 ? targetLogs[0].switch_time: null);
-        let max_icons_in_a_row = 1;
-        let icons_in_a_row = 1;
+        let firstIconInfo = {
+                id: targetLogs.length > 0 ? targetLogs[0].id: null,
+                icons_in_a_row: 1,
+        };
+        let iconRowsInfo = [];
 
         for(let i = 1; i < targetLogs.length; i++){
             let nextLog = targetLogs[i];
@@ -213,46 +218,55 @@ let TimerLogs = {
                 seconds: delta.deltaSeconds,
             });
             if(deltaSeconds <= 3600){
-                icons_in_a_row += 1;
+                firstIconInfo.icons_in_a_row += 1;
                 if(i === targetLogs.length - 1){
-                    max_icons_in_a_row = icons_in_a_row;
+                    iconRowsInfo.push(firstIconInfo);
                 }
             }else{
-                max_icons_in_a_row = max_icons_in_a_row < icons_in_a_row ? icons_in_a_row : max_icons_in_a_row;
-                icons_in_a_row = 1;
+                iconRowsInfo.push(firstIconInfo);
+                // max_icons_in_a_row = max_icons_in_a_row < icons_in_a_row ? icons_in_a_row : max_icons_in_a_row;
+                firstIconInfo = {
+                    id: targetLogs[i].id,
+                    icons_in_a_row: 1,
+                };
                 basementTime = new Date(targetLogs[i].switch_time);
             };
         }
 
-        TimerLogs.limitsOfEveryLane = [];
-        if(6 < max_icons_in_a_row){
-            for(let i = 0 ; i < max_icons_in_a_row ; i++){
-                TimerLogs.limitsOfEveryLane.push(0);
+        let graphWidth = Math.floor($('.graph-base').width());
+
+        let targetLogsCounter = 0;
+        iconRowsInfo.forEach(function(iconRow){
+            let tempLeft = 0;
+            for(let i = 0; i < iconRow.icons_in_a_row; i++){
+                // Y軸は時分秒から出すだけ
+
+                let iconLog = targetLogs[i + targetLogsCounter];
+                let top = TimerLogs.calculateYPositionOfIcon(new Date(iconLog.switch_time));
+                let left = tempLeft;
+                if(iconRow.icons_in_a_row * 40 <= graphWidth){
+                    // 重ねなくても収まる場合
+                    tempLeft += 40;
+                } else {
+                    // 重ねないと収まらない場合
+                    tempLeft += Math.floor(graphWidth / iconRow.icons_in_a_row);
+                }
+                // アイコンdiv作成
+                let $icon = TimerLogs.createIconElement(iconLog.type);
+                // メモ引っ張るときに使うID
+                $icon.attr('row-id', iconLog.id);
+                // 配置位置属性付与
+                $icon.css({
+                    'top': top + 'px',
+                    'left': left + 'px',
+                });
+                // 画面上にappend
+                $('.log-contents .icons').append($icon);
+
             }
-        }else{
-            TimerLogs.limitsOfEveryLane.push(0);
-            TimerLogs.limitsOfEveryLane.push(0);
-            TimerLogs.limitsOfEveryLane.push(0);
-            TimerLogs.limitsOfEveryLane.push(0);
-            TimerLogs.limitsOfEveryLane.push(0);
-            TimerLogs.limitsOfEveryLane.push(0);
-        }
-
-
-        // 各アイコン配置
-        targetLogs.forEach(function(log){
-            // アイコンdiv作成
-            let $icon = TimerLogs.createIconElement(log.type);
-            // メモ引っ張るときに使うID
-            $icon.attr('row-id', log.id);
-            // 配置位置属性付与
-            TimerLogs.addPositionStyleOfIcon($icon, new Date(log.switch_time));
-            // 画面上にappend
-            $('.log-contents .icons').append($icon);
+            tempLeft = 0;
+            targetLogsCounter += iconRow.icons_in_a_row;
         });
-
-        // 制御値を初期化
-        TimerLogs.limitsOfEveryLane = [];
 
         // 出現アニメーションスタート
         TimerLogs.animateGraphIconAppearing(100);
@@ -316,7 +330,7 @@ let TimerLogs = {
         let m = dateObject.getMinutes();
         let s = dateObject.getSeconds();
 
-        return (h * 40) + Math.floor(((m * 60) + s) / 90);
+        return (h * 40) + Math.floor(((m * 60) + s) / 90) - 20;
     },
 
     /* 出現アニメーション */

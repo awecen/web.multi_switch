@@ -20,6 +20,17 @@ let Base = {
         Base.attachEventsForAppMenu('whatsnew', '/multi_switch/whatsnew/');
         Base.attachEventsForAppMenu('print', '/multi_switch/print/');
         Base.attachEventsForAppMenu('settings', '/multi_switch/settings/');
+
+        // 背景押しても
+        $(document).on('click', '.app-menu', function(){
+            Base.toggleAppMenu();
+        });
+
+        // 背景の上のBODYは
+        $(document).on('click', '.app-menu .body', function(e){
+            e.stopPropagation();
+        });
+
     },
 
     // app-menu 用イベント付加

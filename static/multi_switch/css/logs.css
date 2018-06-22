@@ -3,7 +3,6 @@
 /**********/
 .timer-body{
     /* 本体 */
-    padding: 8px 0px;
 }
 
 /************/
@@ -44,9 +43,11 @@
     flex-direction: row;
     justify-content: space-around;
     background-color: #fff3e0;
-    padding: 4px;
-    border-radius: 8px 8px 0 0;
-    position: relative;
+    padding: 8px;
+    position: fixed;
+    filter: drop-shadow(1px 1px 3px rgba(0,0,0,0.3));
+    width: 100%;
+    overflow: hidden;
 }
 
 .date-selector .previous-date i.disabled{
@@ -135,15 +136,16 @@
 /* Log Content - Common */
 /************************/
 .log-contents{
-    padding: 0px 8px 8px 8px;
-    display: flex;
-    flex-direction: row;
+    overflow-x: hidden;
     overflow-y: scroll;
-    height: 440px;
+    height: 520px;
     border-left: 1px #f0f0f0 solid;
     border-right: 1px #f0f0f0 solid;
     border-bottom: 1px #f0f0f0 solid;
     border-radius: 0 0 8px 8px;
+    float: left;
+    width: 100%;
+    margin-top: 64px;
 }
 
 /***********************/
@@ -152,7 +154,8 @@
 .log-contents .graph{
     display: flex;
     flex-direction: row;
-    width: 292px;
+    width: 100%;
+    margin: 8px;
 }
 .log-contents .graph .graph-scales{
     display: flex;
@@ -177,9 +180,9 @@
 }
 .log-contents .graph .graph-body{
     height: 1000px;
-    width: 240px;
-    margin-left: 12px;
+    margin: 0 40px 0 12px;
     padding: 20px 0;
+    width: inherit;
 }
 .log-contents .graph .graph-body .graph-base {
     height: 960px;
@@ -187,32 +190,27 @@
     border-radius: 4px;
     background-color: #f1f8e9;
 }
-.log-contents .graph .graph-lines{
-    width: 240px;
-    height: 900px;
-    padding-top: 18px;
-    position: relative;
-    left: -240px;
-}
-.log-contents .graph .graph-lines .scale-1{
+.log-contents .graph .graph-body .graph-base .scale-1{
     color: #666666;
     height: 40px;
     border-bottom: 2px #999999 dotted;
     width: inherit;
 }
-.log-contents .graph .graph-lines .scale-2{
+.log-contents .graph .graph-body .graph-base .scale-2{
     color: #999999;
     height: 40px;
     border-bottom: 1px #cccccc dotted;
     width: inherit;
 }
+
+
 /*****************+*****/
 /* Log Contents - Icon */
 /*****************+*****/
 .icons{
     position: relative;
-    top: 0;
-    left: -240px;
+    top: -988px;
+    left: 60px;
 }
 .graph-icon{
     position: absolute;
@@ -228,6 +226,7 @@
     padding: 8px;
     -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    overflow: hidden;
 }
 
 .graph-icon.milk i{
@@ -338,8 +337,7 @@
     background-color: #ffffff;
     width: 360px;
     border-radius: 8px;
-    margin: 0 auto;
-    margin-top: 24px;
+    margin: 80px auto 0 auto;
 }
 
 .log-detail .detail-body .header{
