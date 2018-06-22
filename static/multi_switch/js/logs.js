@@ -114,7 +114,7 @@ let TimerLogs = {
             // "noCalendar": false, // カレンダーを非表示
             "enableSeconds": true, // '秒' を有効
             "time_24hr": true, // 24時間表示
-            "dateFormat": "Y-m-d H:i", // 時間のフォーマット "時:分:秒"
+            "dateFormat": "Y/m/d H:i", // 時間のフォーマット "時:分:秒"
             // "maxDate": new Date(),
             // "defaultDate": new Date(), // タイムピッカーのデフォルトタイム
         });
@@ -381,13 +381,13 @@ let TimerLogs = {
             // "noCalendar": false, // カレンダーを非表示
             "enableSeconds": true, // '秒' を有効
             "time_24hr": true, // 24時間表示
-            "dateFormat": "Y-m-d H:i", // 時間のフォーマット "時:分:秒"
+            "dateFormat": "Y/m/d H:i", // 時間のフォーマット "時:分:秒"
             "maxDate": new Date(),
             "defaultDate": new Date(), // タイムピッカーのデフォルトタイム
         });
 
         // 年月日時分
-        datetime_instance.setDate(targetLogDatetimeObject, null, "Y-m-d H:i");
+        datetime_instance.setDate(targetLogDatetimeObject, null, "Y/m/d H:i");
         if($('.flatpickr-mobile').val()){
             $('.flatpickr-mobile').val($('.flatpickr-mobile').val().slice(0, -3));
         }
