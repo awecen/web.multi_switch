@@ -371,14 +371,21 @@ let TimerLogs = {
             "maxDate": new Date(),
             "defaultDate": new Date(), // タイムピッカーのデフォルトタイム
         });
+
+        // 年月日時分
         datetime_instance.setDate(targetLogDatetimeObject, null, "Y-m-d H:i");
         if($('.flatpickr-mobile').val()){
             $('.flatpickr-mobile').val($('.flatpickr-mobile').val().slice(0, -3));
         }
+
+        // 秒
         $('#adding-form-datetime-seconds').val(
             datetimeTools.padZero(targetLogDatetimeObject.getSeconds(), 2)
         );
+
+        // メモ
         $('#adding-form-note').val(targetLog.note);
+        M.textareaAutoResize($('#adding-form-note'));
 
         // ダイアログ表示
         $('.log-detail').show();

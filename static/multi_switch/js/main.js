@@ -954,7 +954,9 @@ let Main = {
     setTemporaryNotes: function(){
         Main.temporaryNotes.forEach(function(note){
             let type_name = switchTypeTools.getTypeName(note.type);
-            $('.timer-row[type="' + type_name.name + '"]').find('.note-textarea').val(note.note);
+            let $targetTextarea = $('.timer-row[type="' + type_name.name + '"]').find('.note-textarea');
+            $targetTextarea.val(note.note);
+            M.textareaAutoResize($targetTextarea);
         });
     },
 
