@@ -199,7 +199,7 @@ let TimerLogs = {
         });
 
         // 1枠(40px=1時間)内に最大いくつアイコンが重なるかを算出
-        let basementTime = new Date(targetLogs[0].switch_time);
+        let basementTime = new Date(targetLogs.length > 0 ? targetLogs[0].switch_time: null);
         let max_icons_in_a_row = 1;
         let icons_in_a_row = 1;
 
