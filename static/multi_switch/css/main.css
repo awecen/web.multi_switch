@@ -29,20 +29,24 @@
     background-color: #e8e8e8;
 }
 
+.timer-row:first-child{
+    padding: 8px 0 0 0;
+}
 
 .timer-row .timer-contents{
     /* 各項目 */
     display: flex;
     flex-direction: row;
-    border-bottom: 1px #e8e8e8 dotted;
+    border-bottom: 1px #cccccc dotted;
     padding: 8px 0;
     justify-content: space-around;
 }
 
 .row-title{
     font-weight: bold;
-    padding-left: 6px;
     border-left: 3px #cccccc solid;
+    padding: 0 8px;
+    margin-left: 16px;
 }
 
 /* Row Title Color Variation */
