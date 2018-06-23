@@ -1,36 +1,40 @@
-let TimerLogs = {
+let Logs = {
 
-    /* 全ログ */
+    /**
+     * 全ログ
+     */
     allLogs: null,
 
-    /* アイコン配置制御用 */
-    limitsOfEveryLane : [],
-
-    /* 初期処理 */
+    /**
+     * 初期処理
+     */
     init: function(){
         $('#screen-name').text(CONST.SCREEN_NAME.LOGS);
-        TimerLogs.attachEvents();
+        Logs.attachEvents();
         switchTypeTools.getSwitchTypes(function(){
-            TimerLogs.getLogs(function(){
+            Logs.getLogs(function(){
                 //初期表示は本日分
                 let targetDate = new Date();
-                TimerLogs.setDateSelectorTitle(targetDate);
-                TimerLogs.setIconsToGraph(targetDate);
+                Logs.setDateSelectorTitle(targetDate);
+                Logs.setIconsToGraph(targetDate);
                 Base.toggleLoadingScreen("hide");//ロード画面
             });
         });
-        TimerLogs.initializeMaterialize();
-        TimerLogs.initializeFlatPickr()  ;
+        Logs.initializeMaterialize();
+        Logs.initializeFlatPickr()  ;
 
     },
 
+    /**
+     * イベント付加
+     */
     attachEvents: function(){
 
         /* 日付セレクタ 前の日付 */
         $('.date-selector .previous-date').on('click', function(e){
             let $ct = $(e.currentTarget);
             if(!$ct.find('i').hasClass('disabled')){
-                TimerLogs.moveAnotherDay(true);
+                Logs.moveAnotherDay(true);
             }
         });
 
@@ -38,17 +42,17 @@ let TimerLogs = {
         $('.date-selector .next-date').on('click', function(e){
             let $ct = $(e.currentTarget);
             if(!$ct.find('i').hasClass('disabled')){
-                TimerLogs.moveAnotherDay(false);
+                Logs.moveAnotherDay(false);
             }
         });
 
         /* ログ詳細 ほぞんボタン */
         $('.btn-save').on('click', function(){
             Base.toggleLoadingScreen("show");
-            TimerLogs.updateLogInfo($('.log-detail .detail-body').attr('data-val'),
+            Logs.updateLogInfo($('.log-detail .detail-body').attr('data-val'),
                 function(){
-                    TimerLogs.getLogs(function(){
-                        TimerLogs.setIconsToGraph(
+                    Logs.getLogs(function(){
+                        Logs.setIconsToGraph(
                             new Date($('.date-selector .now-date').attr('data-date')));
                         $('.log-detail').hide();
                         Base.toggleLoadingScreen("hide");
@@ -75,11 +79,13 @@ let TimerLogs = {
         /* アイコン → ログ詳細 */
         $(document).on('click', '.graph-icon', function(e){
             let $tgt = $(e.currentTarget);
-            TimerLogs.showLogDetail($tgt.attr('row-id'));
+            Logs.showLogDetail($tgt.attr('row-id'));
         });
     },
 
-    /* Materialize標準コンポーネントの初期化 */
+    /**
+     * Materialize標準コンポーネントの初期化
+     */
     initializeMaterialize: function(){
         let today = new Date();
         // Date Picker
@@ -105,7 +111,9 @@ let TimerLogs = {
         });
     },
 
-    /* flatpickr 標準コンポーネントの初期化*/
+    /**
+     * flatpickr 標準コンポーネントの初期化
+     */
     initializeFlatPickr: function(){
         // flatpickrを起動させるinputのID *classでも可
         $('#adding-form-datetime').flatpickr({
@@ -120,14 +128,17 @@ let TimerLogs = {
         });
     },
 
-    /* 全ログ取得 */
+    /**
+     * 全ログ取得
+     * @param {function} after - コールバック関数
+     */
     getLogs: function(after){
         $.ajax({
             "url": "/multi_switch/api/log_list/",
             "cache": false,
             "dataType": "json",
             "success": function (result) {
-                TimerLogs.allLogs = result;
+                Logs.allLogs = result;
                 after();
             },
             "error": function (e) {
@@ -136,7 +147,10 @@ let TimerLogs = {
         });
     },
 
-    /* 日付セレクタの文字 */
+    /**
+     * 日付セレクタの文字を表示
+     * @param {Date} dateObject
+     */
     setDateSelectorTitle: function(dateObject) {
         let $target = $('.date-selector .now-date');
         // 制御用属性
@@ -159,24 +173,30 @@ let TimerLogs = {
 
     },
 
-    /* 日付移動 */
+    /**
+     * 日付移動
+     * @param {Boolean} is_previous
+     */
     moveAnotherDay: function(is_previous){
         let i = is_previous ? -1 : 1;
         let $target = $('.date-selector .now-date');
         let dateObj = new Date($target.attr('data-date'));
         dateObj.setDate(dateObj.getDate() + i);
-        TimerLogs.setDateSelectorTitle(dateObj);
-        TimerLogs.setIconsToGraph(dateObj);
+        Logs.setDateSelectorTitle(dateObj);
+        Logs.setIconsToGraph(dateObj);
     },
 
-    /* グラフにアイコンを置いていく*/
+    /**
+     * グラフにアイコンを置いていく
+     * @param {Date} selectedDateObject
+     */
     setIconsToGraph: function(selectedDateObject){
         // 初期化
         $('.icons').empty();
 
         // 指定日付分だけ抽出
         let targetLogs = [];
-        TimerLogs.allLogs.forEach(function(log){
+        Logs.allLogs.forEach(function(log){
            if(datetimeTools.compareDate(
                selectedDateObject, new Date(log.switch_time))){
                targetLogs.push(log);
@@ -198,84 +218,36 @@ let TimerLogs = {
             return 0;
         });
 
-        // 一番左にくるログのID
-        // 重なりがあればいくつ重なるか
-        // この２つを算出
-        let basementTime = new Date(targetLogs.length > 0 ? targetLogs[0].switch_time: null);
-        let firstIconInfo = {
-                id: targetLogs.length > 0 ? targetLogs[0].id: null,
-                icons_in_a_row: 1,
-        };
-        let iconRowsInfo = [];
+        // 表示位置算出
+        Logs.calculateIconPosition(targetLogs);
 
-        for(let i = 1; i < targetLogs.length; i++){
-            let nextLog = targetLogs[i];
-            let nextLogDateObject = new Date(nextLog.switch_time);
-            let delta = datetimeTools.getDelta(nextLogDateObject, basementTime);
-            let deltaSeconds = datetimeTools.convertToSeconds({
-                hours: delta.deltaHours,
-                minutes: delta.deltaMinutes,
-                seconds: delta.deltaSeconds,
+        // 画面上に表示
+        targetLogs.forEach(function(log){
+            // アイコンdiv作成
+            let $icon = Logs.createIconElement(log.type);
+            // メモ引っ張るときに使うID
+            $icon.attr('row-id', log.id);
+            // 配置位置属性付与
+            $icon.css({
+                'top': log.top + 'px',
+                'left': log.left + 'px',
             });
-            if(deltaSeconds <= 3600){
-                firstIconInfo.icons_in_a_row += 1;
-                if(i === targetLogs.length - 1){
-                    iconRowsInfo.push(firstIconInfo);
-                }
-            }else{
-                iconRowsInfo.push(firstIconInfo);
-                // max_icons_in_a_row = max_icons_in_a_row < icons_in_a_row ? icons_in_a_row : max_icons_in_a_row;
-                firstIconInfo = {
-                    id: targetLogs[i].id,
-                    icons_in_a_row: 1,
-                };
-                basementTime = new Date(targetLogs[i].switch_time);
-            };
-        }
-
-        let graphWidth = Math.floor($('.graph-base').width());
-
-        let targetLogsCounter = 0;
-        iconRowsInfo.forEach(function(iconRow){
-            let tempLeft = 0;
-            for(let i = 0; i < iconRow.icons_in_a_row; i++){
-                // Y軸は時分秒から出すだけ
-
-                let iconLog = targetLogs[i + targetLogsCounter];
-                let top = TimerLogs.calculateYPositionOfIcon(new Date(iconLog.switch_time));
-                let left = tempLeft;
-                if(iconRow.icons_in_a_row * 40 <= graphWidth){
-                    // 重ねなくても収まる場合
-                    tempLeft += 40;
-                } else {
-                    // 重ねないと収まらない場合
-                    tempLeft += Math.floor(graphWidth / iconRow.icons_in_a_row);
-                }
-                // アイコンdiv作成
-                let $icon = TimerLogs.createIconElement(iconLog.type);
-                // メモ引っ張るときに使うID
-                $icon.attr('row-id', iconLog.id);
-                // 配置位置属性付与
-                $icon.css({
-                    'top': top + 'px',
-                    'left': left + 'px',
-                });
-                // 画面上にappend
-                $('.log-contents .icons').append($icon);
-
-            }
-            tempLeft = 0;
-            targetLogsCounter += iconRow.icons_in_a_row;
+            // 画面上にappend
+            $('.log-contents .icons').append($icon);
         });
 
         // 出現アニメーションスタート
-        TimerLogs.animateGraphIconAppearing(100);
+        Logs.animateGraphIconAppearing(100);
 
     },
 
-    /* スイッチのタイプ別DOM要素作成 */
-    /* (e.g.) */
-    /* <div class="graph-icon milk" style="top:180px;left:40px;"><i></i></div> */
+    /**
+     * スイッチのタイプ別DOM要素作成
+     * (e.g.)
+     * <div class="graph-icon milk" style="top:180px;left:40px;"><i></i></div>
+     * @param {String} switch_type
+     * @returns {*|jQuery|HTMLElement}
+     */
     createIconElement: function(switch_type){
         let $div = $('<div></div>');
         switchTypeTools.switchTypes.some(function(type){
@@ -299,32 +271,11 @@ let TimerLogs = {
         return $div;
     },
 
-    /* アイコン配置位置算出 */
-    addPositionStyleOfIcon: function($element, dateObject, logs){
-        // Y軸は時分秒から出すだけ
-        let top = TimerLogs.calculateYPositionOfIcon(dateObject);
-        let left = 0;
-
-
-
-        // X軸は重ならないように
-        for(let i = 0; 0 < TimerLogs.limitsOfEveryLane.length; i++){
-            let limit = TimerLogs.limitsOfEveryLane[i];
-            if(limit <= top){
-                TimerLogs.limitsOfEveryLane[i] = top + 40;
-                left = i * (240 / TimerLogs.limitsOfEveryLane.length | 0);
-                break;
-            }
-        }
-
-        $element.css({
-            'top': top + 'px',
-            'left': left + 'px',
-        });
-
-    },
-
-    /* 時分秒からアイコンDOMの高さを算出*/
+    /**
+     * 時分秒からアイコンDOMの高さを算出
+     * @param {Date} dateObject
+     * @returns {number} - トップ位置
+     */
     calculateYPositionOfIcon: function(dateObject){
         let h = dateObject.getHours();
         let m = dateObject.getMinutes();
@@ -333,7 +284,74 @@ let TimerLogs = {
         return (h * 40) + Math.floor(((m * 60) + s) / 90) - 20;
     },
 
-    /* 出現アニメーション */
+    /**
+     * アイコン表示位置の計算
+     * @param {Log[]} targetLogs
+     */
+    calculateIconPosition: function(targetLogs){
+        // 各列の高さ占有値
+        let laneLimits = [0];
+        for(let i = 0; i < targetLogs.length; i++){
+            // 起点
+            let baseLog = targetLogs[i];
+            let baseDate = new Date(baseLog.switch_time);
+            let baseTop = Logs.calculateYPositionOfIcon(baseDate);
+            // 列
+            let yLane = 1;
+            // 高さ占有値配列長分
+            for(let j = 0; j < laneLimits.length; j++){
+                let limit = laneLimits[j];
+                // 高さ占有値が対象ログより小さい
+                // ＝配置可能(列決定)
+                if(limit <= baseTop) {
+                    //高さ占有地を更新してループ脱出
+                    laneLimits[j] = baseTop + 40;//アイコンのX位置と高さ
+                    break;
+                }else{
+                    // 配置不可なので次の列へ
+                    yLane += 1;
+                    // もし次の列の高さ占有値が未定義なら新たに追加してループ脱出
+                    if(laneLimits.length - 1 === j){
+                        laneLimits.push(baseTop + 40);
+                        break;
+                    }
+                }
+            }
+
+            baseLog.top = baseTop;
+            baseLog.lane = yLane;
+            baseLog.left = 0;
+        }
+
+        // グラフ本体の幅
+        let graphWidth = Math.floor($('.graph-base').width());
+
+        // 時系列降順
+        targetLogs.reverse();
+        for(let i = 0; i < targetLogs.length; i++){
+            let log = targetLogs[i];
+            // 基本は40
+            let leftUnit = 40;
+            if(graphWidth < log.lane * 40){
+                // グラフ幅よりはみ出そうな場合はグラフ幅で除した分
+                leftUnit = Math.floor(graphWidth / log.lane);
+            }
+            // Lane1以外にLeftを設定(Lane1は0)
+            while(log.lane !== 1){
+                log.left = (log.lane - 1) * leftUnit;
+                i += 1;
+                log = targetLogs[i];
+            }
+        }
+
+        targetLogs.reverse();
+
+    },
+
+    /**
+     * アイコン出現アニメーション
+     * @param {number} duration - 出現間隔(ミリ秒)
+     */
     animateGraphIconAppearing: function(duration){
       $('.graph-icon').each(function(i, e){
           let $e = $(e);
@@ -345,13 +363,16 @@ let TimerLogs = {
       })
     },
 
-    /* アイコン→メモ表示 */
+    /**
+     * ログ詳細情報ダイアログの表示
+     * @param {number} rowId - 対象ログのid
+     */
     showLogDetail: function(rowId){
         // ダイアログ本体に更新時の識別属性を付与
         $('.log-detail .detail-body').attr('data-val', rowId);
         // 対象ログを抽出
         let targetLog = null;
-        TimerLogs.allLogs.some(function(log){
+        Logs.allLogs.some(function(log){
            if(log.id === parseInt(rowId)){
                targetLog = log;
            }
@@ -405,7 +426,11 @@ let TimerLogs = {
         $('.log-detail').show();
     },
 
-    /* ログの更新(API) */
+    /**
+     * ログの更新(API)
+     * @param {number} rowId - 対象ログのid
+     * @param {function} after - コールバック関数
+     */
     updateLogInfo: function(rowId, after){
         let type = parseInt($('#adding-form-switch-type').children(':selected').attr('switch-type'));
         let date = new Date($('#adding-form-datetime').val() +":"+ ('0' + $('#adding-form-datetime-seconds').val()).slice(-2));
@@ -436,4 +461,5 @@ let TimerLogs = {
 
 };
 
-TimerLogs.init();
+// 初期処理
+Logs.init();
