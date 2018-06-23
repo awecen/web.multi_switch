@@ -46,6 +46,31 @@ let Logs = {
             }
         });
 
+        /* ログ詳細 さくじょボタン */
+        $('.btn-delete').on('click', function(){
+            Logs.openDeletionConfirmDialog();
+        });
+
+        /* ログ詳細 さくじょしちゃうボタン */
+        $('.btn-delete-ok').on('click', function(){
+            Base.toggleLoadingScreen("show");
+            Logs.deleteLog($('.log-detail .detail-body').attr('data-val'), function(){
+                Logs.getLogs(function(){
+                    Logs.closeDeletionConfirmDialog(); // 確認ダイアログ非表示
+                    $('.log-detail').hide(); // ログ詳細情報ダイアログ非表示
+                    Base.toggleLoadingScreen("hide"); // ロード画面非表示
+                    Logs.setIconsToGraph(
+                        new Date($('.date-selector .now-date').attr('data-date'))); // アイコン再描画
+                    libraryTools.popSimpleToast('ログを削除しました。');
+                });
+            });
+        });
+
+        /* ログ詳細 さくじょキャンセルボタン */
+        $('.btn-delete-cancel').on('click', function(){
+            Logs.closeDeletionConfirmDialog();
+        });
+
         /* ログ詳細 ほぞんボタン */
         $('.btn-save').on('click', function(){
             Base.toggleLoadingScreen("show");
@@ -56,7 +81,7 @@ let Logs = {
                             new Date($('.date-selector .now-date').attr('data-date')));
                         $('.log-detail').hide();
                         Base.toggleLoadingScreen("hide");
-                        libraryTools.popSimpleToast('ログ情報を更新しました。');
+                        libraryTools.popSimpleToast('ログを更新しました。');
                     });
                 });
         });
@@ -457,8 +482,45 @@ let Logs = {
                 alert('Error: ログ更新APIエラー\r' + e.responseText);
             }
         });
-    }
+    },
 
+    /**
+     * ログの削除(API)
+     * @param {number} rowId - 対象ログのid
+     * @param {function} after - コールバック関数
+     */
+    deleteLog: function(rowId, after){
+
+        $.ajax({
+            "url": "/multi_switch/api/log_list/" + rowId + "/",
+            "type": "DELETE",
+            "cache": false,
+            "dataType": "json",
+            "headers": {
+                "X-CSRFToken": $("input[name='csrfmiddlewaretoken']").val()
+            },
+            "success": function() {
+                after();
+            },
+            "error": function (e) {
+                alert('Error: ログ削除APIエラー\r' + e.responseText);
+            }
+        });
+    },
+
+    /**
+     * 確認ダイアログ表示
+     */
+    openDeletionConfirmDialog: function(){
+        $('.confirmation').show();
+    },
+
+    /**
+     * 確認ダイアログ非表示
+     */
+    closeDeletionConfirmDialog: function(){
+        $('.confirmation').hide();
+    },
 };
 
 // 初期処理
