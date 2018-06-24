@@ -73,17 +73,32 @@ let Logs = {
 
         /* ログ詳細 ほぞんボタン */
         $('.btn-save').on('click', function(){
-            Base.toggleLoadingScreen("show");
-            Logs.updateLogInfo($('.log-detail .detail-body').attr('data-val'),
-                function(){
+            Base.toggleLoadingScreen("show");// ロード画面ON
+            let row_id = parseInt($('.log-detail .detail-body').attr('data-val'));
+            if(row_id !== 0) {
+                // 既存履歴の編集
+                Logs.updateLogInfo(row_id, function(){
                     Logs.getLogs(function(){
                         Logs.setIconsToGraph(
                             new Date($('.date-selector .now-date').attr('data-date')));
-                        $('.log-detail').hide();
-                        Base.toggleLoadingScreen("hide");
+                        $('.log-detail').hide(); // 詳細ダイアログOFF
+                        Base.toggleLoadingScreen("hide"); // ロード画面OFF
                         libraryTools.popSimpleToast('ログを更新しました。');
                     });
                 });
+            } else {
+                // 新規追加
+                Logs.addNewLog(function(){
+                    Logs.getLogs(function(){
+                        Logs.setIconsToGraph(
+                            new Date($('.date-selector .now-date').attr('data-date')));
+                        $('.log-detail').hide(); // 詳細ダイアログOFF
+                        Base.toggleLoadingScreen("hide"); // ロード画面OFF
+                        libraryTools.popSimpleToast('ログを新規追加しました。');
+                    });
+                });
+            }
+
         });
 
         /* ログ詳細 キャンセルボタン */
@@ -106,6 +121,12 @@ let Logs = {
             let $tgt = $(e.currentTarget);
             Logs.showLogDetail($tgt.attr('row-id'));
         });
+
+        /* FAB しんきついか*/
+        $('.btn-new').on('click', function(){
+           Logs.showLogDetail(0);
+        });
+
     },
 
     /**
@@ -134,6 +155,8 @@ let Logs = {
             },
 
         });
+        // Floating Action Button
+        $('.fixed-action-btn').floatingActionButton();
     },
 
     /**
@@ -393,18 +416,8 @@ let Logs = {
      * @param {number} rowId - 対象ログのid
      */
     showLogDetail: function(rowId){
-        // ダイアログ本体に更新時の識別属性を付与
-        $('.log-detail .detail-body').attr('data-val', rowId);
-        // 対象ログを抽出
-        let targetLog = null;
-        Logs.allLogs.some(function(log){
-           if(log.id === parseInt(rowId)){
-               targetLog = log;
-           }
-        });
         // スイッチタイプ選択肢を作成
-        $('#adding-form-switch-type')
-            .empty()
+        $('#adding-form-switch-type').empty()
             .append($('<option value="" disabled selected>種類を選んでください</option>'))
             .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.MILK, true) + '" value="' + CONST.TYPE_ID.MILK + '">' + CONST.TYPE_NAME.MILK + '</option>'))
             .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.POO, true) + '" value="' + CONST.TYPE_ID.POO + '">' + CONST.TYPE_NAME.POO + '</option>'))
@@ -416,39 +429,131 @@ let Logs = {
             .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NAPPING, true) + '" value="' + CONST.TYPE_ID.NAPPING_ON + '">' + CONST.TYPE_NAME.NAPPING_ON + '</option>'))
             .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NAPPING, false) + '" value="' + CONST.TYPE_ID.NAPPING_OFF + '">' + CONST.TYPE_NAME.NAPPING_OFF + '</option>'))
             .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, true) + '" value="' + CONST.TYPE_ID.NIGHT_ON + '">' + CONST.TYPE_NAME.NIGHT_ON + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, false) + '" value="' + CONST.TYPE_ID.NIGHT_OFF + '">' + CONST.TYPE_NAME.NIGHT_OFF + '</option>'))
+            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, false) + '" value="' + CONST.TYPE_ID.NIGHT_OFF + '">' + CONST.TYPE_NAME.NIGHT_OFF + '</option>'));
 
-        // 各Inputに表示
-        $('#adding-form-switch-type').children('[switch-type="' + targetLog.type + '"]').attr('selected', 'selected');
-        let targetLogDatetimeObject = new Date(targetLog.switch_time)
-        let datetime_instance = flatpickr('#adding-form-datetime', {
-            "locale": "ja",
-            "enableTime": true, // タイムピッカーを有効
-            // "noCalendar": false, // カレンダーを非表示
-            "enableSeconds": true, // '秒' を有効
-            "time_24hr": true, // 24時間表示
-            "dateFormat": "Y/m/d H:i", // 時間のフォーマット "時:分:秒"
-            "maxDate": new Date(),
-            "defaultDate": new Date(), // タイムピッカーのデフォルトタイム
-        });
+        // ダイアログ本体に更新時の識別属性を付与
+        $('.log-detail .detail-body').attr('data-val', rowId);
 
-        // 年月日時分
-        datetime_instance.setDate(targetLogDatetimeObject, null, "Y/m/d H:i");
-        if($('.flatpickr-mobile').val()){
-            $('.flatpickr-mobile').val($('.flatpickr-mobile').val().slice(0, -3));
+        // rowId === 0 は新規追加
+        if(parseInt(rowId) !== 0) {
+
+            // ダイアログのヘッダーテキストを変更
+            $('.detail-body .header').text('りれきをへんしゅうする');
+
+            // 対象ログを抽出
+            let targetLog = null;
+            Logs.allLogs.some(function (log) {
+                if (log.id === parseInt(rowId)) {
+                    targetLog = log;
+                }
+            });
+
+
+            // スイッチタイプ
+            $('#adding-form-switch-type').attr('disabled','disabled');
+            $('#adding-form-switch-type').children('[switch-type="' + targetLog.type + '"]').attr('selected', 'selected');
+
+            // 年月日時分
+            let targetLogDatetimeObject = new Date(targetLog.switch_time)
+            let datetime_instance = flatpickr('#adding-form-datetime', {
+                "locale": "ja",
+                "enableTime": true, // タイムピッカーを有効
+                // "noCalendar": false, // カレンダーを非表示
+                "enableSeconds": true, // '秒' を有効
+                "time_24hr": true, // 24時間表示
+                "dateFormat": "Y/m/d H:i", // 時間のフォーマット "時:分:秒"
+                "maxDate": new Date(),
+                "defaultDate": new Date(), // タイムピッカーのデフォルトタイム
+            });
+            datetime_instance.setDate(targetLogDatetimeObject, null, "Y/m/d H:i");
+            if ($('.flatpickr-mobile').val()) {
+                $('.flatpickr-mobile').val($('.flatpickr-mobile').val().slice(0, -3));
+            }
+
+            // 秒
+            $('#adding-form-datetime-seconds').val(
+                datetimeTools.padZero(targetLogDatetimeObject.getSeconds(), 2)
+            );
+
+            // メモ
+            $('#adding-form-note').val(targetLog.note);
+            M.textareaAutoResize($('#adding-form-note'));
+
+            // 削除ボタン
+            $('.btn-delete').show();
+
+        } else {
+            // 新規追加パターン
+
+            // ダイアログのヘッダーテキストを変更
+            $('.detail-body .header').text('しんきついか する');
+
+            // スイッチタイプ選べるように
+            $('#adding-form-switch-type').attr('disabled',false);
+
+            // 時間は今時間がDefault
+            let now = new Date();
+            let datetime_instance = flatpickr('#adding-form-datetime', {
+                "locale": "ja",
+                "enableTime": true, // タイムピッカーを有効
+                // "noCalendar": false, // カレンダーを非表示
+                "enableSeconds": true, // '秒' を有効
+                "time_24hr": true, // 24時間表示
+                "dateFormat": "Y/m/d H:i", // 時間のフォーマット "時:分:秒"
+                "maxDate": now,
+                "defaultDate": now, // タイムピッカーのデフォルトタイム
+            });
+            datetime_instance.setDate(now, null, "Y/m/d H:i");
+            $('#adding-form-datetime-seconds').val(
+                datetimeTools.padZero(now.getSeconds(), 2)
+            );
+            if ($('.flatpickr-mobile').val()) {
+                $('.flatpickr-mobile').val($('.flatpickr-mobile').val().slice(0, -3));
+            }
+
+            // メモは空欄
+            $('#adding-form-note').val('');
+            M.textareaAutoResize($('#adding-form-note'));
+
+            // 削除ボタンはいらない
+            $('.btn-delete').hide();
+
         }
-
-        // 秒
-        $('#adding-form-datetime-seconds').val(
-            datetimeTools.padZero(targetLogDatetimeObject.getSeconds(), 2)
-        );
-
-        // メモ
-        $('#adding-form-note').val(targetLog.note);
-        M.textareaAutoResize($('#adding-form-note'));
 
         // ダイアログ表示
         $('.log-detail').show();
+    },
+
+    /**
+     * ログの新規追加(API)
+     * @param {function} after - コールバック関数
+     */
+    addNewLog: function(after){
+        let type = parseInt($('#adding-form-switch-type').children(':selected').attr('switch-type'));
+        let date = new Date($('#adding-form-datetime').val() +":"+ ('0' + $('#adding-form-datetime-seconds').val()).slice(-2));
+        let note = $('#adding-form-note').val();
+
+        let insertData = {
+            type: type,
+            switch_time: datetimeTools.convertToDbFormat(date),
+            note: note,
+        }
+        $.ajax({
+            "url": "/multi_switch/api/log_list/",
+            "type": "POST",
+            "cache": false,
+            "dataType": "json",
+            "headers": {
+                "X-CSRFToken": $("input[name='csrfmiddlewaretoken']").val()
+            },
+            "data": insertData,
+            "success": function() {
+                after();
+            },
+            "error": function (e) {
+                alert('Error: ログ新規追加APIエラー\r' + e.responseText);
+            }
+        });
     },
 
     /**

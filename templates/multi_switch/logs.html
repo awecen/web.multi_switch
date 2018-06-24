@@ -11,14 +11,6 @@
 {% block content %}
     {% csrf_token %}
     <div class="timer-body">
-        <!--
-        <div class="timer-header">
-            <div class="app-title">これまでのきろく</div>
-            <div class="logs-icon">
-                 <i class="small material-icons">access_time</i>
-            </div>
-        </div>
-        -->
         <!-- 日付セレクタ -->
         <div class="date-selector">
             <div class="previous-date">
@@ -38,7 +30,6 @@
                 <i class="medium material-icons">chevron_right</i>
             </div>
         </div>
-
         <!-- データ 領域 -->
         <div class="log-contents">
             <!-- グラフ -->
@@ -132,7 +123,7 @@
                             <div class="title">すいっちたいぷ</div>
                             <div class="input switch_type">
 {#                                <label>Browser Select</label>#}
-                                <select id="adding-form-switch-type" class="browser-default" disabled>
+                                <select id="adding-form-switch-type" class="browser-default">
 {#                                    <option value="" disabled selected>種類を選んでください</option>#}
 {#                                    <option value="milk">みるく</option>#}
 {#                                    <option value="poo">うんち</option>#}
@@ -149,7 +140,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="title">にちじ</div>
+                            <div class="title datetime-input-items">にちじ</div>
                             <div class="input datetime-input-items">
                                 <div class="item-input">
                                     <input id="adding-form-datetime" class="flatpickr flatpickr-input" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
@@ -190,6 +181,15 @@
                 </div>
             </div>
         </div>
+    </div>
+    <!-- FAB -->
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large red">
+            <i class="large material-icons">more_horiz</i>
+        </a>
+        <ul>
+            <li><a class="btn-new btn-floating blue"><i class="material-icons">create</i></a></li>
+        </ul>
     </div>
 
 {% endblock content %}
