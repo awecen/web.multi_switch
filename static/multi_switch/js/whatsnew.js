@@ -7,8 +7,11 @@ let Whatsnew = {
         Whatsnew.showInfo();
     },
 
-
     showInfo: function(){
+        Whatsnew.appendInfoRowElement('1.2.0', '2018/06/24 22:30', [
+            'きろく画面でログの新規追加が出来るようになった',
+            'きろく画面の表示方法を「グラフ形式」と「リスト形式」とで切り替えられるようになった',
+        ]);
         Whatsnew.appendInfoRowElement('1.1.0', '2018/06/23 23:00', [
             'きろく画面でログの削除が出来るようになった',
             'グラフ上に表示されるアイコン位置の不具合を修正した',

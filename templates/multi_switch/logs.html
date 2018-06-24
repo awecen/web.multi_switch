@@ -16,21 +16,21 @@
             <div class="previous-date">
                 <i class="medium material-icons">chevron_left</i>
             </div>
-            <div class="now-date" data-date="YYYY/MM/DD">
-                <div class="year">YYYY年</div>
+            <div class="now-date" data-date="">
+                <div class="year">&nbsp;年</div>
                 <div class="date">
-                    <div class="number month">MM</div>
+                    <div class="number month">&nbsp;</div>
                     <div class="character">月</div>
-                    <div class="number day">DD</div>
+                    <div class="number day">&nbsp;</div>
                     <div class="character">日</div>
-                    <div class="weekday">(AAA)</div>
+                    <div class="weekday">(&nbsp;)</div>
                 </div>
             </div>
             <div class="next-date">
                 <i class="medium material-icons">chevron_right</i>
             </div>
         </div>
-        <!-- データ 領域 -->
+        <!-- グラフ形式 -->
         <div class="log-contents">
             <!-- グラフ -->
             <div class="graph">
@@ -111,19 +111,37 @@
 {#                <div class="graph-icon night-on" style="top:160px;left:0px;"><i></i></div>#}
 {#                <div class="graph-icon night-off" style="top:760px;left:0px;"><i></i></div>#}
             </div>
-            <!-- ログ詳細ダイアログ -->
-            <div class="log-detail">
+        </div>
 
-                <div class="detail-body" data-val="0">
-                    <div class="header">
-                        しょうさい
-                    </div>
-                    <div class="contents">
-                        <div class="row">
-                            <div class="title">すいっちたいぷ</div>
-                            <div class="input switch_type">
+        <!-- リスト形式 -->
+        <div class="log-list">
+{#            <div class="list-row" row-id="13">#}
+{#                <div class="list-icon milk">#}
+{#                    <i></i>#}
+{#                </div>#}
+{#                <div class="info">#}
+{#                    <div class="date">17:22:21</div>#}
+{#                    <div class="note">めもめもめもめもめもめもめももももめももめめめめ</div>#}
+{#                </div>#}
+{#                <div class="list-icon edit">#}
+{#                    <i class="medium material-icons">create</i>#}
+{#                </div>#}
+{#            </div>#}
+        </div>
+
+        <!-- ログ詳細ダイアログ -->
+        <div class="log-detail">
+
+            <div class="detail-body" data-val="0">
+                <div class="header">
+                    しょうさい
+                </div>
+                <div class="contents">
+                    <div class="row">
+                        <div class="title">すいっちたいぷ</div>
+                        <div class="input switch_type">
 {#                                <label>Browser Select</label>#}
-                                <select id="adding-form-switch-type" class="browser-default">
+                            <select id="adding-form-switch-type" class="browser-default">
 {#                                    <option value="" disabled selected>種類を選んでください</option>#}
 {#                                    <option value="milk">みるく</option>#}
 {#                                    <option value="poo">うんち</option>#}
@@ -136,60 +154,63 @@
 {#                                    <option value="napping-off">ひるね(終了)</option>#}
 {#                                    <option value="night-on">よるね(開始)</option>#}
 {#                                    <option value="night-off">よるね(終了)</option>#}
-                                </select>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="title datetime-input-items">にちじ</div>
+                        <div class="input datetime-input-items">
+                            <div class="item-input">
+                                <input id="adding-form-datetime" class="flatpickr flatpickr-input" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="title datetime-input-items">にちじ</div>
-                            <div class="input datetime-input-items">
-                                <div class="item-input">
-                                    <input id="adding-form-datetime" class="flatpickr flatpickr-input" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
-                                </div>
+                        <div class="input-seconds">
+                            <div class="input input-field">
+                                <input id="adding-form-datetime-seconds" type="number" value="0" min="0" max="59">
                             </div>
-                            <div class="input-seconds">
-                                <div class="input input-field">
-                                    <input id="adding-form-datetime-seconds" type="number" value="0" min="0" max="59">
-                                </div>
-                                <div class="label-seconds">
-                                    <span>秒</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="title">めも</div>
-                            <div class="input note">
-                                <textarea id="adding-form-note" class="materialize-textarea"></textarea>
+                            <div class="label-seconds">
+                                <span>秒</span>
                             </div>
                         </div>
                     </div>
-                    <div class="footer">
-                        <div class="btn-delete waves-effect waves-light btn red darken-2">削除</div>
-                        <div class="btn-save waves-effect waves-light btn blue darken-2">保存</div>
-                        <div class="btn-cancel waves-effect waves-light btn grey darken-1">きゃんせる</div>
+                    <div class="row">
+                        <div class="title">めも</div>
+                        <div class="input note">
+                            <textarea id="adding-form-note" class="materialize-textarea"></textarea>
+                        </div>
                     </div>
                 </div>
-
+                <div class="footer">
+                    <div class="btn-delete waves-effect waves-light btn red darken-2">削除</div>
+                    <div class="btn-save waves-effect waves-light btn blue darken-2">保存</div>
+                    <div class="btn-cancel waves-effect waves-light btn grey darken-1">きゃんせる</div>
+                </div>
             </div>
-            <!-- 確認ダイアログ -->
-            <div class="confirmation">
-                <div class="dialog">
-                    <div class="contents">元には戻せんぞ。<br>...良いのだな？</div>
-                    <div class="footer">
-                        <div class="btn-delete-ok waves-effect waves-light btn red darken-2">消え去れ！</div>
-                        <div class="btn-delete-cancel waves-effect waves-light btn grey darken-1">やめます...</div>
-                    </div>
+
+        </div>
+
+        <!-- 確認ダイアログ -->
+        <div class="confirmation">
+            <div class="dialog">
+                <div class="contents">元には戻せんぞ。<br>...良いのだな？</div>
+                <div class="footer">
+                    <div class="btn-delete-ok waves-effect waves-light btn red darken-2">消え去れ！</div>
+                    <div class="btn-delete-cancel waves-effect waves-light btn grey darken-1">やめます...</div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- FAB -->
-    <div class="fixed-action-btn">
-        <a class="btn-floating btn-large red">
-            <i class="large material-icons">more_horiz</i>
-        </a>
-        <ul>
-            <li><a class="btn-new btn-floating blue"><i class="material-icons">create</i></a></li>
-        </ul>
+
+        <!-- FAB -->
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">toys</i>
+            </a>
+            <ul>
+                <li><a class="btn-change-graph btn-floating green invisible"><i class="material-icons">bubble_chart</i></a></li>
+                <li><a class="btn-change-list btn-floating green"><i class="material-icons">list</i></a></li>
+                <li><a class="btn-new btn-floating blue"><i class="material-icons">create</i></a></li>
+            </ul>
+        </div>
     </div>
 
 {% endblock content %}

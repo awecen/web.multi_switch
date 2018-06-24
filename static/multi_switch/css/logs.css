@@ -214,7 +214,7 @@
     left: 60px;
 }
 .graph-icon{
-position: absolute;
+    position: absolute;
     transform: scale(0);
     transition: transform 0.5s cubic-bezier(.2,.8,.46,1.29);
     overflow: hidden;
@@ -513,9 +513,180 @@ position: absolute;
     margin-left: 8px;
 }
 
+/************/
+/* Log List */
+/************/
+
+.log-list{
+    display: none;
+    overflow-x: hidden;
+    border-left: 1px #f0f0f0 solid;
+    border-right: 1px #f0f0f0 solid;
+    border-bottom: 1px #f0f0f0 solid;
+    border-radius: 0 0 8px 8px;
+    float: left;
+    width: 100%;
+    margin-top: 64px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.log-list .list-row{
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    border-bottom: 1px #f0f0f0 solid;
+    transition: all 0.3s ease;
+    opacity: 0;
+    padding: 0;
+    height: 0;
+    display: none;
+}
+.log-list .list-row:last-child{
+    margin-bottom: 40px;
+}
+
+.log-list .list-row .list-icon{
+    /*position: absolute;*/
+    /*transform: scale(0);*/
+    transition: transform 0.5s cubic-bezier(.2,.8,.46,1.29);
+    overflow: hidden;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    margin: 0 16px;
+}
+
+.log-list .list-row .list-icon.edit {
+    /* Editアイコンだけクリッカブルなので */
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+.log-list .list-row .list-icon i{
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 8px;
+}
+
+.log-list .list-row .list-icon.milk i{
+    content: url(/static/multi_switch/img/milk_64.png);
+    background-color: #ffcdd2;
+}
+
+.log-list .list-row .list-icon.poo i{
+    content: url(/static/multi_switch/img/poo_64.png);
+    background-color: #ffcc80;
+}
+
+.log-list .list-row .list-icon.pee i{
+    content: url(/static/multi_switch/img/pee_64.png);
+    background-color: #fff59d;
+}
+.log-list .list-row .list-icon.food i{
+    content: url(/static/multi_switch/img/food_64.png);
+    background-color: #80cbc4;
+}
+
+.log-list .list-row .list-icon.shower i {
+    content: url(/static/multi_switch/img/shower_64.png);
+    background-color: #9fa8da;
+}
+
+.log-list .list-row .list-icon.helmet-on i{
+    content: url(/static/multi_switch/img/helmet_64.png);
+    background-color: #90caf9;
+}
+
+.log-list .list-row .list-icon.helmet-off i{
+    content: url(/static/multi_switch/img/helmet_64.png);
+    background-color: #ef9a9a;
+}
+
+.log-list .list-row .list-icon.napping-on i{
+    content: url(/static/multi_switch/img/napping_64.png);
+    background-color: #c5e1a5;
+}
+
+.log-list .list-row .list-icon.napping-off i{
+    content: url(/static/multi_switch/img/napping_64.png);
+    background-color: #ffe082;
+}
+
+.log-list .list-row .list-icon.night-on i{
+    content: url(/static/multi_switch/img/night_64.png);
+    background-color: #ce93d8;
+}
+
+.log-list .list-row .list-icon.night-off i{
+    content: url(/static/multi_switch/img/night_64.png);
+    background-color: #bcaaa4;
+}
+
+.log-list .list-row .list-icon.edit i{
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    background-color: #5e35b1;
+    font-size: 24px;
+    cursor: pointer;
+    color: #ffffff;
+}
+.log-list .list-row .list-icon.edit i:hover{
+    background-color: #64ffda;
+}
+
+.log-list .list-row .info{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.log-list .list-row .info .date {
+    color: #999999;
+    font-size: 16px;
+    margin: 4px 0;
+    font-weight: bold;
+}
+
+.log-list .list-row .info .note{
+    color: #666666;
+    font-size: 12px;
+}
+.log-list .list-row .info .note pre{
+    display: block;
+    margin: inherit;
+    font-size: initial;
+    line-height: inherit;
+    word-break: initial;
+    word-wrap: initial;
+    background-color: initial;
+    border: 0;
+    border-radius: 0px;
+    font-family: inherit;
+    padding: 0;
+}
+
+.log-list .list-row .edit{
+
+}
 /**************************/
 /* Floating Action Button */
 /**************************/
 .fixed-action-btn{
     z-index: 200;
+}
+
+.fixed-action-btn ul li a.invisible{
+    display: none;
 }
