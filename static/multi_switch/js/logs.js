@@ -11,18 +11,9 @@ let Logs = {
     init: function(){
         $('#screen-name').text(CONST.SCREEN_NAME.LOGS);
         Logs.attachEvents();
-        switchTypeTools.getSwitchTypes(function(){
-            Logs.getLogs(function(){
-                //初期表示は本日分
-                let targetDate = new Date();
-                Logs.setDateSelectorTitle(targetDate);
-                Logs.setIconsToGraph(targetDate);
-                Base.toggleLoadingScreen("hide");//ロード画面
-            });
-        });
         Logs.initializeMaterialize();
-        Logs.initializeFlatPickr()  ;
-
+        Logs.initializeFlatPickr();
+        Logs.changeView("graph");
     },
 
     /**
@@ -127,6 +118,24 @@ let Logs = {
            Logs.showLogDetail(0);
         });
 
+        /* FAB リスト形式へ*/
+        $('.btn-change-list').on('click', function(){
+            Base.toggleLoadingScreen("show");
+            Logs.changeView('list');
+        });
+
+        /* FAB グラフ形式へ*/
+        $('.btn-change-graph').on('click', function(){
+            Base.toggleLoadingScreen("show");
+            Logs.changeView('graph');
+        });
+
+        /* リスト形式 編集ボタン */
+        $(document).on('click', '.list-icon.edit', function(e){
+            let $tgt = $(e.currentTarget);
+            Logs.showLogDetail($tgt.parent().attr('row-id'));
+        });
+
     },
 
     /**
@@ -156,7 +165,9 @@ let Logs = {
 
         });
         // Floating Action Button
-        $('.fixed-action-btn').floatingActionButton();
+        $('.fixed-action-btn').floatingActionButton({
+            hoverEnabled: false,
+        });
     },
 
     /**
@@ -232,6 +243,7 @@ let Logs = {
         dateObj.setDate(dateObj.getDate() + i);
         Logs.setDateSelectorTitle(dateObj);
         Logs.setIconsToGraph(dateObj);
+        Logs.setLogsToList(dateObj);
     },
 
     /**
@@ -408,6 +420,137 @@ let Logs = {
                   $e.css('transform', 'scale(1)');
               }, duration * i);
           }
+      })
+    },
+
+    /**
+     * リスト形式の画面にログを反映させる
+     * @param {Date} selectedDateObject
+     */
+    setLogsToList: function(selectedDateObject){
+        // 要素初期化
+        $('.log-list').empty();
+
+        // 指定日付分だけ抽出
+        let targetLogs = [];
+        Logs.allLogs.forEach(function(log){
+           if(datetimeTools.compareDate(
+               selectedDateObject, new Date(log.switch_time))){
+               targetLogs.push(log);
+           }
+        });
+
+        // 対象ログを日付昇順に並べ替え
+        targetLogs.sort(function(a, b){
+            //(ソート順に基づき、aはbより小さい)
+            if (new Date(a.switch_time) - new Date(b.switch_time) < 0)
+                return -1;
+
+            //(ソート順に基づき、aはbより大きい)
+            if (new Date(a.switch_time) - new Date(b.switch_time) > 0)
+                return 1;
+
+            // aはbと等しい(ここに到達する場合は等しいはずである)
+            return 0;
+        });
+
+        // 画面上に表示
+        targetLogs.forEach(function(log){
+            // アイコンdiv作成
+            let $list_item = Logs.createLogListElement(log.type, new Date(log.switch_time), log.note);
+            // メモ引っ張るときに使うID
+            $list_item.attr('row-id', log.id);
+            // 画面上にappend
+            $('.log-list').append($list_item);
+        });
+
+        // 出現アニメーションスタート
+        Logs.animateLogListAppearing(100);
+
+    },
+
+    /**
+     * スイッチのタイプ別リスト形式ログDOM要素作成
+     * (e.g.)
+     * @param {String} switch_type
+     * @param {Date} date
+     * @param {String} note
+     * @returns {*|jQuery|HTMLElement}
+     */
+    createLogListElement: function(switch_type, date, note){
+        let $div = $('<div></div>');
+        $div.addClass('list-row');
+
+        // アクションアイコン
+        let $icon_div = $('<div></div>');
+        $icon_div.addClass('list-icon');
+        switchTypeTools.switchTypes.some(function(type){
+            if(type.id === switch_type){
+
+                switch(type.name){
+                    case CONST.TYPE_ID.HELMET:
+                    case CONST.TYPE_ID.NAPPING:
+                    case CONST.TYPE_ID.NIGHT:
+                        $icon_div.addClass(type.name + (type.is_on ? "-on" : "-off"));
+                        break;
+                    default:
+                        $icon_div.addClass(type.name);
+                }
+
+                $icon_div.append($('<i></i>'));
+                return true;
+            }
+        });
+        $icon_div.appendTo($div);
+
+        // Info
+        let $info_div = $('<div></div>');
+        $info_div.addClass('info').appendTo($div)
+
+        let $info_date_div = $('<div></div>');
+        $info_date_div.addClass('date')
+            .text(
+            datetimeTools.padZero(date.getHours(), 2) + ":" +
+            datetimeTools.padZero(date.getMinutes(), 2) + ":" +
+            datetimeTools.padZero(date.getSeconds(), 2)
+        ).appendTo($info_div);
+
+        let $info_note_div = $('<div></div>');
+        $info_note_div.addClass('note')
+            .append($('<pre>' + (note ? note : "---") + '</pre>'))
+            .appendTo($info_div);
+
+        // Editアイコン
+        let $edit_div = $('<div></div>');
+        $edit_div.addClass('list-icon edit').appendTo($div);
+
+        let $edit_i = $('<i></i>');
+        $edit_i.addClass('medium material-icons')
+            .text('create').appendTo($edit_div);
+
+        return $div;
+    },
+
+    /**
+     * アイコン出現アニメーション
+     * @param {number} duration - 出現間隔(ミリ秒)
+     */
+    animateLogListAppearing: function(duration){
+      $('.list-row').each(function(i, e){
+          let $e = $(e);
+          setTimeout(function(){
+              $e.css('display', 'flex')
+                  .animate({
+                      'paddingTop': '16px',
+                      'paddingBottom':'16px',
+                  }, duration, 'swing', function(){
+                      $e.css({
+                          'opacity': '1',
+                          'height': 'initial',
+                      });
+                  });
+              }, duration * i);
+
       })
     },
 
@@ -626,6 +769,56 @@ let Logs = {
     closeDeletionConfirmDialog: function(){
         $('.confirmation').hide();
     },
+
+    /**
+     * 表示形式切り替え
+     * @param {String} view_type
+     */
+    changeView: function(view_type){
+        switch(view_type){
+            case "graph":
+                $('.log-list').empty();
+                $('.btn-change-graph').addClass('invisible');
+                $('.btn-change-list').removeClass('invisible');
+                $('.log-list').hide();
+                $('.log-contents').show();
+
+                // グラフ表示 初期処理
+                switchTypeTools.getSwitchTypes(function(){
+                    Logs.getLogs(function(){
+                        let $target = $('.date-selector .now-date');
+                        let targetDate = $target.attr('data-date') ? new Date($target.attr('data-date')) : new Date();
+                        Logs.setDateSelectorTitle(targetDate);
+                        Logs.setIconsToGraph(targetDate);
+                        Base.toggleLoadingScreen("hide");//ロード画面OFF
+                        $('.fixed-action-btn').floatingActionButton('close');
+                    });
+                });
+
+                break;
+            case "list":
+                $('.icons').empty();
+                $('.btn-change-graph').removeClass('invisible');
+                $('.btn-change-list').addClass('invisible');
+                $('.log-list').show();
+                $('.log-contents').hide();
+
+                switchTypeTools.getSwitchTypes(function(){
+                    Logs.getLogs(function(){
+                        let $target = $('.date-selector .now-date');
+                        let targetDate = $target.attr('data-date') ? new Date($target.attr('data-date')) : new Date();
+                        Logs.setDateSelectorTitle(targetDate);
+                        Logs.setLogsToList(targetDate);
+                        Base.toggleLoadingScreen("hide");//ロード画面OFF
+                        $('.fixed-action-btn').floatingActionButton('close');
+
+                    });
+                });
+                break;
+        }
+
+    },
+
 };
 
 // 初期処理
