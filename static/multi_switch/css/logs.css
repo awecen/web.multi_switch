@@ -342,14 +342,17 @@ position: absolute;
     width: 360px;
     border-radius: 8px;
     margin: 80px auto 0 auto;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
 }
 
 .log-detail .detail-body .header{
-    color: #ffffff;
-    padding: 8px;
-    background-color: #f57f17;
+    color: #333333;
+    padding: 12px 8px;
+    background-color: #ffe57f;
     border-radius: 8px 8px 0 0;
     font-size: 16px;
+    font-weight: bold;
 }
 
 .log-detail .detail-body .contents{
@@ -376,10 +379,28 @@ position: absolute;
 .log-detail .detail-body .contents .row .input.switch_type select{
     border: 0;
     border-bottom: 1px #9e9e9e solid;
+    
 }
+
+#adding-form-switch-type{
+    cursor: pointer;
+}
+
+#adding-form-switch-type:disabled{
+    cursor: default;
+}
+
 .log-detail .detail-body .contents .row .input.switch_type select:focus{
     outline:none;
     border-bottom: 1px #c9f3ef solid;
+}
+
+.datetime-input-items .title{
+    width: 20%;
+}
+
+.datetime-input-items .input{
+    width: 60%;
 }
 
 .log-detail .detail-body .contents .row .input.datetime-input-items .item-input{
@@ -450,11 +471,18 @@ position: absolute;
 .confirmation{
     display: none;
     background-color: rgba(0, 0, 0, 0.2);
+    top: 0;
+    position: fixed;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 400;
 }
 
 .confirmation .dialog{
     width: 300px;
     background-color: #ffffff;
+    border-radius: 8px;
     overflow: hidden;
     position: fixed;
     top: 0;
@@ -483,4 +511,11 @@ position: absolute;
 }
 .confirmation .dialog .footer div{
     margin-left: 8px;
+}
+
+/**************************/
+/* Floating Action Button */
+/**************************/
+.fixed-action-btn{
+    z-index: 200;
 }
