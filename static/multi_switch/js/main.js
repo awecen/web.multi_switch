@@ -1,15 +1,27 @@
 let Main = {
 
+    /**
+     * スイッチ種類
+     */
     switchTypes: {},
 
+    /**
+     * 全ログ
+     */
     allLogs: [],
 
+    /**
+     * 最新ログ
+     */
     latestLogs: {
         'helmet': null,
         'napping': null,
         'night': null,
     },
 
+    /**
+     * 累計計算用
+     */
     totalTime: {
         'helmet':{
             'on':{},
@@ -23,6 +35,9 @@ let Main = {
         }
     },
 
+    /**
+     * くるくるタイマーID
+     */
     timerIds: {
         'helmet_now': 0,
         'helmet_on': 0,
@@ -31,9 +46,14 @@ let Main = {
         'night': 0,
     },
 
+    /**
+     * 一時保存用メモ
+     */
     temporaryNotes: [],
 
-    /* 初期処理 */
+    /**
+     * 初期処理
+     */
     init: function(){
         $('#screen-name').text(CONST.SCREEN_NAME.MAIN);
         Main.setShowMoreDisabled(); // attachEventsより前
@@ -50,6 +70,9 @@ let Main = {
 
     },
 
+    /**
+     * イベント付加
+     */
     attachEvents: function(){
 
         /* しょうさい開閉 */
@@ -120,7 +143,9 @@ let Main = {
 
     },
 
-    /* くわしく ボタンの active/negative 切り替え */
+    /**
+     * [くわしく] ボタンの active/negative 切り替え
+     */
     setShowMoreDisabled: function(){
         $('.detail-info').each(function(index, detail){
             /* 詳細情報項目が一つもないならボタンnegative */
@@ -132,7 +157,11 @@ let Main = {
         });
     },
 
-    /* くわしく ボタン 開閉 */
+    /**
+     * [くわしく] ボタン 開閉
+     * @param $e
+     * @param $div
+     */
     toggleDetailInfo: function($e, $div){
         if($div.hasClass('invisible')){
             $div.removeClass('invisible');
@@ -158,7 +187,12 @@ let Main = {
         }
     },
 
-    /* 登録API */
+    /**
+     * ログ登録API
+     * @param {string} log_type - スイッチ種類
+     * @param {Boolean} is_on - スイッチON/OFF
+     * @param {function} after - コールバック関数
+     */
     registerLog: function(log_type, is_on, after){
         let newData = {
             "switch_time": datetimeTools.convertToDbFormat(new Date()),
@@ -207,7 +241,10 @@ let Main = {
         });
     },
 
-    /* 全ログ取得 */
+    /**
+     * 全ログ取得API
+     * @param {function} after - コールバック関数
+     */
     getLogs: function(after){
         $.ajax({
             "url": "/multi_switch/api/log_list/",
@@ -223,7 +260,9 @@ let Main = {
         });
     },
 
-    /* Info:ぜんぶ */
+    /**
+     *  全項目情報表示
+     */
     setInfoAll: function(){
         Main.setInfoMilk();
         Main.setInfoPoo();
@@ -235,7 +274,40 @@ let Main = {
         Main.setInfoNight();
     },
 
-    /* Info:おっぱい  */
+    /**
+     * 【共通】前回時間取得
+     */
+    setInfoCommonPreviousTime: function(switchType){
+        let targetLog = "";
+        Main.allLogs.some(function(log){
+            // タイプ一致(※on/offについては現状全部onなので)
+            let typeId = switchTypeTools.getTypeId(switchType, true);
+            if(log.type === typeId){
+                targetLog = log;
+                return true;
+            }
+        });
+
+        // きょう、きのう、おととい変換
+        let logDateObject = new Date(targetLog.switch_time)
+        let displayDate = datetimeTools.convertJapaneseDesignation(logDateObject);
+        // それより前なら日付そのまま表示
+        let dateTimeString = datetimeTools.convertToStringFormat(logDateObject);
+        let displayDatetime = displayDate ? displayDate + ' ' + dateTimeString.slice(-8) : dateTimeString;
+
+        // DOM要素に反映
+        $('.timer-row[type="' + switchType + '"]')
+                .find('.timer-contents')
+                .find('.info')
+                .find('.basic-info')
+                .find('.info-item.previous-time')
+                .find('.time')
+                .text(displayDatetime);
+    },
+
+    /**
+     * 【おっぱい/みるく】情報表示
+     */
     setInfoMilk: function(){
         let switchType = CONST.TYPE_ID.MILK;
 
@@ -261,7 +333,9 @@ let Main = {
                 .text(num + 'かい');
     },
 
-    /* Info:うんち */
+    /**
+     * 【うんち】情報表示
+     */
     setInfoPoo: function(){
         let switchType = CONST.TYPE_ID.POO;
 
@@ -320,7 +394,9 @@ let Main = {
                 .text(con + 'にち');
     },
 
-    /* Info:おしっこ */
+    /**
+     * 【おしっこ】情報表示
+     */
     setInfoPee: function(){
         let switchType = CONST.TYPE_ID.PEE;
 
@@ -346,7 +422,9 @@ let Main = {
                 .text(num + 'かい');
     },
 
-    /* Info:ごはん */
+    /**
+     * 【ごはん】情報表示
+     */
     setInfoFood: function(){
         let switchType = CONST.TYPE_ID.FOOD;
 
@@ -354,7 +432,9 @@ let Main = {
         Main.setInfoCommonPreviousTime(switchType);
     },
 
-    /* Info:おふろ */
+    /**
+     * 【おふろ/しゃわー】情報表示
+     */
     setInfoShower: function(){
         let switchType = CONST.TYPE_ID.SHOWER;
 
@@ -362,7 +442,9 @@ let Main = {
         Main.setInfoCommonPreviousTime(switchType);
     },
 
-    /* Info: へるめっと */
+    /**
+     * 【へるめっと】情報表示
+     */
     setInfoHelmet: function(){
         let switchType = CONST.TYPE_ID.HELMET;
         let typeId_on = switchTypeTools.getTypeId(switchType, true);
@@ -484,7 +566,9 @@ let Main = {
         Main.changeHelmetStatus(Main.latestLogs.helmet.type !== typeId_on);
     },
 
-    /* Info: へるめっと(タイマー処理用) */
+    /**
+     * 【へるめっと】タイマー処理用
+     */
     setInfoHelmetForTimer: function(){
         let switchType = CONST.TYPE_ID.HELMET;
 
@@ -546,7 +630,10 @@ let Main = {
         $targetTotal.find('.seconds').text(datetimeTools.padZero(timerTotalForDisplay_m.seconds, 2));
     },
 
-    /* Info: へるめっと(スイッチ切り替え) */
+    /**
+     * 【へるめっと】スイッチ ON/OFF 切替
+     * @param {Boolean} is_on
+     */
     changeHelmetStatus: function(is_on){
         let switch_type = CONST.TYPE_ID.HELMET;
 
@@ -573,7 +660,9 @@ let Main = {
 
     },
 
-    /* Info: ひるね */
+    /**
+     * 【ひるね】情報表示
+     */
     setInfoNapping: function(){
         let switchType = CONST.TYPE_ID.NAPPING;
         let typeId_on = switchTypeTools.getTypeId(switchType, true);
@@ -673,7 +762,9 @@ let Main = {
         Main.changeNappingStatus(Main.latestLogs.napping.type !== typeId_on);
     },
 
-    /* Info: ひるね(タイマー処理用) */
+    /**
+     * 【ひるね】タイマー処理用
+     */
     setInfoNappingForTimer: function(){
         let switchType = CONST.TYPE_ID.NAPPING;
 
@@ -734,7 +825,10 @@ let Main = {
 
     },
 
-    /* Info: ひるね(スイッチ切り替え) */
+    /**
+     * 【ひるね】スイッチ ON/OFF 切替
+     * @param {Boolean} is_on
+     */
     changeNappingStatus: function(is_on){
         let switch_type = CONST.TYPE_ID.NAPPING;
 
@@ -760,7 +854,9 @@ let Main = {
         }
     },
 
-    /* Info: よるね */
+   /**
+     * 【よるね】情報表示
+     */
     setInfoNight: function(){
         let switchType = CONST.TYPE_ID.NIGHT;
         let typeId_on = switchTypeTools.getTypeId(switchType, true);
@@ -851,7 +947,9 @@ let Main = {
 
     },
 
-    /* Info: よるね(タイマー処理用) */
+    /**
+     * 【よるね】タイマー処理用
+     */
     setInfoNightForTimer: function()    {
         let switchType = CONST.TYPE_ID.NIGHT;
 
@@ -882,7 +980,10 @@ let Main = {
 
     },
 
-    /* Info: よるね(スイッチ切り替え) */
+    /**
+     * 【よるね】スイッチ ON/OFF 切替
+     * @param {Boolean} is_on
+     */
     changeNightStatus: function(is_on){
         let switch_type = CONST.TYPE_ID.NIGHT;
 
@@ -908,28 +1009,10 @@ let Main = {
         }
     },
 
-    /* Info: 前回時間(共通) */
-    setInfoCommonPreviousTime: function(switchType){
-        let targetLog = "";
-        Main.allLogs.some(function(log){
-            // タイプ一致(※on/offについては現状全部onなので)
-            let typeId = switchTypeTools.getTypeId(switchType, true);
-            if(log.type === typeId){
-                targetLog = log;
-                return true;
-            }
-        });
-        $('.timer-row[type="' + switchType + '"]')
-                .find('.timer-contents')
-                .find('.info')
-                .find('.basic-info')
-                .find('.info-item.previous-time')
-                .find('.time')
-                .text(datetimeTools.convertToStringFormat(
-                    new Date(targetLog.switch_time)));
-    },
-
-    /* 一時メモ 取得API */
+    /**
+     *  一時メモ 取得API
+     * @param {function} after
+     */
     getTemporaryNotes: function(after){
         $.ajax({
             "url": "/multi_switch/api/note_list/",
@@ -950,7 +1033,9 @@ let Main = {
         });
     },
 
-    /* 一時メモ 画面反映 */
+    /**
+     * 一時メモ 画面反映
+     */
     setTemporaryNotes: function(){
         Main.temporaryNotes.forEach(function(note){
             let type_name = switchTypeTools.getTypeName(note.type);
@@ -960,7 +1045,12 @@ let Main = {
         });
     },
 
-    /* 一時メモ 保存API */
+    /**
+     *  一時メモ 保存API
+     * @param {string} type_name - スイッチ種類
+     * @param {string} note - メモ
+     * @param {function} after - コールバック関数
+     */
     registerTemporaryNote: function(type_name, note, after){
         let targetNoteId = 0;
         let type_id = switchTypeTools.getTypeId(type_name, true);
