@@ -155,6 +155,28 @@ datetimeTools = {
     convertWeekdayString: function(dayOfWeek){
         return [ "日", "月", "火", "水", "木", "金", "土" ][dayOfWeek] ;
     },
+
+    /**
+     * きょう、きのう、おととい変換
+     * @param {Date} date
+     * @returns {string} 変換後文字列
+     */
+    convertJapaneseDesignation: function(date){
+        let now = new Date();
+        let delta = datetimeTools.getDelta(now, date);
+        let result = '';
+        if(delta.deltaDate < 1){
+            result = '今日';
+        } else if(delta.deltaDate < 2) {
+            result = '昨日'
+        } else if(delta.deltaDate < 3){
+            result = 'おととい'
+        }
+        return result;
+
+    }
+
+
 };
 
 /**
