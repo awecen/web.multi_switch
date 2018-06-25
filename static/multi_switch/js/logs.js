@@ -483,7 +483,9 @@ let Logs = {
 
         // アクションアイコン
         let $icon_div = $('<div></div>');
-        $icon_div.addClass('list-icon');
+        $icon_div.appendTo($div);
+        let $icon_img_div = $('<div></div>');
+        $icon_img_div.addClass('list-icon');
         switchTypeTools.switchTypes.some(function(type){
             if(type.id === switch_type){
 
@@ -491,17 +493,23 @@ let Logs = {
                     case CONST.TYPE_ID.HELMET:
                     case CONST.TYPE_ID.NAPPING:
                     case CONST.TYPE_ID.NIGHT:
-                        $icon_div.addClass(type.name + (type.is_on ? "-on" : "-off"));
+                        $icon_img_div.addClass(type.name + (type.is_on ? "-on" : "-off"));
                         break;
                     default:
-                        $icon_div.addClass(type.name);
+                        $icon_img_div.addClass(type.name);
                 }
 
-                $icon_div.append($('<i></i>'));
+                $icon_img_div.append($('<i></i>'));
                 return true;
             }
         });
-        $icon_div.appendTo($div);
+        $icon_img_div.appendTo($icon_div);
+        // アイコンのキャプション
+        let $icon_caption_div = $('<div></div>');
+        $icon_caption_div.addClass('icon-caption');
+        let switch_type_object = switchTypeTools.getTypeName(parseInt(switch_type));
+        $icon_caption_div.text(switchTypeTools.getJapaneseTypeName(switch_type_object.name, switch_type_object.is_on))
+            .appendTo($icon_div);
 
         // Info
         let $info_div = $('<div></div>');

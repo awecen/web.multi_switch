@@ -77,11 +77,16 @@
 
 
 /*** Main Button ***/
+.timer-btn{
+    position: relative;
+    top: -16px;
+}
+
 .timer-btn .btn-image{
     background-color: #cccccc;
     border-radius: 50%;
-    height: 80px;
-    width: 80px;
+    height: 96px;
+    width: 96px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -128,8 +133,8 @@
 .timer-row.napping .btn-image.on{
     /* ひるね(on) */
     background-color: #c5e1a5;
-    height: 40px;
-    border-radius: 40px 40px 0 0;
+    height: 48px;
+    border-radius: 48px 48px 0 0;
     overflow: hidden;
     margin-bottom: 4px;
 }
@@ -141,15 +146,16 @@
 
 .timer-row.napping .btn-image.on img{
     /* ひるね(on) */
-    position: relative;
-    top: calc(50% + 2px);
+    height: 40px;
+    width: 40px;
+    content: url(/static/multi_switch/img/napping_64.png);
 }
 
 .timer-row.napping .btn-image.off{
     /* ひるね(off) */
     background-color: #ffe082;
-    height: 40px;
-    border-radius: 0 0 40px 40px;
+    height: 48px;
+    border-radius: 0 0 48px 48px;
     overflow: hidden;
 }
 
@@ -160,8 +166,9 @@
 
 .timer-row.napping .btn-image.off img{
     /* ひるね(off) */
-    position: relative;
-    top: calc(-50% - 2px);
+    height: 40px;
+    width: 40px;
+    content: url(/static/multi_switch/img/napping_off_64.png);
 }
 
 .timer-row.napping .btn-image.disabled{
@@ -169,6 +176,13 @@
     background-color: #f0f0f0;
     cursor: initial;
     box-shadow: none;
+}
+
+.timer-row.napping .btn-image.on.disabled img{
+    content: url(/static/multi_switch/img/napping_64_disabled.png);
+}
+.timer-row.napping .btn-image.off.disabled img{
+    content: url(/static/multi_switch/img/napping_off_64_disabled.png);
 }
 
 .timer-row.napping .btn-image.disabled:hover{
@@ -189,8 +203,8 @@
 .timer-row.helmet .btn-image.on{
     /* めっと(on) */
     background-color: #90caf9;
-    height: 40px;
-    border-radius: 40px 40px 0 0;
+    height: 48px;
+    border-radius: 48px 48px 0 0;
     overflow: hidden;
     margin-bottom: 4px;
 }
@@ -202,15 +216,16 @@
 
 .timer-row.helmet .btn-image.on img{
     /* めっと(on) */
-    position: relative;
-    top: calc(50% + 2px);
+    height: 40px;
+    width: 40px;
+    content: url(/static/multi_switch/img/helmet_64.png);
 }
 
 .timer-row.helmet .btn-image.off{
     /* めっと(off) */
     background-color: #ef9a9a;
-    height: 40px;
-    border-radius: 0 0 40px 40px;
+    height: 48px;
+    border-radius: 0 0 48px 48px;
     overflow: hidden;
 }
 
@@ -221,8 +236,9 @@
 
 .timer-row.helmet .btn-image.off img{
     /* めっと(off) */
-    position: relative;
-    top: calc(-50% - 2px);
+    height: 40px;
+    width: 40px;
+    content: url(/static/multi_switch/img/helmet_off_64.png);
 }
 
 .timer-row.helmet .btn-image.disabled{
@@ -235,6 +251,13 @@
 .timer-row.helmet .btn-image.disabled:hover{
     /* めっと(disabled) */
     background-color: #f0f0f0;
+}
+
+.timer-row.helmet .btn-image.on.disabled img{
+    content: url(/static/multi_switch/img/helmet_64_disabled.png);
+}
+.timer-row.helmet .btn-image.off.disabled img{
+    content: url(/static/multi_switch/img/helmet_off_64_disabled.png);
 }
 
 .timer-row.shower .btn-image{
@@ -250,8 +273,8 @@
 .timer-row.night .btn-image.on{
     /* よるね(on) */
     background-color: #ce93d8;
-    height: 40px;
-    border-radius: 40px 40px 0 0;
+    height: 48px;
+    border-radius: 48px 48px 0 0;
     overflow: hidden;
     margin-bottom: 4px;
 }
@@ -263,27 +286,29 @@
 
 .timer-row.night .btn-image.on img{
     /* よるね(on) */
-    position: relative;
-    top: calc(50% + 2px);
+    height: 40px;
+    width: 40px;
+    content: url(/static/multi_switch/img/night_64.png);
 }
 
 .timer-row.night .btn-image.off{
     /* よるね(off) */
-    background-color: #bcaaa4;
-    height: 40px;
-    border-radius: 0 0 40px 40px;
+    background-color: #ffcdd2;
+    height: 48px;
+    border-radius: 0 0 48px 48px;
     overflow: hidden;
 }
 
 .timer-row.night .btn-image.off:hover{
     /* よるね(off) */
-    background-color: #a1887f;
+    background-color: #ef9a9a;
 }
 
 .timer-row.night .btn-image.off img{
     /* よるね(off) */
-    position: relative;
-    top: calc(-50% - 2px);
+    height: 40px;
+    width: 40px;
+    content: url(/static/multi_switch/img/night_off_64.png);
 }
 
 .timer-row.night .btn-image.disabled{
@@ -298,6 +323,12 @@
     background-color: #f0f0f0;
 }
 
+.timer-row.night .btn-image.on.disabled img{
+    content: url(/static/multi_switch/img/night_64_disabled.png);
+}
+.timer-row.night .btn-image.off.disabled img{
+    content: url(/static/multi_switch/img/night_off_64_disabled.png);
+}
 
 /*** Basic Info ***/
 .info{
