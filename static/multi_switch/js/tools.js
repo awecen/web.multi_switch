@@ -239,9 +239,10 @@ switchTypeTools = {
     /**
      * スイッチタイプ日本語名(CONST登録名)を返す
      * @param {string} type_name - スイッチタイプ名 (eg.'milk')
+     * @param {boolean} is_on - ON/OFF
      * @returns {string}
      */
-    getJapaneseTypeName: function(type_name){
+    getJapaneseTypeName: function(type_name, is_on){
         let name = "";
         switch(type_name){
             case CONST.TYPE_ID.MILK:
@@ -260,13 +261,31 @@ switchTypeTools = {
                 name = CONST.TYPE_NAME.SHOWER;
                 break;
             case CONST.TYPE_ID.HELMET:
-                name = CONST.TYPE_NAME.HELMET;
+                if(is_on === true){
+                    name = CONST.TYPE_NAME.HELMET_OFF;
+                } else if (is_on === false){
+                    name = CONST.TYPE_NAME.HELMET_OFF;
+                } else {
+                    name = CONST.TYPE_NAME.HELMET;
+                }
                 break;
             case CONST.TYPE_ID.NAPPING:
-                name = CONST.TYPE_NAME.NAPPING;
+                if(is_on === true){
+                    name = CONST.TYPE_NAME.NAPPING_ON;
+                } else if (is_on === false){
+                    name = CONST.TYPE_NAME.NAPPING_OFF;
+                } else {
+                    name = CONST.TYPE_NAME.NAPPING;
+                }
                 break;
             case CONST.TYPE_ID.NIGHT:
-                name = CONST.TYPE_NAME.NIGHT;
+                if(is_on === true){
+                    name = CONST.TYPE_NAME.NIGHT_ON;
+                } else if (is_on === false){
+                    name = CONST.TYPE_NAME.NIGHT_OFF;
+                } else {
+                    name = CONST.TYPE_NAME.NIGHT;
+                }
                 break;
         }
         return name;

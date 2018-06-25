@@ -281,7 +281,7 @@
 }
 
 .graph-icon.helmet-off i{
-    content: url(/static/multi_switch/img/helmet_64.png);
+    content: url(/static/multi_switch/img/helmet_off_64.png);
     background-color: #ef9a9a;
 }
 .graph-icon.helmet-off i:hover{
@@ -297,7 +297,7 @@
 }
 
 .graph-icon.napping-off i{
-    content: url(/static/multi_switch/img/napping_64.png);
+    content: url(/static/multi_switch/img/napping_off_64.png);
     background-color: #ffe082;
 }
 .graph-icon.napping-off i:hover{
@@ -313,11 +313,11 @@
 }
 
 .graph-icon.night-off i{
-    content: url(/static/multi_switch/img/night_64.png);
-    background-color: #bcaaa4;
+    content: url(/static/multi_switch/img/night_off_64.png);
+    background-color: #ffcdd2;
 }
 .graph-icon.night-off i:hover{
-    background-color: #a1887f;
+    background-color: #ef9a9a;
 }
 
 /*****************+*******/
@@ -548,8 +548,6 @@
 }
 
 .log-list .list-row .list-icon{
-    /*position: absolute;*/
-    /*transform: scale(0);*/
     transition: transform 0.5s cubic-bezier(.2,.8,.46,1.29);
     overflow: hidden;
     border-radius: 50%;
@@ -557,7 +555,7 @@
     height: 48px;
     min-width: 48px;
     min-height: 48px;
-    margin: 0 16px;
+    margin: 0 24px;
 }
 
 .log-list .list-row .list-icon.edit {
@@ -608,7 +606,7 @@
 }
 
 .log-list .list-row .list-icon.helmet-off i{
-    content: url(/static/multi_switch/img/helmet_64.png);
+    content: url(/static/multi_switch/img/helmet_off_64.png);
     background-color: #ef9a9a;
 }
 
@@ -618,7 +616,7 @@
 }
 
 .log-list .list-row .list-icon.napping-off i{
-    content: url(/static/multi_switch/img/napping_64.png);
+    content: url(/static/multi_switch/img/napping_off_64.png);
     background-color: #ffe082;
 }
 
@@ -628,7 +626,7 @@
 }
 
 .log-list .list-row .list-icon.night-off i{
-    content: url(/static/multi_switch/img/night_64.png);
+    content: url(/static/multi_switch/img/night_off_64.png);
     background-color: #bcaaa4;
 }
 
@@ -644,6 +642,12 @@
 }
 .log-list .list-row .list-icon.edit i:hover{
     background-color: #64ffda;
+}
+
+.log-list .list-row .icon-caption{
+    color: #999999;
+    font-size: 10px;
+    text-align: center;
 }
 
 .log-list .list-row .info{

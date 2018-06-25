@@ -740,12 +740,17 @@ let Main = {
 
         // ボタン切り替え
         let $timer_row_switch_type = $('.timer-row[type="' + switch_type + '"]');
+        let $btn_on = $timer_row_switch_type.find('.btn-image[is_on="' + true + '"]');
+        let $btn_off = $timer_row_switch_type.find('.btn-image[is_on="' + false + '"]');
+
         if(is_on){
-            $timer_row_switch_type.find('.btn-image[is_on="' + true + '"]').removeClass('disabled');
-            $timer_row_switch_type.find('.btn-image[is_on="' + false + '"]').addClass('disabled');
+            $btn_on.removeClass('disabled');
+            $btn_on.find('img').attr('src', '')
+            $btn_off.addClass('disabled');
+
         } else {
-            $timer_row_switch_type.find('.btn-image[is_on="' + true + '"]').addClass('disabled');
-            $timer_row_switch_type.find('.btn-image[is_on="' + false + '"]').removeClass('disabled');
+            $btn_on.addClass('disabled');
+            $btn_off.removeClass('disabled');
         }
         Main.attachEvents();
 
