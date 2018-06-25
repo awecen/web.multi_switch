@@ -163,13 +163,13 @@ datetimeTools = {
      */
     convertJapaneseDesignation: function(date){
         let now = new Date();
-        let delta = datetimeTools.getDelta(now, date);
+        let delta = now.getDate() - date.getDate();
         let result = '';
-        if(delta.deltaDate < 1){
+        if(delta < 1){
             result = '今日';
-        } else if(delta.deltaDate < 2) {
+        } else if(delta < 2) {
             result = '昨日'
-        } else if(delta.deltaDate < 3){
+        } else if(delta < 3){
             result = 'おととい'
         }
         return result;
