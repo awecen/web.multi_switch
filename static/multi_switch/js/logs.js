@@ -52,6 +52,8 @@ let Logs = {
                     Base.toggleLoadingScreen("hide"); // ロード画面非表示
                     Logs.setIconsToGraph(
                         new Date($('.date-selector .now-date').attr('data-date'))); // アイコン再描画
+                    Logs.setLogsToList(
+                        new Date($('.date-selector .now-date').attr('data-date'))); // アイコン再描画
                     libraryTools.popSimpleToast('ログを削除しました。');
                 });
             });
@@ -72,6 +74,8 @@ let Logs = {
                     Logs.getLogs(function(){
                         Logs.setIconsToGraph(
                             new Date($('.date-selector .now-date').attr('data-date')));
+                        Logs.setLogsToList(
+                            new Date($('.date-selector .now-date').attr('data-date')));
                         $('.log-detail').hide(); // 詳細ダイアログOFF
                         Base.toggleLoadingScreen("hide"); // ロード画面OFF
                         libraryTools.popSimpleToast('ログを更新しました。');
@@ -82,6 +86,8 @@ let Logs = {
                 Logs.addNewLog(function(){
                     Logs.getLogs(function(){
                         Logs.setIconsToGraph(
+                            new Date($('.date-selector .now-date').attr('data-date')));
+                        Logs.setLogsToList(
                             new Date($('.date-selector .now-date').attr('data-date')));
                         $('.log-detail').hide(); // 詳細ダイアログOFF
                         Base.toggleLoadingScreen("hide"); // ロード画面OFF
