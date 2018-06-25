@@ -82,6 +82,22 @@
     top: -16px;
 }
 
+.timer-btn .caption{
+    color: #333333;
+    font-size: 12px;
+    text-align: center;
+    margin: 2px 0;
+     font-weight: bold;
+}
+
+.timer-btn .caption.disabled{
+    color: #CCCCCC;
+    font-size: 12px;
+    text-align: center;
+    margin: 2px 0;
+     font-weight: bold;
+}
+
 .timer-btn .btn-image{
     background-color: #cccccc;
     border-radius: 50%;

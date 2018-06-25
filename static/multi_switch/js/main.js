@@ -642,9 +642,13 @@ let Main = {
         if(is_on){
             $timer_row_switch_type.find('.btn-image[is_on="' + true + '"]').removeClass('disabled');
             $timer_row_switch_type.find('.btn-image[is_on="' + false + '"]').addClass('disabled');
+            $timer_row_switch_type.find('.caption.on').removeClass('disabled');
+            $timer_row_switch_type.find('.caption.off').addClass('disabled');
         } else {
             $timer_row_switch_type.find('.btn-image[is_on="' + true + '"]').addClass('disabled');
             $timer_row_switch_type.find('.btn-image[is_on="' + false + '"]').removeClass('disabled');
+            $timer_row_switch_type.find('.caption.on').addClass('disabled');
+            $timer_row_switch_type.find('.caption.off').removeClass('disabled');
         }
         Main.attachEvents();
 
@@ -841,10 +845,14 @@ let Main = {
             $btn_on.removeClass('disabled');
             $btn_on.find('img').attr('src', '')
             $btn_off.addClass('disabled');
+            $timer_row_switch_type.find('.caption.on').removeClass('disabled');
+            $timer_row_switch_type.find('.caption.off').addClass('disabled');
 
         } else {
             $btn_on.addClass('disabled');
             $btn_off.removeClass('disabled');
+            $timer_row_switch_type.find('.caption.on').addClass('disabled');
+            $timer_row_switch_type.find('.caption.off').removeClass('disabled');
         }
         Main.attachEvents();
 
@@ -997,9 +1005,13 @@ let Main = {
         if(is_on){
             $timer_row_switch_type.find('.btn-image[is_on="' + true + '"]').removeClass('disabled');
             $timer_row_switch_type.find('.btn-image[is_on="' + false + '"]').addClass('disabled');
+            $timer_row_switch_type.find('.caption.on').removeClass('disabled');
+            $timer_row_switch_type.find('.caption.off').addClass('disabled');
         } else {
             $timer_row_switch_type.find('.btn-image[is_on="' + true + '"]').addClass('disabled');
             $timer_row_switch_type.find('.btn-image[is_on="' + false + '"]').removeClass('disabled');
+            $timer_row_switch_type.find('.caption.on').addClass('disabled');
+            $timer_row_switch_type.find('.caption.off').removeClass('disabled');
         }
         Main.attachEvents();
 
