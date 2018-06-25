@@ -627,7 +627,7 @@
 
 .log-list .list-row .list-icon.night-off i{
     content: url(/static/multi_switch/img/night_off_64.png);
-    background-color: #bcaaa4;
+    background-color: #ffcdd2;
 }
 
 .log-list .list-row .list-icon.edit i{
