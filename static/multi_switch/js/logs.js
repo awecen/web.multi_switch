@@ -531,7 +531,7 @@ let Logs = {
 
         let $info_note_div = $('<div></div>');
         $info_note_div.addClass('note')
-            .append($('<pre>' + (note ? note : "---") + '</pre>'))
+            .append(note ? note : "---")
             .appendTo($info_div);
 
         // Editアイコン

@@ -666,19 +666,8 @@
 .log-list .list-row .info .note{
     color: #666666;
     font-size: 12px;
-}
-.log-list .list-row .info .note pre{
-    display: block;
-    margin: inherit;
-    font-size: initial;
-    line-height: inherit;
-    word-break: initial;
-    word-wrap: initial;
-    background-color: initial;
-    border: 0;
-    border-radius: 0px;
-    font-family: inherit;
-    padding: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .log-list .list-row .edit{
