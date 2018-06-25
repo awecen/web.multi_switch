@@ -284,7 +284,7 @@ switchTypeTools = {
                 break;
             case CONST.TYPE_ID.HELMET:
                 if(is_on === true){
-                    name = CONST.TYPE_NAME.HELMET_OFF;
+                    name = CONST.TYPE_NAME.HELMET_ON;
                 } else if (is_on === false){
                     name = CONST.TYPE_NAME.HELMET_OFF;
                 } else {
