@@ -15,8 +15,6 @@ let Stat = {
         switchTypeTools.getSwitchTypes(function(){
             Stat.getAllLogs(function(){
                 Stat.changeType(CONST.TYPE_ID.HELMET);
-                Stat.setCalendarDate(new Date(), CONST.TYPE_ID.HELMET);
-                Stat.setStatisticData(new Date, CONST.TYPE_ID.HELMET);
             });
         });
     },
@@ -43,24 +41,14 @@ let Stat = {
             }
         });
 
-        /* FAB 【へるめっと】*/
-        $('.btn-change-helmet').on('click', function(){
+        /* FAB 【へるめっと】／【ひるね】／【よるね】*/
+        $('.btn-change-view').on('click', function(e){
+            let $e = $(e.currentTarget);
+            $('.btn-change-view').removeClass('invisible');
+            $e.addClass('invisible');
             Base.toggleLoadingScreen("show");
-            Stat.changeType(CONST.TYPE_ID.HELMET);
+            Stat.changeType($e.attr('data-val'));
         });
-
-        /* FAB 【ひるね】*/
-        $('.btn-change-napping').on('click', function(){
-            Base.toggleLoadingScreen("show");
-            Stat.changeType(CONST.TYPE_ID.NAPPING);
-        });
-
-        /* FAB 【よるね】*/
-        $('.btn-change-night').on('click', function(){
-            Base.toggleLoadingScreen("show");
-            Stat.changeType(CONST.TYPE_ID.NIGHT);
-        });
-
     },
 
     /**
@@ -93,6 +81,26 @@ let Stat = {
     },
 
     /**
+     * 画面上部のタイプ名称を設定
+     * @param {String} switch_type
+     */
+    setTypeTitle: function(switch_type){
+        let $typeTitle = $('.type-title');
+        $typeTitle.removeClass(CONST.TYPE_ID.HELMET);
+        $typeTitle.removeClass(CONST.TYPE_ID.NAPPING);
+        $typeTitle.removeClass(CONST.TYPE_ID.NIGHT);
+        $typeTitle.addClass(switch_type);
+        $typeTitle.attr('data-val', switch_type);
+        let $icon = $typeTitle.find('.switch-icon');
+        $icon.removeClass(CONST.TYPE_ID.HELMET);
+        $icon.removeClass(CONST.TYPE_ID.NAPPING);
+        $icon.removeClass(CONST.TYPE_ID.NIGHT);
+        $icon.addClass(switch_type);
+        let $name = $typeTitle.find('.switch-type-name');
+        $name.text(switchTypeTools.getJapaneseTypeName(switch_type, null));
+    },
+
+    /**
      * 集計データ設定
      * @param {Date} date
      * @param {String} switch_type
@@ -119,6 +127,15 @@ let Stat = {
             datetimeTools.padZero(averages.month.off.minutes, 2) + ":" +
             datetimeTools.padZero(averages.month.off.seconds, 2);
         $('.stat-data .stat-column.total-month .content .off .time').text(month_off);
+
+        // スイッチタイプ別表示切り替え
+        if(switch_type === CONST.TYPE_ID.HELMET){
+            $('.stat-data .stat-column .content .on .status-label').removeClass('invisible');
+            $('.stat-data .stat-column .content .off').removeClass('invisible');
+        }else{
+            $('.stat-data .stat-column .content .on .status-label').addClass('invisible');
+            $('.stat-data .stat-column .content .off').addClass('invisible');
+        }
     },
 
     /**
@@ -244,9 +261,16 @@ let Stat = {
                     // 数値要素作成
                     let $day = $('<div class="day">' + day + '</div>');
                     $day.appendTo($cell);
-                    let $on_time = $('<div class="total-time on"><span>●</span>' + on_time + '</div>');
+                    let $on_time, $off_time;
+                    // スイッチタイプ別表示切り替え
+                    if(switch_type === CONST.TYPE_ID.HELMET){
+                        $on_time = $('<div class="total-time on"><span>●</span>' + on_time + '</div>');
+                        $off_time = $('<div class="total-time off"><span>●</span>' + off_time + '</div>');
+                    } else {
+                        $on_time = $('<div class="total-time on"><span class="invisible">●</span>' + on_time + '</div>');
+                        $off_time = $('<div class="total-time off invisible"><span>●</span>' + off_time + '</div>');
+                    }
                     $on_time.appendTo($cell);
-                    let $off_time = $('<div class="total-time off"><span>●</span>' + off_time + '</div>');
                     $off_time.appendTo($cell);
                 }
                 $cell.appendTo($row);
@@ -310,7 +334,7 @@ let Stat = {
      * ログ内のトータル時間計算
      * @param {String} type_id
      * @param {Date} selected_date
-     * @return {Array[
+     * @return {[
      *   date : number,
      *   on_time : {hours: number, minutes: number, seconds: number},
      *   off_time : {hours: number, minutes: number, seconds: number}
@@ -448,20 +472,10 @@ let Stat = {
      * @param {String} view_type
      */
     changeType: function(view_type){
-        switch(view_type){
-            case CONST.TYPE_ID.HELMET:
-                Base.toggleLoadingScreen("hide");
-                break;
-
-            case CONST.TYPE_ID.NAPPING:
-                Base.toggleLoadingScreen("hide");
-                break;
-
-            case CONST.TYPE_ID.NIGHT:
-                Base.toggleLoadingScreen("hide");
-                break;
-        }
-
+        Stat.setTypeTitle(view_type);
+        Stat.setCalendarDate(new Date(), view_type);
+        Stat.setStatisticData(new Date(), view_type);
+        Base.toggleLoadingScreen("hide");
     },
 
 };

@@ -10,6 +10,19 @@
     align-items: center;
 }
 
+.type-title.helmet{
+    background-color: #90CAF9;
+}
+
+.type-title.napping{
+    background-color: #c5e1a5;
+}
+
+.type-title.night{
+    background-color: #ce93d8;
+}
+
+
 .type-title .switch-icon{
     height: 40px;
     width: 40px;
@@ -118,6 +131,10 @@
     flex-direction: column;
 }
 
+.stat-data .stat-column .content .invisible {
+    display: none !important;
+}
+
 .stat-data .stat-column .content .on {
     display: flex;
     flex-direction: row;
@@ -160,6 +177,7 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 4px;
+    margin-bottom: 48px;
 }
 
 .stat-calendar .calendar-row{
@@ -234,6 +252,11 @@
 .stat-calendar .calendar-row .cell .total-time{
     font-size: 11px;
 }
+
+.stat-calendar .calendar-row .cell .total-time .invisible{
+    display: none !important;
+}
+
 .stat-calendar .calendar-row .cell .total-time.on span{
     color: #90caf9;
 }

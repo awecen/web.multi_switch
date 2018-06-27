@@ -261,7 +261,7 @@ switchTypeTools = {
     /**
      * スイッチタイプ日本語名(CONST登録名)を返す
      * @param {string} type_name - スイッチタイプ名 (eg.'milk')
-     * @param {boolean} is_on - ON/OFF
+     * @param {boolean|Object} is_on - ON/OFF
      * @returns {string}
      */
     getJapaneseTypeName: function(type_name, is_on){
