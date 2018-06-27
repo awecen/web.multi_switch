@@ -15,6 +15,7 @@ urlpatterns = [
     path('', views.MainView.as_view(), name='main'),
     path('logs/', views.LogsView.as_view(), name='main'),
     path('whatsnew/', views.WhatsnewView.as_view(), name='main'),
+    path('stat/', views.StatView.as_view(), name='main'),
 
     # API
     path('api/log_list/', apis.LifeSwitchLogList.as_view()),

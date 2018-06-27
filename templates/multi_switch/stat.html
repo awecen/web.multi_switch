@@ -1,0 +1,188 @@
+{% extends "multi_switch/base.html" %}
+{% load i18n static %}
+
+{% block title %}みつき すいっち{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'multi_switch/css/stat.css' %}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+    {% csrf_token %}
+
+    <!-- Type Title -->
+    <div class="type-title helmet" data-val="helmet">
+        <div><i class="switch-icon helmet"></i></div>
+        <div class="switch-type-name">へるめっと</div>
+    </div>
+
+    <!-- Date Selector -->
+    <div class="date-selector">
+        <div class="btn-move btn-prev" data-val="2">
+            <i class="material-icons">chevron_left</i>
+        </div>
+        <div class="datetime">
+            <div class="year">0000</div>
+            <div class="year-design">年</div>
+            <div class="month">00</div>
+            <div class="month-design">月</div>
+        </div>
+        <div class="btn-move btn-next" data-val="0">
+            <i class="material-icons">chevron_right</i>
+        </div>
+    </div>
+
+    <!-- Stat Data -->
+    <div class="stat-data">
+        <div class="stat-column total-all">
+            <div class="caption">全平均</div>
+            <div class="content">
+                <div class="on">
+                    <div class="status-label">装着</div>
+                    <div class="time">00:00:00</div>
+                </div>
+                <div class="off">
+                    <div class="status-label">休憩</div>
+                    <div class="time">00:00:00</div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-column total-month">
+            <div class="caption">当月平均</div>
+            <div class="content">
+                <div class="on">
+                    <div class="status-label">装着</div>
+                    <div class="time">00:00:00</div>
+                </div>
+                <div class="off">
+                    <div class="status-label">休憩</div>
+                    <div class="time">00:00:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Calendar -->
+    <div class="stat-calendar">
+        <div class="calendar-row weekday">
+            <div class="cell sun">日</div>
+            <div class="ce  ll">月</div>
+            <div class="cell">火</div>
+            <div class="cell">水</div>
+            <div class="cell">木</div>
+            <div class="cell">金</div>
+            <div class="cell sat">土</div>
+        </div>
+{#        <div class="calendar-row date">#}
+{#            <div class="cell none"></div>#}
+{#            <div class="cell none"></div>#}
+{#            <div class="cell none"></div>#}
+{#            <div class="cell none"></div>#}
+{#            <div class="cell none"></div>#}
+{#            <div class="cell odd">#}
+{#                <div class="day">1</div>#}
+{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
+{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
+{#            </div>#}
+{#            <div class="cell even">#}
+{#                <div class="day">2</div>#}
+{#                <div class="total-time on"><span>●</span>22:55:00</div>#}
+{#                <div class="total-time off"><span>●</span>01:05:00</div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="calendar-row date">#}
+{#            <div class="cell odd">#}
+{#                <div class="day">3</div>#}
+{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
+{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
+{#            </div>#}
+{#            <div class="cell even">#}
+{#                <div class="day">4</div>#}
+{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
+{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
+{#            </div>#}
+{#            <div class="cell odd">#}
+{#                <div class="day">5</div>#}
+{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
+{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
+{#            </div>#}
+{#            <div class="cell even">#}
+{#                <div class="day">6</div>#}
+{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
+{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
+{#            </div>#}
+{#            <div class="cell odd">#}
+{#                <div class="day">7</div>#}
+{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
+{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
+{#            </div>#}
+{#            <div class="cell even">#}
+{#                <div class="day">8</div>#}
+{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
+{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
+{#            </div>#}
+{#            <div class="cell odd">#}
+{#                <div class="day">9</div>#}
+{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
+{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="calendar-row date">#}
+{#            <div class="cell even">10</div>#}
+{#            <div class="cell odd">11</div>#}
+{#            <div class="cell even">12</div>#}
+{#            <div class="cell odd">13</div>#}
+{#            <div class="cell even">14</div>#}
+{#            <div class="cell odd">15</div>#}
+{#            <div class="cell even">16</div>#}
+{#        </div>#}
+{#        <div class="calendar-row date">#}
+{#            <div class="cell odd">17</div>#}
+{#            <div class="cell even">18</div>#}
+{#            <div class="cell odd">19</div>#}
+{#            <div class="cell even">20</div>#}
+{#            <div class="cell odd">21</div>#}
+{#            <div class="cell even">22</div>#}
+{#            <div class="cell odd">23</div>#}
+{#        </div>#}
+{#        <div class="calendar-row date">#}
+{#            <div class="cell even">24</div>#}
+{#            <div class="cell odd">25</div>#}
+{#            <div class="cell even">26</div>#}
+{#            <div class="cell odd">27</div>#}
+{#            <div class="cell even">28</div>#}
+{#            <div class="cell odd">29</div>#}
+{#            <div class="cell even">30</div>#}
+{#        </div>#}
+    </div>
+
+    <!-- FAB -->
+{#    <div class="fixed-action-btn">#}
+{#        <a class="btn-floating btn-large amber accent-4">#}
+{#            <i class="large material-icons">cached</i>#}
+{#        </a>#}
+{#        <ul>#}
+{#            <li>#}
+{#                <a class="btn-change-helmet btn-floating blue lighten-3 invisible">#}
+{#                    <i class="switch-icon helmet"></i>#}
+{#                </a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a class="btn-change-napping btn-floating light-green lighten-3">#}
+{#                    <i class="switch-icon napping"></i>#}
+{#                </a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a class="btn-change-night btn-floating purple lighten-3">#}
+{#                    <i class="switch-icon night"></i>#}
+{#                </a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </div>#}
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'multi_switch/js/stat.js' %}"></script>
+{% endblock extra_js %}

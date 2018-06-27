@@ -270,7 +270,6 @@ let Logs = {
         });
 
         // 対象ログを日付昇順に並べ替え
-        // 日付降順ソート
         targetLogs.sort(function(a, b){
             //(ソート順に基づき、aはbより小さい)
             if (new Date(a.switch_time) - new Date(b.switch_time) < 0)
