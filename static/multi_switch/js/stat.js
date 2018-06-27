@@ -354,19 +354,33 @@ let Stat = {
         let targetLogs = [];
         if(selected_date){
             targetLogsBySwitchType.forEach(function(log){
+                // ログの日付
                 let logDate = new Date(log.switch_time);
-                let monthDate = new Date(logDate.getTime());
-                monthDate.setDate(1);
-                let selectedDate = new Date(selected_date.getTime());
-                selectedDate.setDate(1);
-                if(monthDate.getMonth() === selectedDate.getMonth()){
+                // 範囲判定用:開始日時
+                let startDate = new Date(selected_date.getTime());
+                startDate.setDate(1);
+                startDate.setHours(0,0,0,0);
+                if(type_id === CONST.TYPE_ID.NIGHT){
+                    // 【よるね】は12時が区切りなので
+                    startDate.setHours(12,0,0,0);
+                }
+                // 範囲判定用:終了日時
+                let endDate = new Date(selected_date.getTime());
+                endDate.setMonth(endDate.getMonth() + 1);
+                endDate.setDate(1);
+                endDate.setDate(0,0,0,0);
+                if(type_id === CONST.TYPE_ID.NIGHT){
+                    // 【よるね】は12時が区切りなので
+                    endDate.setHours(12,0,0,0);
+                }
+                // 範囲内判定
+                if(startDate <= logDate && logDate < endDate){
                     targetLogs.push(log);
                 }
             });
         } else {
             targetLogs = targetLogsBySwitchType.concat();
         }
-
 
         // 日付昇順ソート
         targetLogs.sort(function(a, b){
@@ -381,22 +395,54 @@ let Stat = {
             // aはbと等しい(ここに到達する場合は等しいはずである)
             return 0;
         });
-        // 日毎に分割
+
+        // 日毎ログ集計用配列
         let targetLogsByDate = [];
-        let tempDate = new Date();
+        // 判定用開始日付
+        let startDateObj = new Date();
+        // 判定用終了日付
+        let endDateObj = new Date();
+        let tempDate = startDateObj.getDate()
         if(targetLogs.length !== 0){
-            tempDate = new Date(targetLogs[0].switch_time);
+            // 判定用日付に対象ログの最初のログ情報をまずセット
+            startDateObj = new Date(targetLogs[0].switch_time);
+            endDateObj = new Date(targetLogs[0].switch_time);
+            tempDate = startDateObj.getDate();
+            startDateObj.setHours(0,0,0,0);
+            endDateObj.setDate(endDateObj.getDate() + 1);
+            endDateObj.setHours(0,0,0,0);
+            if(type_id === CONST.TYPE_ID.NIGHT){
+                // 【よるね】は12時が区切りなので
+                startDateObj.setHours(12,0,0,0);
+                endDateObj.setHours(12,0,0,0)
+            }
         }
+        // 日毎ログ
         let logsByDate = [];
         targetLogs.forEach(function(log){
-           let logDate = new Date(log.switch_time);
-           if(tempDate.getDate() !== logDate.getDate()) {
-               targetLogsByDate.push({
+           let logDateObj = new Date(log.switch_time);
+           if(logDateObj < startDateObj || endDateObj <= logDateObj){
+                // 対象ログが範囲外なら
+                // 日毎ログを集計用配列に格納
+                targetLogsByDate.push({
                    date: tempDate,
                    logs: logsByDate.concat(),
-               });
-               tempDate = logDate;
-               logsByDate = [];
+                });
+
+                // 判定用日付更新
+                startDateObj = new Date(log.switch_time);
+                endDateObj = new Date(log.switch_time);
+                tempDate = startDateObj.getDate();
+                startDateObj.setHours(0,0,0,0);
+                endDateObj.setDate(endDateObj.getDate() + 1);
+                endDateObj.setHours(0,0,0,0);
+                if(type_id === CONST.TYPE_ID.NIGHT){
+                    // 【よるね】は12時が区切りなので
+                    startDateObj.setHours(12,0,0,0);
+                    endDateObj.setHours(12,0,0,0)
+                }
+                // 日毎ログも初期化
+                logsByDate = [];
            }
            logsByDate.push(log);
         });
@@ -408,39 +454,57 @@ let Stat = {
         // 日付ごとの累計時間を算出
         let totalTimes = [];
         targetLogsByDate.forEach(function(logsByDate){
+            // 累計ON(秒)
             let on_time_seconds = 0;
+            // 累計OFF(秒)
             let off_time_seconds = 0;
+            // 日付数字
             let date = logsByDate.date;
+            // 日毎ログループ
             for(let i = 0; i < logsByDate.logs.length; i++){
                 let log = logsByDate.logs[i];
-                let targetLogDate = "";
+                let logDateObj = new Date(log.switch_time);
+                let targetLogDateObj;
                 if(i === 0){
-                    // はじめは0時0分から
-                    targetLogDate = new Date(new Date(log.switch_time).setHours(0,0,0,0));
+                    // 最初のログは0時0分から
+                    targetLogDateObj = new Date(logDateObj.getTime());
+                    targetLogDateObj.setHours(0,0,0,0);
+                    if(type_id === CONST.TYPE_ID.NIGHT){
+                        // 【よるね】は12時が区切りなので
+                        targetLogDateObj.setHours(12,0,0,0);
+                    }
                 } else {
                     // その他は前のログ時間から
-                    targetLogDate = new Date(logsByDate.logs[i - 1].switch_time);
+                    targetLogDateObj = new Date(logsByDate.logs[i - 1].switch_time);
                 }
 
+                // 差分算出
                 let delta = datetimeTools.getDelta(
-                        new Date(log.switch_time), targetLogDate
+                        logDateObj, targetLogDateObj
                 );
+                // 差分を秒換算
                 let deltaSeconds = datetimeTools.convertToSeconds({
                     hours: delta.deltaHours,
                     minutes: delta.deltaMinutes,
                     seconds: delta.deltaSeconds,
                 });
+                // ON／OFFどちらかに振り分け
                 if(!switchTypeTools.getTypeName(log.type).is_on){
                     on_time_seconds += deltaSeconds;
                 } else {
                     off_time_seconds += deltaSeconds;
                 }
-
+                // 日毎ログ内の最後のログ
                 if(i === logsByDate.logs.length - 1){
-                    let tomorrow = new Date(new Date(log.switch_time).setHours(0,0,0,0));
-                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    let tomorrowObj = new Date(logDateObj.getTime());
+                    tomorrowObj.setHours(0,0,0,0);
+                    tomorrowObj.setDate(tomorrowObj.getDate() + 1);
+                    if(type_id === CONST.TYPE_ID.NIGHT){
+                        // 【よるね】は12時が区切りなので
+                        tomorrowObj.setHours(12,0,0,0);
+                    }
                     let lastDelta = datetimeTools.getDelta(
-                        tomorrow,  new Date(log.switch_time));
+                        tomorrowObj, logDateObj);
                     let lastDeltaSeconds = datetimeTools.convertToSeconds({
                         hours: lastDelta.deltaHours,
                         minutes: lastDelta.deltaMinutes,
@@ -457,7 +521,7 @@ let Stat = {
             }
 
             totalTimes.push({
-                date: date.getDate(),
+                date: date,
                 on_time: datetimeTools.convertToHMS(on_time_seconds),
                 off_time: datetimeTools.convertToHMS(off_time_seconds),
             });
