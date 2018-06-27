@@ -503,8 +503,14 @@ let Stat = {
                         // 【よるね】は12時が区切りなので
                         tomorrowObj.setHours(12,0,0,0);
                     }
+                    let lastTargetDateObj = tomorrowObj;
+                    if(new Date() <= tomorrowObj){
+                        // 比較対象が現在より未来日時なら
+                        // 比較対象は現在日時とする
+                        lastTargetDateObj = new Date();
+                    }
                     let lastDelta = datetimeTools.getDelta(
-                        tomorrowObj, logDateObj);
+                        lastTargetDateObj, logDateObj);
                     let lastDeltaSeconds = datetimeTools.convertToSeconds({
                         hours: lastDelta.deltaHours,
                         minutes: lastDelta.deltaMinutes,
