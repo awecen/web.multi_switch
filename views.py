@@ -22,3 +22,9 @@ class LogsView(generic.ListView):
 class WhatsnewView(generic.ListView):
     model = LifeSwitchLog
     template_name = 'multi_switch/whatsnew.html'
+
+
+@method_decorator(login_required, name='dispatch')
+class StatView(generic.ListView):
+    model = LifeSwitchLog
+    template_name = 'multi_switch/stat.html'
