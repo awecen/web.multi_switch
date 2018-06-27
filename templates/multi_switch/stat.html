@@ -74,112 +74,31 @@
             <div class="cell">金</div>
             <div class="cell sat">土</div>
         </div>
-{#        <div class="calendar-row date">#}
-{#            <div class="cell none"></div>#}
-{#            <div class="cell none"></div>#}
-{#            <div class="cell none"></div>#}
-{#            <div class="cell none"></div>#}
-{#            <div class="cell none"></div>#}
-{#            <div class="cell odd">#}
-{#                <div class="day">1</div>#}
-{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
-{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
-{#            </div>#}
-{#            <div class="cell even">#}
-{#                <div class="day">2</div>#}
-{#                <div class="total-time on"><span>●</span>22:55:00</div>#}
-{#                <div class="total-time off"><span>●</span>01:05:00</div>#}
-{#            </div>#}
-{#        </div>#}
-{#        <div class="calendar-row date">#}
-{#            <div class="cell odd">#}
-{#                <div class="day">3</div>#}
-{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
-{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
-{#            </div>#}
-{#            <div class="cell even">#}
-{#                <div class="day">4</div>#}
-{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
-{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
-{#            </div>#}
-{#            <div class="cell odd">#}
-{#                <div class="day">5</div>#}
-{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
-{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
-{#            </div>#}
-{#            <div class="cell even">#}
-{#                <div class="day">6</div>#}
-{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
-{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
-{#            </div>#}
-{#            <div class="cell odd">#}
-{#                <div class="day">7</div>#}
-{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
-{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
-{#            </div>#}
-{#            <div class="cell even">#}
-{#                <div class="day">8</div>#}
-{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
-{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
-{#            </div>#}
-{#            <div class="cell odd">#}
-{#                <div class="day">9</div>#}
-{#                <div class="total-time on"><span>●</span>23:00:00</div>#}
-{#                <div class="total-time off"><span>●</span>01:00:00</div>#}
-{#            </div>#}
-{#        </div>#}
-{#        <div class="calendar-row date">#}
-{#            <div class="cell even">10</div>#}
-{#            <div class="cell odd">11</div>#}
-{#            <div class="cell even">12</div>#}
-{#            <div class="cell odd">13</div>#}
-{#            <div class="cell even">14</div>#}
-{#            <div class="cell odd">15</div>#}
-{#            <div class="cell even">16</div>#}
-{#        </div>#}
-{#        <div class="calendar-row date">#}
-{#            <div class="cell odd">17</div>#}
-{#            <div class="cell even">18</div>#}
-{#            <div class="cell odd">19</div>#}
-{#            <div class="cell even">20</div>#}
-{#            <div class="cell odd">21</div>#}
-{#            <div class="cell even">22</div>#}
-{#            <div class="cell odd">23</div>#}
-{#        </div>#}
-{#        <div class="calendar-row date">#}
-{#            <div class="cell even">24</div>#}
-{#            <div class="cell odd">25</div>#}
-{#            <div class="cell even">26</div>#}
-{#            <div class="cell odd">27</div>#}
-{#            <div class="cell even">28</div>#}
-{#            <div class="cell odd">29</div>#}
-{#            <div class="cell even">30</div>#}
-{#        </div>#}
     </div>
 
     <!-- FAB -->
-{#    <div class="fixed-action-btn">#}
-{#        <a class="btn-floating btn-large amber accent-4">#}
-{#            <i class="large material-icons">cached</i>#}
-{#        </a>#}
-{#        <ul>#}
-{#            <li>#}
-{#                <a class="btn-change-helmet btn-floating blue lighten-3 invisible">#}
-{#                    <i class="switch-icon helmet"></i>#}
-{#                </a>#}
-{#            </li>#}
-{#            <li>#}
-{#                <a class="btn-change-napping btn-floating light-green lighten-3">#}
-{#                    <i class="switch-icon napping"></i>#}
-{#                </a>#}
-{#            </li>#}
-{#            <li>#}
-{#                <a class="btn-change-night btn-floating purple lighten-3">#}
-{#                    <i class="switch-icon night"></i>#}
-{#                </a>#}
-{#            </li>#}
-{#        </ul>#}
-{#    </div>#}
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large amber accent-4">
+            <i class="large material-icons">cached</i>
+        </a>
+        <ul>
+            <li>
+                <a class="btn-change-view btn-floating blue lighten-3 invisible" data-val="helmet">
+                    <i class="switch-icon helmet"></i>
+                </a>
+            </li>
+            <li>
+                <a class="btn-change-view btn-floating light-green lighten-3" data-val="napping">
+                    <i class="switch-icon napping"></i>
+                </a>
+            </li>
+            <li>
+                <a class="btn-change-view btn-floating purple lighten-3" data-val="night">
+                    <i class="switch-icon night"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
 
 {% endblock content %}
 

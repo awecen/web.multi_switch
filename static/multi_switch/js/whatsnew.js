@@ -21,6 +21,12 @@ let Whatsnew = {
      * 表示する情報を入れ込む
      */
     setInfo: function(){
+        Whatsnew.appendInfoRowElement('1.4.0', '2018/06/25 23:00', [
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.ALL,
+                'とうけいデータ画面へ移動できるようになった'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.STAT,
+                '【へるめっと】【ひるね】【よるね】を切り替えて表示できるようになった'),
+        ]);
         Whatsnew.appendInfoRowElement('1.3.1', '2018/06/25 23:00', [
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.TOP,
                 'ON/OFFボタンの上下にキャプションが表示されるようになった'),
@@ -34,10 +40,10 @@ let Whatsnew = {
                 '[へるめっと(休憩)]、[ひるね(終了)]、[よるね(終了)]のアイコン画像が変わった'),
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.TOP,
                 '前回スイッチ時間が「今日」「昨日」「おととい」で表示されるようになった'),
-            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.ALL,
-                '[へるめっと(休憩)]、[ひるね(終了)]、[よるね(終了)]のアイコン画像が変わった'),
-            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.ALL,
-                '[へるめっと(休憩)]、[ひるね(終了)]、[よるね(終了)]のアイコン画像が変わった'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.LOGS,
+                'リスト形式のときにアイコンの下にアイコン名称が表示されるようになった'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.LOGS,
+                'リスト形式で表示中に履歴を更新してもすぐに画面上に反映されない不具合が修正された'),
         ]);
         Whatsnew.appendInfoRowElement('1.2.0', '2018/06/24 22:30', [
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.LOGS,
