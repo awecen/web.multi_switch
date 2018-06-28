@@ -23,7 +23,7 @@ let Stat = {
     /**
      * イベント付加
      */
-    attachEvents: function(){
+    attachEvents: function()    {
 
         /* 月移動 */
         $('.date-selector .btn-move').on('click', function(e){
@@ -266,12 +266,12 @@ let Stat = {
 
         return {
             all:{
-                on : datetimeTools.convertToHMS(Math.floor(allOnSumAsSeconds / allTotalWoToday.length)),
-                off : datetimeTools.convertToHMS(Math.floor(allOffSumAsSeconds / allTotalWoToday.length)),
+                on : allOnSumAsSeconds ? datetimeTools.convertToHMS(Math.floor(allOnSumAsSeconds / allTotalWoToday.length)) : {hours:0, minutes:0, seconds:0},
+                off : allOffSumAsSeconds ? datetimeTools.convertToHMS(Math.floor(allOffSumAsSeconds / allTotalWoToday.length)) : {hours:0, minutes:0, seconds:0},
             },
             month:{
-                on : datetimeTools.convertToHMS(Math.floor(monthOnSumAsSeconds / monthTotalWoToday.length)),
-                off : datetimeTools.convertToHMS(Math.floor(monthOffSumAsSeconds / monthTotalWoToday.length)),
+                on : monthOnSumAsSeconds ? datetimeTools.convertToHMS(Math.floor(monthOnSumAsSeconds / monthTotalWoToday.length)) : {hours:0, minutes:0, seconds:0},
+                off : monthOffSumAsSeconds ? datetimeTools.convertToHMS(Math.floor(monthOffSumAsSeconds / monthTotalWoToday.length)) : {hours:0, minutes:0, seconds:0},
             },
         }
 
@@ -507,9 +507,10 @@ let Stat = {
         }
         // 日毎ログ
         let logsByDate = [];
-        targetLogs.forEach(function(log){
-           let logDateObj = new Date(log.switch_time);
-           if(logDateObj < startDateObj || endDateObj <= logDateObj){
+        for(let i = 0; i < targetLogs.length ; i++){
+            let log = targetLogs[i];
+            let logDateObj = new Date(log.switch_time);
+            if(logDateObj < startDateObj || endDateObj <= logDateObj){
                 // 対象ログが範囲外なら
                 // 日毎ログを集計用配列に格納
                 targetLogsByDate.push({
@@ -531,13 +532,15 @@ let Stat = {
                 }
                 // 日毎ログも初期化
                 logsByDate = [];
-           }
-           logsByDate.push(log);
-        });
-        targetLogsByDate.push({
-           date: tempDate,
-           logs: logsByDate.concat(),
-        });
+            }
+            logsByDate.push(log);
+            if(i === targetLogs.length - 1){
+                targetLogsByDate.push({
+                   date: tempDate,
+                   logs: logsByDate.concat(),
+                });
+            }
+        }
 
         // 日付ごとの累計時間を算出
         let totalTimes = [];
