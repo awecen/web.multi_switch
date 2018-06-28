@@ -539,6 +539,22 @@
     background-color: #ef9a9a;
 }
 
+.detail-content .detail-body .graph .graph-body .graph-bar.napping.on{
+    background-color: #c5e1a5;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-bar.napping.off{
+    background-color: #dddddd;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-bar.night.on{
+    background-color: #ce93d8;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-bar.night.off{
+    background-color: #dddddd;
+}
+
 .detail-content .detail-body .graph .graph-body .graph-cover {
     background-color: #cccccc;
     position: absolute;

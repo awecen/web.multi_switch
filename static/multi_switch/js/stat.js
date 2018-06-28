@@ -48,29 +48,41 @@ let Stat = {
             $('.btn-change-view').removeClass('invisible');
             $e.addClass('invisible');
             Base.toggleLoadingScreen("show");
-            let year = $('.date-selector .datetime .year').text();
-            let month = $('.date-selector .datetime .month').text();
-            let day = 1;
-            let selectedDate = year + '/' + month + '/' + day;
-            let selectedDateObj = new Date(selectedDate);
-            Stat.changeType(selectedDateObj, $e.attr('data-val'));
+            if($('.detail-content').css('display') === 'none'){
+                // カレンダーモードのFAB
+                let year = $('.date-selector .datetime .year').text();
+                let month = $('.date-selector .datetime .month').text();
+                let day = $('.date-selector .datetime .date') ?
+                    $('.date-selector .datetime .date').text() : 1;
+                let selectedDate = year + '/' + month + '/' + day;
+                let selectedDateObj = new Date(selectedDate);
+                Stat.changeType(selectedDateObj, $e.attr('data-val'));
+            } else {
+                // グラフモードのFAB
+                let year = $('.date-changer .datetime .year').text();
+                let month = $('.date-changer .datetime .month').text();
+                let day = $('.date-changer .datetime .date') ?
+                    $('.date-changer .datetime .date').text() : 1;
+                let selectedDate = year + '/' + month + '/' + day;
+                let selectedDateObj = new Date(selectedDate);
+                Stat.changeType(selectedDateObj, $e.attr('data-val'));
+            }
         });
 
         /* 日付選択 */
         $(document).on('click', '.calendar-row.date .cell', function(e){
-
-            let $e = $(e.currentTarget);
+        　  let $e = $(e.currentTarget);
             if(!($e.hasClass('none') || $e.hasClass('future'))){
-                Base.toggleLoadingScreen('show');
                 let date = $e.find('.day').text();
                 let year = $('.date-selector .datetime .year').text();
                 let month = $('.date-selector .datetime .month').text();
                 let selected_date = year + '/' + month + '/' + date;
-                if($('.type-title').attr('data-val') === CONST.TYPE_ID.HELMET){
-                    Stat.moveToDetailStat(new Date(selected_date), CONST.TYPE_ID.HELMET);
-                    $('html').scrollTop(0);
-                    Base.toggleLoadingScreen('hide');
-                }
+                let switch_type = $('.type-title').attr('data-val');
+                let selected_date_object = new Date(selected_date);
+                Base.toggleLoadingScreen('show');
+                Stat.moveToDetailStat(selected_date_object, switch_type);
+                $('html').scrollTop(0);
+                Base.toggleLoadingScreen('hide');
             }
         });
 
@@ -78,14 +90,16 @@ let Stat = {
         $('.btn-back-to-calendar').on('click', function(){
             Base.toggleLoadingScreen('show');
             $('.detail-content').hide();
-            let year = $('.date-selector .datetime .year').text();
-            let month = $('.date-selector .datetime .month').text();
-            let day = $('.date-selector .datetime .date').text();
+            let year = $('.date-changer .datetime .year').text();
+            let month = $('.date-changer .datetime .month').text();
+            let day = $('.date-selector .datetime .date') ?
+                    $('.date-selector .datetime .date').text() : 1;
             let selectedDate = year + '/' + month + '/' + day;
             let selectedDateObj = new Date(selectedDate);
+            let switch_type = $('.type-title').attr('data-val');
             switchTypeTools.getSwitchTypes(function(){
                 Stat.getAllLogs(function(){
-                    Stat.changeType(selectedDateObj, CONST.TYPE_ID.HELMET);
+                    Stat.changeType(selectedDateObj, switch_type);
                     Base.toggleLoadingScreen('hide');
                     $('html').scrollTop(0);
                     $('.calendar-content').show();
@@ -266,6 +280,7 @@ let Stat = {
     /**
      * カレンダー要素設定
      * @param {Date} date
+     * @param {String} switch_type
      */
     setCalendarDate: function(date, switch_type){
         let monthByWeek = Stat.calculateMonthByWeek(new Date(date.getTime()));
@@ -411,11 +426,7 @@ let Stat = {
      * ログ内のトータル時間計算
      * @param {String} type_id
      * @param {Date} selected_date
-     * @return {[
-     *   date : number,
-     *   on_time : {hours: number, minutes: number, seconds: number},
-     *   off_time : {hours: number, minutes: number, seconds: number}
-     * ]}
+     * @return {Array}
      */
     calculateTotalOfLogs: function(selected_date, type_id){
         // 対象ログの抽出(スイッチタイプ)
@@ -445,7 +456,7 @@ let Stat = {
                 let endDate = new Date(selected_date.getTime());
                 endDate.setMonth(endDate.getMonth() + 1);
                 endDate.setDate(1);
-                endDate.setDate(0,0,0,0);
+                endDate.setHours(0,0,0,0);
                 if(type_id === CONST.TYPE_ID.NIGHT){
                     // 【よるね】は12時が区切りなので
                     endDate.setHours(12,0,0,0);
@@ -479,7 +490,7 @@ let Stat = {
         let startDateObj = new Date();
         // 判定用終了日付
         let endDateObj = new Date();
-        let tempDate = startDateObj.getDate()
+        let tempDate = startDateObj.getDate();
         if(targetLogs.length !== 0){
             // 判定用日付に対象ログの最初のログ情報をまずセット
             startDateObj = new Date(targetLogs[0].switch_time);
@@ -623,6 +634,7 @@ let Stat = {
         Stat.setTypeTitle(view_type);
         Stat.setCalendarDate(selected_date, view_type);
         Stat.setStatisticData(selected_date, view_type);
+        Stat.setDetailGraph(selected_date, view_type);
         Base.toggleLoadingScreen("hide");
     },
 
@@ -654,6 +666,12 @@ let Stat = {
             $('.date-changer .btn-move.btn-next').removeClass('disabled');
         }
 
+        // グラフ目盛り変更
+        Stat.changeGraphScale(switch_type);
+
+        // 情報格納要素変更
+        Stat.changeDetailInfo(switch_type);
+
         // 対象ログ格納用配列
         let targetLogs = [];
         // 対象ログ抽出
@@ -663,9 +681,17 @@ let Stat = {
                 let logDateObj = new Date(log.switch_time);
                 let startDateObj = new Date(selected_date);
                 startDateObj.setHours(0,0,0,0);
+                if(switch_type === CONST.TYPE_ID.NIGHT){
+                    // 【よるね】は12時区切り
+                    startDateObj.setHours(12, 0, 0, 0);
+                }
                 let endDateObj = new Date(selected_date);
                 endDateObj.setDate(endDateObj.getDate() + 1);
                 endDateObj.setHours(0,0,0,0);
+                if(switch_type === CONST.TYPE_ID.NIGHT){
+                    // 【よるね】は12時区切り
+                    endDateObj.setHours(12, 0, 0, 0);
+                }
                 if(startDateObj <= logDateObj && logDateObj < endDateObj){
                     targetLogs.push(log);
                 }
@@ -690,6 +716,11 @@ let Stat = {
             if(!tempDateObj){
                 tempDateObj = new Date(log.switch_time);
                 tempDateObj.setHours(0,0,0,0);
+                if(switch_type === CONST.TYPE_ID.NIGHT){
+                    // 【よるね】は12時区切り
+                    tempDateObj.setHours(12, 0, 0, 0);
+                }
+
             }
             let logDateObj = new Date(log.switch_time);
             let delta = datetimeTools.getDelta(logDateObj, tempDateObj);
@@ -705,7 +736,7 @@ let Stat = {
             $bar.addClass(switch_type);
             $bar.addClass(!switchTypeTools.getTypeName(log.type).is_on ? 'on' : 'off');
             $bar.css('height', height + 'px');
-            $bar.appendTo($('.detail-body .graph .graph-body .graph-basement'));
+            $bar.appendTo($basement);
             // 次ログへの基準を渡す
             tempDateObj = new Date(logDateObj.getTime());
 
@@ -713,6 +744,10 @@ let Stat = {
             if(i === targetLogs.length - 1){
                 let targetDateObj = new Date(logDateObj.getTime());
                 targetDateObj.setHours(0,0,0,0);
+                if(switch_type === CONST.TYPE_ID.NIGHT){
+                    // 【よるね】は12時区切り
+                    targetDateObj.setHours(12, 0, 0, 0);
+                }
                 targetDateObj.setDate(targetDateObj.getDate() + 1);
                 // 対象日時が未来日時の場合は対象を現在日時に変更する
                 if(new Date() < targetDateObj){
@@ -731,7 +766,7 @@ let Stat = {
                 $bar.addClass(switch_type);
                 $bar.addClass(switchTypeTools.getTypeName(log.type).is_on ? 'on' : 'off');
                 $bar.css('height', height + 'px');
-                $bar.appendTo($('.detail-body .graph .graph-body .graph-basement'));
+                $bar.appendTo($basement);
             }
         }
 
@@ -844,14 +879,137 @@ let Stat = {
     },
 
     /**
+     * スイッチタイプ別グラフ目盛り(時間)変更
+     * @param switch_type
+     */
+    changeGraphScale: function(switch_type){
+        let $scale = $('.detail-content .scroll-area .detail-body .graph .graph-scale');
+        $scale.empty();
+        if(switch_type === CONST.TYPE_ID.NIGHT){
+            // 【よるね】は12時区切り
+            $scale.append($('<div class="th0">12:00</div>'));
+            $scale.append($('<div class="th2">13:00</div>'));
+            $scale.append($('<div class="th2">14:00</div>'));
+            $scale.append($('<div class="th1">15:00</div>'));
+            $scale.append($('<div class="th2">16:00</div>'));
+            $scale.append($('<div class="th2">17:00</div>'));
+            $scale.append($('<div class="th1">18:00</div>'));
+            $scale.append($('<div class="th2">19:00</div>'));
+            $scale.append($('<div class="th2">20:00</div>'));
+            $scale.append($('<div class="th1">21:00</div>'));
+            $scale.append($('<div class="th2">22:00</div>'));
+            $scale.append($('<div class="th2">23:00</div>'));
+            $scale.append($('<div class="th1"> 0:00</div>'));
+            $scale.append($('<div class="th2"> 1:00</div>'));
+            $scale.append($('<div class="th2"> 2:00</div>'));
+            $scale.append($('<div class="th1"> 3:00</div>'));
+            $scale.append($('<div class="th2"> 4:00</div>'));
+            $scale.append($('<div class="th2"> 5:00</div>'));
+            $scale.append($('<div class="th1"> 6:00</div>'));
+            $scale.append($('<div class="th2"> 7:00</div>'));
+            $scale.append($('<div class="th2"> 8:00</div>'));
+            $scale.append($('<div class="th1"> 9:00</div>'));
+            $scale.append($('<div class="th2">10:00</div>'));
+            $scale.append($('<div class="th2">11:00</div>'));
+            $scale.append($('<div class="th1">12:00</div>'));
+        } else {
+            $scale.append($('<div class="th0"> 0:00</div>'));
+            $scale.append($('<div class="th2"> 1:00</div>'));
+            $scale.append($('<div class="th2"> 2:00</div>'));
+            $scale.append($('<div class="th1"> 3:00</div>'));
+            $scale.append($('<div class="th2"> 4:00</div>'));
+            $scale.append($('<div class="th2"> 5:00</div>'));
+            $scale.append($('<div class="th1"> 6:00</div>'));
+            $scale.append($('<div class="th2"> 7:00</div>'));
+            $scale.append($('<div class="th2"> 8:00</div>'));
+            $scale.append($('<div class="th1"> 9:00</div>'));
+            $scale.append($('<div class="th2">10:00</div>'));
+            $scale.append($('<div class="th2">11:00</div>'));
+            $scale.append($('<div class="th1">12:00</div>'));
+            $scale.append($('<div class="th2">13:00</div>'));
+            $scale.append($('<div class="th2">14:00</div>'));
+            $scale.append($('<div class="th1">15:00</div>'));
+            $scale.append($('<div class="th2">16:00</div>'));
+            $scale.append($('<div class="th2">17:00</div>'));
+            $scale.append($('<div class="th1">18:00</div>'));
+            $scale.append($('<div class="th2">19:00</div>'));
+            $scale.append($('<div class="th2">20:00</div>'));
+            $scale.append($('<div class="th1">21:00</div>'));
+            $scale.append($('<div class="th2">22:00</div>'));
+            $scale.append($('<div class="th2">23:00</div>'));
+            $scale.append($('<div class="th1">24:00</div>'));
+        }
+
+    },
+
+    /**
+     * スイッチタイプ別Info表示変更
+     * @param switch_type
+     */
+    changeDetailInfo: function(switch_type){
+        let $detailInfo = $('.detail-content .scroll-area .detail-body .detail-info');
+        $detailInfo.empty();
+
+        // 合計 キャプション
+        let $totalCaption = $('<div class="info-row caption">とーたる</div>');
+        $totalCaption.appendTo($detailInfo);
+
+        // 合計 ON
+        let $totalOnRow = $('<div class="info-row total-on"></div>');
+        $totalOnRow.appendTo($detailInfo);
+        let $totalOnTitle = $('<div class="title"></div>');
+        $totalOnTitle.appendTo($totalOnRow);
+        if(switch_type === CONST.TYPE_ID.HELMET){
+            $totalOnTitle.append($('<span class="status-label on">装着</span>'));
+        }else{
+            $totalOnTitle.text(' ');
+        }
+        let $totalOnData = $('<div class="data"></div>');
+        $totalOnData.appendTo($totalOnRow);
+        $totalOnData.append($('<span class="time">00:00:00</span>'));
+
+        // 合計 OFF
+        let $totalOffRow = $('<div class="info-row total-off"></div>');
+        if(switch_type === CONST.TYPE_ID.HELMET){
+            $totalOffRow.appendTo($detailInfo);
+        }
+        let $totalOffTitle = $('<div class="title"></div>');
+        $totalOffTitle.appendTo($totalOffRow);
+        if(switch_type === CONST.TYPE_ID.HELMET){
+            $totalOffTitle.append($('<span class="status-label off">休憩</span>'));
+        }
+        let $totalOffData = $('<div class="data"></div>');
+        $totalOffData.appendTo($totalOffRow);
+        $totalOffData.append($('<span class="time">00:00:00</span>'));
+
+        // 回数 キャプション
+        let $numberCaption;
+        if(switch_type === CONST.TYPE_ID.HELMET){
+            $numberCaption = $('<div class="info-row caption">休憩回数</div>');
+        } else {
+            $numberCaption = $('<div class="info-row caption">かいすう</div>');
+        }
+        $numberCaption.appendTo($detailInfo);
+
+        // 回数 Data
+        let $numberRow = $('<div class="info-row off-number">');
+        $numberRow.appendTo($detailInfo);
+        let $numberTitle = $('<div class="title"><span>&nbsp;</span></div>');
+        $numberTitle.appendTo($numberRow);
+        let $numberData = $('<div class="data"><span class="number">00</span><span class="counter">かい</span></div>');
+        $numberData.appendTo($numberRow);
+    },
+
+    /**
      * グラフ表示アニメーション
      */
     startGraphAppearingAnimation: function(duration){
-        $('.graph-cover').css({
+        let $graphCover = $('.graph-cover');
+        $graphCover.css({
             'top': '0px',
             'height': '648px',
         });
-        $('.graph-cover').animate({
+        $graphCover.animate({
             'top': '648px',
             'height': '0px',
         }, duration, 'swing');
