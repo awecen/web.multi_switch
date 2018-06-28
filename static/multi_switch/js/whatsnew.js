@@ -21,7 +21,13 @@ let Whatsnew = {
      * 表示する情報を入れ込む
      */
     setInfo: function(){
-        Whatsnew.appendInfoRowElement('1.4.0', '2018/06/25 23:00', [
+        Whatsnew.appendInfoRowElement('1.5.0', '2018/06/28 19:30', [
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.STAT,
+                'カレンダーから選択した日にちの記録を表示できるようになった（【へるめっと】のみ）'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.STAT,
+                'いくつかの統計値計算の不具合が修正された'),
+        ]);
+        Whatsnew.appendInfoRowElement('1.4.0', '2018/06/27 22:00', [
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.ALL,
                 'とうけいデータ画面へ移動できるようになった'),
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.STAT,
