@@ -52,10 +52,10 @@ let Stat = {
                 // カレンダーモードのFAB
                 let year = $('.date-selector .datetime .year').text();
                 let month = $('.date-selector .datetime .month').text();
-                let day = $('.date-selector .datetime .date') ?
-                    $('.date-selector .datetime .date').text() : 1;
+                let day = 1;
                 let selectedDate = year + '/' + month + '/' + day;
                 let selectedDateObj = new Date(selectedDate);
+                alert(datetimeTools.convertToDbFormat(selectedDateObj) + ":Calendar Mode");
                 Stat.changeType(selectedDateObj, $e.attr('data-val'));
             } else {
                 // グラフモードのFAB
@@ -63,8 +63,10 @@ let Stat = {
                 let month = $('.date-changer .datetime .month').text();
                 let day = $('.date-changer .datetime .date') ?
                     $('.date-changer .datetime .date').text() : 1;
+                alert('Graph Mode: day=' + day);
                 let selectedDate = year + '/' + month + '/' + day;
                 let selectedDateObj = new Date(selectedDate);
+                alert("Graph Mode: " + datetimeTools.convertToDbFormat(selectedDateObj));
                 Stat.changeType(selectedDateObj, $e.attr('data-val'));
             }
         });
@@ -81,7 +83,9 @@ let Stat = {
                 let selected_date_object = new Date(selected_date);
                 Base.toggleLoadingScreen('show');
                 Stat.moveToDetailStat(selected_date_object, switch_type);
-                $('html').scrollTop(0);
+                $('.body').scrollTop(0);
+                $('html,body').scrollTop(0);
+                $(document).scrollTop(0);
                 Base.toggleLoadingScreen('hide');
             }
         });
@@ -92,8 +96,8 @@ let Stat = {
             $('.detail-content').hide();
             let year = $('.date-changer .datetime .year').text();
             let month = $('.date-changer .datetime .month').text();
-            let day = $('.date-selector .datetime .date') ?
-                    $('.date-selector .datetime .date').text() : 1;
+            let day = $('.date-changer .datetime .date') ?
+                    $('.date-changer .datetime .date').text() : 1;
             let selectedDate = year + '/' + month + '/' + day;
             let selectedDateObj = new Date(selectedDate);
             let switch_type = $('.type-title').attr('data-val');
@@ -101,7 +105,9 @@ let Stat = {
                 Stat.getAllLogs(function(){
                     Stat.changeType(selectedDateObj, switch_type);
                     Base.toggleLoadingScreen('hide');
-                    $('html').scrollTop(0);
+                    $('.body').scrollTop(0);
+                    $('html,body').scrollTop(0);
+                    $(document).scrollTop(0);
                     $('.calendar-content').show();
                 });
             });
