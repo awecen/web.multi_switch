@@ -17,87 +17,211 @@
         <div class="switch-type-name">へるめっと</div>
     </div>
 
-    <!-- Date Selector -->
-    <div class="date-selector">
-        <div class="btn-move btn-prev" data-val="2">
-            <i class="material-icons">chevron_left</i>
-        </div>
-        <div class="datetime">
-            <div class="year">0000</div>
-            <div class="year-design">年</div>
-            <div class="month">00</div>
-            <div class="month-design">月</div>
-        </div>
-        <div class="btn-move btn-next" data-val="0">
-            <i class="material-icons">chevron_right</i>
-        </div>
-    </div>
+    <!-- Calendar Content -->
+    <div class="calendar-content">
 
-    <!-- Stat Data -->
-    <div class="stat-data">
-        <div class="stat-column total-all">
-            <div class="caption">全平均</div>
-            <div class="content">
-                <div class="on">
-                    <div class="status-label">装着</div>
-                    <div class="time">00:00:00</div>
+        <!-- Date Selector -->
+        <div class="date-selector">
+            <div class="btn-move btn-prev" data-val="2">
+                <i class="material-icons">chevron_left</i>
+            </div>
+            <div class="datetime">
+                <div class="year">0000</div>
+                <div class="year-design">年</div>
+                <div class="month">00</div>
+                <div class="month-design">月</div>
+            </div>
+            <div class="btn-move btn-next" data-val="0">
+                <i class="material-icons">chevron_right</i>
+            </div>
+        </div>
+
+        <!-- Stat Data -->
+        <div class="stat-data">
+            <div class="stat-column total-all">
+                <div class="caption">全平均</div>
+                <div class="content">
+                    <div class="on">
+                        <div class="status-label">装着</div>
+                        <div class="time">00:00:00</div>
+                    </div>
+                    <div class="off">
+                        <div class="status-label">休憩</div>
+                        <div class="time">00:00:00</div>
+                    </div>
                 </div>
-                <div class="off">
-                    <div class="status-label">休憩</div>
-                    <div class="time">00:00:00</div>
+            </div>
+            <div class="stat-column total-month">
+                <div class="caption">当月平均</div>
+                <div class="content">
+                    <div class="on">
+                        <div class="status-label">装着</div>
+                        <div class="time">00:00:00</div>
+                    </div>
+                    <div class="off">
+                        <div class="status-label">休憩</div>
+                        <div class="time">00:00:00</div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="stat-column total-month">
-            <div class="caption">当月平均</div>
-            <div class="content">
-                <div class="on">
-                    <div class="status-label">装着</div>
-                    <div class="time">00:00:00</div>
+
+        <!-- Stat Calendar -->
+        <div class="stat-calendar">
+            <div class="calendar-row weekday">
+                <div class="cell sun">日</div>
+                <div class="cell">月</div>
+                <div class="cell">火</div>
+                <div class="cell">水</div>
+                <div class="cell">木</div>
+                <div class="cell">金</div>
+                <div class="cell sat">土</div>
+            </div>
+        </div>
+
+        <!-- FAB -->
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large amber accent-4">
+                <i class="large material-icons">cached</i>
+            </a>
+            <ul>
+                <li>
+                    <a class="btn-change-view btn-floating blue lighten-3 invisible" data-val="helmet">
+                        <i class="switch-icon helmet"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="btn-change-view btn-floating light-green lighten-3" data-val="napping">
+                        <i class="switch-icon napping"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="btn-change-view btn-floating purple lighten-3" data-val="night">
+                        <i class="switch-icon night"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Detail Content -->
+    <div class="detail-content">
+        <div class="fixed-area">
+            <div class="tool-area">
+            <div class="btn-back-to-calendar">
+                <i class="material-icons">arrow_back</i>
+                <span>カレンダーに戻る</span>
+            </div>
+        </div>
+            <div class="date-changer">
+            <div class="btn-move btn-prev" data-val="2">
+                <i class="material-icons">chevron_left</i>
+            </div>
+            <div class="datetime">
+                <div class="year">0000</div>
+                <div class="year-design">年</div>
+                <div class="month">00</div>
+                <div class="month-design">月</div>
+                <div class="date">00</div>
+                <div class="date-design">日</div>
+            </div>
+            <div class="btn-move btn-next" data-val="0">
+                <i class="material-icons">chevron_right</i>
+            </div>
+        </div>
+        </div>
+        <div class="scroll-area">
+            <div class="detail-body">
+            <div class="graph">
+                <div class="graph-scale">
+                    <div class="th0"> 0:00</div>
+                    <div class="th2"> 1:00</div>
+                    <div class="th2"> 2:00</div>
+                    <div class="th1"> 3:00</div>
+                    <div class="th2"> 4:00</div>
+                    <div class="th2"> 5:00</div>
+                    <div class="th1"> 6:00</div>
+                    <div class="th2"> 7:00</div>
+                    <div class="th2"> 8:00</div>
+                    <div class="th1"> 9:00</div>
+                    <div class="th2">10:00</div>
+                    <div class="th2">11:00</div>
+                    <div class="th1">12:00</div>
+                    <div class="th2">13:00</div>
+                    <div class="th2">14:00</div>
+                    <div class="th1">15:00</div>
+                    <div class="th2">16:00</div>
+                    <div class="th2">17:00</div>
+                    <div class="th1">18:00</div>
+                    <div class="th2">19:00</div>
+                    <div class="th2">20:00</div>
+                    <div class="th1">21:00</div>
+                    <div class="th2">22:00</div>
+                    <div class="th2">23:00</div>
+                    <div class="th1">24:00</div>
                 </div>
-                <div class="off">
-                    <div class="status-label">休憩</div>
-                    <div class="time">00:00:00</div>
+                <div class="graph-body">
+                    <div class="graph-basement"></div>
+                    <div class="graph-cover"></div>
+                    <div class="graph-line">
+                        <div class="th2"></div>
+                        <div class="th2"></div>
+                        <div class="th1"></div>
+                        <div class="th2"></div>
+                        <div class="th2"></div>
+                        <div class="th1"></div>
+                        <div class="th2"></div>
+                        <div class="th2"></div>
+                        <div class="th1"></div>
+                        <div class="th2"></div>
+                        <div class="th2"></div>
+                        <div class="th1"></div>
+                        <div class="th2"></div>
+                        <div class="th2"></div>
+                        <div class="th1"></div>
+                        <div class="th2"></div>
+                        <div class="th2"></div>
+                        <div class="th1"></div>
+                        <div class="th2"></div>
+                        <div class="th2"></div>
+                        <div class="th1"></div>
+                        <div class="th2"></div>
+                        <div class="th2"></div>
+                        <div class="th1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-info">
+                <div class="info-row caption">とーたる</div>
+                <div class="info-row total-on">
+                    <div class="title">
+                        <span class="status-label on">装着</span>
+                    </div>
+                    <div class="data">
+                        <span class="time">00:00:00</span>
+                    </div>
+                </div>
+                <div class="info-row total-off">
+                    <div class="title">
+                        <span class="status-label off">休憩</span>
+                    </div>
+                    <div class="data">
+                        <span class="time">00:00:00</span>
+                    </div>
+                </div>
+                <div class="info-row caption">休憩回数</div>
+                <div class="info-row off-number">
+                    <div class="title">
+                        <span>&nbsp;</span>
+                    </div>
+                    <div class="data">
+                        <span class="number">00</span>
+                        <span class="counter">かい</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Stat Calendar -->
-    <div class="stat-calendar">
-        <div class="calendar-row weekday">
-            <div class="cell sun">日</div>
-            <div class="ce  ll">月</div>
-            <div class="cell">火</div>
-            <div class="cell">水</div>
-            <div class="cell">木</div>
-            <div class="cell">金</div>
-            <div class="cell sat">土</div>
         </div>
-    </div>
-
-    <!-- FAB -->
-    <div class="fixed-action-btn">
-        <a class="btn-floating btn-large amber accent-4">
-            <i class="large material-icons">cached</i>
-        </a>
-        <ul>
-            <li>
-                <a class="btn-change-view btn-floating blue lighten-3 invisible" data-val="helmet">
-                    <i class="switch-icon helmet"></i>
-                </a>
-            </li>
-            <li>
-                <a class="btn-change-view btn-floating light-green lighten-3" data-val="napping">
-                    <i class="switch-icon napping"></i>
-                </a>
-            </li>
-            <li>
-                <a class="btn-change-view btn-floating purple lighten-3" data-val="night">
-                    <i class="switch-icon night"></i>
-                </a>
-            </li>
-        </ul>
     </div>
 
 {% endblock content %}

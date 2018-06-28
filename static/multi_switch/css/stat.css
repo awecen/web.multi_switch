@@ -1,6 +1,6 @@
-/*****************/
-/* Date Selector */
-/*****************/
+/**************/
+/* Type Title */
+/**************/
 .type-title{
     background-color: #fce4ec;
     width:100%;
@@ -8,6 +8,9 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    position: fixed;
+    z-index: 300;
+    max-width: 480px;
 }
 
 .type-title.helmet{
@@ -33,6 +36,14 @@
     font-weight: bold;
     color: #666666;
 }
+/********************/
+/* Calendar Content */
+/********************/
+
+.calendar-content{
+    margin-top: 48px;
+}
+
 /*****************/
 /* Date Selector */
 /*****************/
@@ -294,3 +305,332 @@
     content: url(/static/multi_switch/img/night_64.png);
 }
 
+/****************/
+/**** Detail ****/
+/****************/
+.detail-content{
+    display: none;
+}
+
+.detail-content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+    position: relative;
+}
+
+.detail-content .fixed-area{
+    position: fixed;
+    width: 100%;
+    margin-top: 72px;
+    background-color: #ffffff;
+    z-index: 300;
+    padding: 8px 0px 0px 0px;
+    border-bottom: 1px #f0f0f0 solid;
+    -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,0.14), 0 3px 1px -1px rgba(0,0,0,0.12), 0 1px 5px -5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,0.14), 0 3px 1px -1px rgba(0,0,0,0.12), 0 1px 5px -5px rgba(0,0,0,0.2);
+    max-width: 480px;
+}
+
+.detail-content .scroll-area{
+    width: 100%;
+    height: 100%;
+    margin-top: 24px;
+}
+
+/**********************/
+/* [Detail] Tool Area */
+/**********************/
+.detail-content .tool-area{
+    top: 96px;
+    z-index: 300;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.detail-content .tool-area .btn-back-to-calendar{
+    background-color: #e8e8e8;
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 32px;
+    padding: 0 4px;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    margin-left: 4px;
+    cursor: pointer;
+    width: 128px;
+}
+.detail-content .tool-area .btn-back-to-calendar:hover{
+    background-color: #cccccc;
+}
+
+.detail-content .tool-area .btn-back-to-calendar i{
+    font-size: 16px;
+}
+.detail-content .tool-area .btn-back-to-calendar span{
+    color: #666666;
+    font-size: 11px;
+}
+
+/*************************/
+/* [Detail] Date Changer */
+/*************************/
+.date-changer{
+    width: 100%;
+    height: 56px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 8px 0;
+    margin-top: 8px;
+    top: 128px;
+    z-index: 300;
+    background-color: #ffffff;
+}
+
+.date-changer .btn-move{
+    width: 64px;
+    border-radius: 4px;
+    background-color: #f0f4c3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.date-changer .btn-move:hover{
+    background-color: #c0c4a3;
+}
+
+.date-changer .btn-move.disabled{
+    color: #cccccc;
+    background-color: #e8e8e8;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    cursor: default;
+}
+
+.date-changer .datetime{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 16px;
+    color: #666666;
+}
+
+.date-changer .datetime .year{
+    font-size: 16px;
+    margin: 0 2px;
+}
+
+.date-changer .datetime .year-design{
+    font-size: 12px;
+    margin: 0 2px;
+}
+
+.date-changer .datetime .month{
+    font-size: 24px;
+    margin: 0 2px;
+}
+
+.date-changer .datetime .month-design{
+    font-size: 16px;
+    margin: 0 2px;
+}
+.date-changer .datetime .date{
+    font-size: 24px;
+    margin: 0 2px;
+}
+
+.date-changer .datetime .date-design{
+    font-size: 16px;
+    margin: 0 2px;
+}
+
+/********************************/
+/* [Detail] Detail Body - Graph */
+/********************************/
+.detail-content .detail-body{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 136px;
+}
+
+.detail-content .detail-body .graph{
+    height: 675px;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+}
+
+.detail-content .detail-body .graph .graph-scale{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    width: 64px;
+    align-items: flex-end;
+}
+.detail-content .detail-body .graph .graph-scale div{
+    height: 27px;
+    display: flex;
+    align-items: center;
+}
+.detail-content .detail-body .graph .graph-scale .th0{
+    font-size: 14px;
+    color: #666666;
+}
+
+.detail-content .detail-body .graph .graph-scale .th1{
+    font-size: 14px;
+    color: #666666;
+}
+
+.detail-content .detail-body .graph .graph-scale .th2{
+    font-size: 12px;
+    color: #999999;
+}
+
+.detail-content .detail-body .graph .graph-body {
+    width: 100%;
+    padding: 13.5px 0;
+    position: relative;
+    margin-left: 8px;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-basement {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    background-color: #CCCCCC;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-bar:first-child{
+    border-radius: 4px 4px 0 0;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-bar:last-child{
+    border-radius: 0 0 4px 4px;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-bar.helmet.on{
+    background-color: #90caf9;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-bar.helmet.off{
+    background-color: #ef9a9a;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-cover {
+    background-color: #cccccc;
+    position: absolute;
+    height: 648px;
+    width: 100%;
+    top: 0px;
+    border-radius: 0 0 4px 4px;
+    margin: 13.5px 0;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-line {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: transparent;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    border-radius: 4px;
+    padding: 13.5px 0px;
+}
+.detail-content .detail-body .graph .graph-body .graph-line div{
+    height: 27px;
+}
+
+.detail-content .detail-body .graph .graph-body .graph-line .th1{
+    background-color: transparent;
+    border-bottom: 1px #aaaaaa dotted;
+}
+.detail-content .detail-body .graph .graph-body .graph-line .th1:last-child{
+    border-bottom: 0;
+}
+.detail-content .detail-body .graph .graph-body .graph-line .th2{
+    background-color: transparent;
+    border-bottom: 1px #e8e8e8 dotted;
+
+}
+
+/*******************************/
+/* [Detail] Detail Body - Info */
+/*******************************/
+.detail-content .detail-body .detail-info{
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 16px 8px;
+    background-color: #f0f0f0;
+    padding: 8px 8px 16px 8px;
+    border-radius: 8px;
+}
+
+.detail-content .detail-body .detail-info .info-row.caption{
+    margin-top: 24px;
+    font-size: 16px;
+    color: #999999;
+    border-bottom: 1px #e8e8e8 solid;
+}
+.detail-content .detail-body .detail-info .info-row.caption:first-child{
+    margin-top: 8px;
+}
+
+.detail-content .detail-body .detail-info .info-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 4px 0;
+    align-items: center;
+}
+.detail-content .detail-body .detail-info .info-row .title{
+    font-size: 14px;
+    color: #666666;
+}
+.detail-content .detail-body .detail-info .info-row .data{
+    font-size: 14px;
+    color: #666666;
+}
+
+.detail-content .detail-body .detail-info .info-row .data .time{
+    font-size: 18px;
+    color: #666666;
+    font-weight: bold;
+}
+
+.detail-content .detail-body .detail-info .info-row .data .number{
+    font-size: 16px;
+    color: #666666;
+    font-weight: bold;
+}
+
+.detail-content .detail-body .detail-info .info-row .title .status-label{
+    font-size: 12px;
+    border-radius: 4px;
+    padding: 4px;
+    font-weight: bold;
+}
+.detail-content .detail-body .detail-info .info-row .title .status-label.on{
+    background-color: #90caf9;
+}
+.detail-content .detail-body .detail-info .info-row .title .status-label.off{
+    background-color: #ef9a9a;
+}
