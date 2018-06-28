@@ -14,7 +14,7 @@ let Stat = {
         Stat.initializeMaterialize();
         switchTypeTools.getSwitchTypes(function(){
             Stat.getAllLogs(function(){
-                Stat.changeType(CONST.TYPE_ID.HELMET);
+                Stat.changeType(new Date(), CONST.TYPE_ID.HELMET);
             });
         });
 
@@ -48,25 +48,49 @@ let Stat = {
             $('.btn-change-view').removeClass('invisible');
             $e.addClass('invisible');
             Base.toggleLoadingScreen("show");
-            Stat.changeType($e.attr('data-val'));
+            let year = $('.date-selector .datetime .year').text();
+            let month = $('.date-selector .datetime .month').text();
+            let day = 1;
+            let selectedDate = year + '/' + month + '/' + day;
+            let selectedDateObj = new Date(selectedDate);
+            Stat.changeType(selectedDateObj, $e.attr('data-val'));
         });
 
         /* 日付選択 */
         $(document).on('click', '.calendar-row.date .cell', function(e){
+
             let $e = $(e.currentTarget);
-            let date = $e.find('.day').text();
-            let year = $('.date-selector .datetime .year').text();
-            let month = $('.date-selector .datetime .month').text();
-            let selected_date = year + '/' + month + '/' + date;
-            if($('.type-title').attr('data-val') === CONST.TYPE_ID.HELMET){
-                Stat.moveToDetailStat(new Date(selected_date), CONST.TYPE_ID.HELMET);
+            if(!($e.hasClass('none') || $e.hasClass('future'))){
+                Base.toggleLoadingScreen('show');
+                let date = $e.find('.day').text();
+                let year = $('.date-selector .datetime .year').text();
+                let month = $('.date-selector .datetime .month').text();
+                let selected_date = year + '/' + month + '/' + date;
+                if($('.type-title').attr('data-val') === CONST.TYPE_ID.HELMET){
+                    Stat.moveToDetailStat(new Date(selected_date), CONST.TYPE_ID.HELMET);
+                    $('html').scrollTop(0);
+                    Base.toggleLoadingScreen('hide');
+                }
             }
         });
 
         /* カレンダーに戻る */
         $('.btn-back-to-calendar').on('click', function(){
-            $('.calendar-content').show();
+            Base.toggleLoadingScreen('show');
             $('.detail-content').hide();
+            let year = $('.date-selector .datetime .year').text();
+            let month = $('.date-selector .datetime .month').text();
+            let day = $('.date-selector .datetime .date').text();
+            let selectedDate = year + '/' + month + '/' + day;
+            let selectedDateObj = new Date(selectedDate);
+            switchTypeTools.getSwitchTypes(function(){
+                Stat.getAllLogs(function(){
+                    Stat.changeType(selectedDateObj, CONST.TYPE_ID.HELMET);
+                    Base.toggleLoadingScreen('hide');
+                    $('html').scrollTop(0);
+                    $('.calendar-content').show();
+                });
+            });
         });
 
         /* 日付移動 */
@@ -576,12 +600,13 @@ let Stat = {
 
     /**
      * 表示形式切り替え
+     * @param {Date} selected_date
      * @param {String} view_type
      */
-    changeType: function(view_type){
+    changeType: function(selected_date, view_type){
         Stat.setTypeTitle(view_type);
-        Stat.setCalendarDate(new Date(), view_type);
-        Stat.setStatisticData(new Date(), view_type);
+        Stat.setCalendarDate(selected_date, view_type);
+        Stat.setStatisticData(selected_date, view_type);
         Base.toggleLoadingScreen("hide");
     },
 
@@ -590,7 +615,7 @@ let Stat = {
      */
     moveToDetailStat: function(selected_date, switch_type){
         $('.calendar-content').hide();
-        $('.detail-content').show();
+        $('.detail-content').css('display', 'flex');
         Stat.setDetailGraph(selected_date, switch_type);
     },
 
