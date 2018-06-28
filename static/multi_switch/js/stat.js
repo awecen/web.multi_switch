@@ -55,7 +55,6 @@ let Stat = {
                 let day = 1;
                 let selectedDate = year + '/' + month + '/' + day;
                 let selectedDateObj = new Date(selectedDate);
-                alert(datetimeTools.convertToDbFormat(selectedDateObj) + ":Calendar Mode");
                 Stat.changeType(selectedDateObj, $e.attr('data-val'));
             } else {
                 // グラフモードのFAB
@@ -63,10 +62,8 @@ let Stat = {
                 let month = $('.date-changer .datetime .month').text();
                 let day = $('.date-changer .datetime .date') ?
                     $('.date-changer .datetime .date').text() : 1;
-                alert('Graph Mode: day=' + day);
                 let selectedDate = year + '/' + month + '/' + day;
                 let selectedDateObj = new Date(selectedDate);
-                alert("Graph Mode: " + datetimeTools.convertToDbFormat(selectedDateObj));
                 Stat.changeType(selectedDateObj, $e.attr('data-val'));
             }
         });
