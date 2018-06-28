@@ -60,7 +60,7 @@ html{
     display: none;
 }
 
-.app-menu .body{
+.app-menu .app-body{
     background-color: #ffffff;
     filter: drop-shadow(1px 6px 3px rgba(0,0,0,0.3));
     position: relative;
@@ -69,13 +69,13 @@ html{
     top: -200px;
 }
 
-.app-menu .body .item-row{
+.app-menu .app-body .item-row{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     margin: 8px;
 }
-.app-menu .body .item-row .menu-item {
+.app-menu .app-body .item-row .menu-item {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -83,35 +83,35 @@ html{
     width: 80px;
 }
 
-.app-menu .body .item-row .menu-item i{
+.app-menu .app-body .item-row .menu-item i{
     color: #333333;
     cursor: pointer;
     border-radius: 50%;
     padding: 8px;
 }
 
-.app-menu .body .item-row .menu-item i:hover{
+.app-menu .app-body .item-row .menu-item i:hover{
     background-color: #e8eaf6;
 }
 
 
-.app-menu .body .item-row .menu-item.disabled .title{
+.app-menu .app-body .item-row .menu-item.disabled .title{
     text-decoration: line-through;
 
 }
-.app-menu .body .item-row .menu-item.disabled i{
+.app-menu .app-body .item-row .menu-item.disabled i{
     color: #AAAAAA;
     cursor: default;
     border-radius: 50%;
     padding: 8px;
 }
 
-.app-menu .body .item-row .menu-item.disabled i:hover{
+.app-menu .app-body .item-row .menu-item.disabled i:hover{
     background-color: transparent;
 }
 
 
-.app-menu .body .item-row .menu-item .title{
+.app-menu .app-body .item-row .menu-item .title{
     font-size: 12px;
     text-align: center;
     color: #666666;

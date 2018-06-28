@@ -129,7 +129,7 @@ let Main = {
         $('.btn-image.disabled').off('click');
 
         /* めも一時保存 */
-        $(document).on('change', '.note-textarea', function(e){
+        $('.container').on('change', '.note-textarea', function(e){
             let $e = $(e.currentTarget);
             let note = $e.val();
             let type = $e.parent().parent().parent().parent().parent().parent().attr('type');

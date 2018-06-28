@@ -21,6 +21,14 @@ let Whatsnew = {
      * 表示する情報を入れ込む
      */
     setInfo: function(){
+        Whatsnew.appendInfoRowElement('1.6.0', '2018/06/28 23:00', [
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.ALL,
+                '右上のメニューを開いたあとに黒背景を押した場合でもメニューが閉じるようになった'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.ALL,
+                'いくつかのクリック動作の不具合が修正された'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.STAT,
+                'カレンダーから選択した日にちの記録を表示できるようになった（【ひるね】【よるね】も可能）'),
+        ]);
         Whatsnew.appendInfoRowElement('1.5.0', '2018/06/28 19:30', [
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.STAT,
                 'カレンダーから選択した日にちの記録を表示できるようになった（【へるめっと】のみ）'),

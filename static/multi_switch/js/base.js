@@ -11,7 +11,7 @@ let Base = {
     attachEvents: function () {
 
         // App Menu 開閉
-        $(document).on('click', '.menu-open-icon', function(){
+        $('.global-bar').on('click', '.menu-open-icon', function(){
             Base.toggleAppMenu();
         });
         Base.attachEventsForAppMenu('home', '/multi_switch/');
@@ -22,12 +22,12 @@ let Base = {
         Base.attachEventsForAppMenu('settings', '/multi_switch/settings/');
 
         // 背景押しても
-        $(document).on('click', '.app-menu', function(){
+        $('.body').on('click', '.app-menu', function(){
             Base.toggleAppMenu();
         });
 
         // 背景の上のBODYは
-        $(document).on('click', '.app-menu .body', function(e){
+        $('.body').on('click', '.app-menu .app-body', function(e){
             e.stopPropagation();
         });
 
@@ -36,8 +36,8 @@ let Base = {
     // app-menu 用イベント付加
     attachEventsForAppMenu: function(appTitle, url){
         // disabled クラスをもっているならイベント付与しない
-        if(!$('.app-menu .body .item-row .menu-item.'+ appTitle).hasClass('disabled')){
-            $(document).on('click', '.app-menu .body .item-row .menu-item.'+ appTitle , function(){
+        if(!$('.app-menu .app-body .item-row .menu-item.'+ appTitle).hasClass('disabled')){
+            $('.body').on('click', '.app-menu .app-body .item-row .menu-item.'+ appTitle , function(){
                 window.location.href = url;
             });
         }
@@ -79,14 +79,14 @@ let Base = {
             $('.app-menu').animate({
                 'opacity': '1.0',
             },100, 'swing', function(){
-                $('.app-menu .body').animate({
+                $('.app-menu .app-body').animate({
                     'top': '56px',
                 }, 50, 'swing', function(){
 
                 });
             })
         }else{
-            $('.app-menu .body').animate({
+            $('.app-menu .app-body').animate({
                 'top': '-200px',
             },100, 'swing', function(){
                 $('.app-menu').animate({
