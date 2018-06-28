@@ -114,7 +114,7 @@ let Logs = {
         });
 
         /* アイコン → ログ詳細 */
-        $(document).on('click', '.graph-icon', function(e){
+        $('.container').on('click', '.graph-icon', function(e){
             let $tgt = $(e.currentTarget);
             Logs.showLogDetail($tgt.attr('row-id'));
         });
@@ -137,7 +137,7 @@ let Logs = {
         });
 
         /* リスト形式 編集ボタン */
-        $(document).on('click', '.list-icon.edit', function(e){
+        $('.container').on('click', '.list-icon.edit', function(e){
             let $tgt = $(e.currentTarget);
             Logs.showLogDetail($tgt.parent().attr('row-id'));
         });

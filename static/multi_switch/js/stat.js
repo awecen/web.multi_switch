@@ -70,7 +70,7 @@ let Stat = {
         });
 
         /* 日付選択 */
-        $(document).on('click', '.calendar-row.date .cell', function(e){
+        $('.container').on('click', '.calendar-row.date .cell', function(e){
         　  let $e = $(e.currentTarget);
             if(!($e.hasClass('none') || $e.hasClass('future'))){
                 let date = $e.find('.day').text();
