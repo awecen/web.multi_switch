@@ -17,6 +17,7 @@ let Stat = {
                 Stat.changeType(CONST.TYPE_ID.HELMET);
             });
         });
+
     },
 
     /**
@@ -48,6 +49,42 @@ let Stat = {
             $e.addClass('invisible');
             Base.toggleLoadingScreen("show");
             Stat.changeType($e.attr('data-val'));
+        });
+
+        /* 日付選択 */
+        $(document).on('click', '.calendar-row.date .cell', function(e){
+            let $e = $(e.currentTarget);
+            let date = $e.find('.day').text();
+            let year = $('.date-selector .datetime .year').text();
+            let month = $('.date-selector .datetime .month').text();
+            let selected_date = year + '/' + month + '/' + date;
+            if($('.type-title').attr('data-val') === CONST.TYPE_ID.HELMET){
+                Stat.moveToDetailStat(new Date(selected_date), CONST.TYPE_ID.HELMET);
+            }
+        });
+
+        /* カレンダーに戻る */
+        $('.btn-back-to-calendar').on('click', function(){
+            $('.calendar-content').show();
+            $('.detail-content').hide();
+        });
+
+        /* 日付移動 */
+        $('.date-changer .btn-move').on('click', function(e){
+            let $e = $(e.currentTarget);
+            if(!$e.hasClass('disabled')){
+                let dataVal = parseInt($e.attr('data-val'));
+                let year = $('.date-changer .datetime .year').text();
+                let month = $('.date-changer .datetime .month').text();
+                let date = $('.date-changer .datetime .date').text();
+                let dateObj = new Date();
+                dateObj.setFullYear(year);
+                dateObj.setMonth(parseInt(month) - 1);
+                dateObj.setDate(date);
+                dateObj.setDate(dateObj.getDate() + 1 - dataVal);
+                let switch_type = $('.type-title').attr('data-val');
+                Stat.setDetailGraph(dateObj, switch_type);
+            }
         });
     },
 
@@ -547,6 +584,239 @@ let Stat = {
         Stat.setStatisticData(new Date(), view_type);
         Base.toggleLoadingScreen("hide");
     },
+
+    /**
+     * 日毎詳細グラフへ移動
+     */
+    moveToDetailStat: function(selected_date, switch_type){
+        $('.calendar-content').hide();
+        $('.detail-content').show();
+        Stat.setDetailGraph(selected_date, switch_type);
+    },
+
+    /**
+     * グラフに情報を設定
+     * @param {Date} selected_date
+     * @param {String} switch_type
+     */
+    setDetailGraph: function(selected_date, switch_type){
+        // 日付表示
+        $('.date-changer .datetime .year').text(selected_date.getFullYear());
+        $('.date-changer .datetime .month').text(datetimeTools.padZero(selected_date.getMonth() + 1 , 2));
+        $('.date-changer .datetime .date').text(datetimeTools.padZero(selected_date.getDate(), 2));
+
+        // 日付移動ボタンセット
+        let nowObj = new Date();
+        if(datetimeTools.compareDate(selected_date, nowObj)){
+            $('.date-changer .btn-move.btn-next').addClass('disabled');
+        } else {
+            $('.date-changer .btn-move.btn-next').removeClass('disabled');
+        }
+
+        // 対象ログ格納用配列
+        let targetLogs = [];
+        // 対象ログ抽出
+        Stat.allLogs.forEach(function(log){
+           if(log.type === switchTypeTools.getTypeId(switch_type, true)
+               || log.type === switchTypeTools.getTypeId(switch_type, false)) {
+                let logDateObj = new Date(log.switch_time);
+                let startDateObj = new Date(selected_date);
+                startDateObj.setHours(0,0,0,0);
+                let endDateObj = new Date(selected_date);
+                endDateObj.setDate(endDateObj.getDate() + 1);
+                endDateObj.setHours(0,0,0,0);
+                if(startDateObj <= logDateObj && logDateObj < endDateObj){
+                    targetLogs.push(log);
+                }
+           }
+        });
+         // 日付昇順ソート
+        targetLogs.sort(function(a, b){
+            if (new Date(a.switch_time) - new Date(b.switch_time) < 0)
+                return -1;
+            if (new Date(a.switch_time) - new Date(b.switch_time) > 0)
+                return 1;
+            return 0;
+        });
+
+        // 対象ログの要素を作成してグラフに配置していく
+        let $basement = $('.detail-body .graph .graph-body .graph-basement');
+        $basement.empty();
+        let tempDateObj;
+        for(let i = 0; i < targetLogs.length; i++){
+            let log = targetLogs[i];
+            // 要素height計算
+            if(!tempDateObj){
+                tempDateObj = new Date(log.switch_time);
+                tempDateObj.setHours(0,0,0,0);
+            }
+            let logDateObj = new Date(log.switch_time);
+            let delta = datetimeTools.getDelta(logDateObj, tempDateObj);
+            let deltaSeconds = datetimeTools.convertToSeconds({
+                hours: delta.deltaHours,
+                minutes: delta.deltaMinutes,
+                seconds: delta.deltaSeconds,
+            });
+            let height = deltaSeconds * 0.0075; //1秒:0.0075px
+
+            // 要素作成
+            let $bar = $('<div class="graph-bar"></div>');
+            $bar.addClass(switch_type);
+            $bar.addClass(!switchTypeTools.getTypeName(log.type).is_on ? 'on' : 'off');
+            $bar.css('height', height + 'px');
+            $bar.appendTo($('.detail-body .graph .graph-body .graph-basement'));
+            // 次ログへの基準を渡す
+            tempDateObj = new Date(logDateObj.getTime());
+
+            // 最後のログの場合、日付変更時刻までの要素も作成する
+            if(i === targetLogs.length - 1){
+                let targetDateObj = new Date(logDateObj.getTime());
+                targetDateObj.setHours(0,0,0,0);
+                targetDateObj.setDate(targetDateObj.getDate() + 1);
+                // 対象日時が未来日時の場合は対象を現在日時に変更する
+                if(new Date() < targetDateObj){
+                    targetDateObj = new Date();
+                }
+                let delta = datetimeTools.getDelta(targetDateObj, tempDateObj);
+                let deltaSeconds = datetimeTools.convertToSeconds({
+                    hours: delta.deltaHours,
+                    minutes: delta.deltaMinutes,
+                    seconds: delta.deltaSeconds,
+                });
+                let height = deltaSeconds * 0.0075; //1秒:0.0075px
+
+                // 要素作成
+                let $bar = $('<div class="graph-bar"></div>');
+                $bar.addClass(switch_type);
+                $bar.addClass(switchTypeTools.getTypeName(log.type).is_on ? 'on' : 'off');
+                $bar.css('height', height + 'px');
+                $bar.appendTo($('.detail-body .graph .graph-body .graph-basement'));
+            }
+        }
+
+        // 出現アニメーション
+        Stat.startGraphAppearingAnimation(1200);
+
+        // 累計
+        let calculatedDate = Stat.getDetailInfo(selected_date, switch_type, targetLogs);
+        $('.info-row.total-on .data .time').text(
+            datetimeTools.padZero(calculatedDate.on_time.hours, 2) + ":" +
+            datetimeTools.padZero(calculatedDate.on_time.minutes, 2) + ":" +
+            datetimeTools.padZero(calculatedDate.on_time.seconds, 2)
+        );
+        $('.info-row.total-off .data .time').text(
+            datetimeTools.padZero(calculatedDate.off_time.hours, 2) + ":" +
+            datetimeTools.padZero(calculatedDate.off_time.minutes, 2) + ":" +
+            datetimeTools.padZero(calculatedDate.off_time.seconds, 2)
+        );
+        $('.info-row.off-number .data .number').text(
+            datetimeTools.padZero(calculatedDate.off_number, 2)
+        );
+
+    },
+
+    /**
+     * 指定日付だけの累計情報
+     * @param {Date} selected_date
+     * @param {String} switch_type
+     * @param {Array} logs
+     */
+    getDetailInfo: function(selected_date, switch_type, logs){
+        // 累計ON(秒)
+        let on_time_seconds = 0;
+        // 累計OFF(秒)
+        let off_time_seconds = 0;
+        // OFF回数
+        let off_number = 0;
+        // 日毎ログループ
+        for(let i = 0; i < logs.length; i++){
+            let log = logs[i];
+            let logDateObj = new Date(log.switch_time);
+            let targetLogDateObj;
+            if(i === 0){
+                // 最初のログは0時0分から
+                targetLogDateObj = new Date(logDateObj.getTime());
+                targetLogDateObj.setHours(0,0,0,0);
+                if(switch_type === CONST.TYPE_ID.NIGHT){
+                    // 【よるね】は12時が区切りなので
+                    targetLogDateObj.setHours(12,0,0,0);
+                }
+            } else {
+                // その他は前のログ時間から
+                targetLogDateObj = new Date(logs[i - 1].switch_time);
+            }
+
+            // 差分算出
+            let delta = datetimeTools.getDelta(
+                    logDateObj, targetLogDateObj
+            );
+            // 差分を秒換算
+            let deltaSeconds = datetimeTools.convertToSeconds({
+                hours: delta.deltaHours,
+                minutes: delta.deltaMinutes,
+                seconds: delta.deltaSeconds,
+            });
+            // ON／OFFどちらかに振り分け
+            if(!switchTypeTools.getTypeName(log.type).is_on){
+                on_time_seconds += deltaSeconds;
+            } else {
+                off_number += 1;
+                off_time_seconds += deltaSeconds;
+            }
+            // 日毎ログ内の最後のログ
+            if(i === logs.length - 1){
+                let tomorrowObj = new Date(logDateObj.getTime());
+                tomorrowObj.setHours(0,0,0,0);
+                tomorrowObj.setDate(tomorrowObj.getDate() + 1);
+                if(switch_type === CONST.TYPE_ID.NIGHT){
+                    // 【よるね】は12時が区切りなので
+                    tomorrowObj.setHours(12,0,0,0);
+                }
+                let lastTargetDateObj = tomorrowObj;
+                if(new Date() <= tomorrowObj){
+                    // 比較対象が現在より未来日時なら
+                    // 比較対象は現在日時とする
+                    lastTargetDateObj = new Date();
+                }
+                let lastDelta = datetimeTools.getDelta(
+                    lastTargetDateObj, logDateObj);
+                let lastDeltaSeconds = datetimeTools.convertToSeconds({
+                    hours: lastDelta.deltaHours,
+                    minutes: lastDelta.deltaMinutes,
+                    seconds: lastDelta.deltaSeconds,
+                });
+
+                if(switchTypeTools.getTypeName(log.type).is_on){
+                    on_time_seconds += lastDeltaSeconds;
+                } else {
+                    off_time_seconds += lastDeltaSeconds;
+                }
+
+            }
+        }
+
+        return {
+            on_time: datetimeTools.convertToHMS(on_time_seconds),
+            off_time: datetimeTools.convertToHMS(off_time_seconds),
+            off_number: off_number,
+        }
+    },
+
+    /**
+     * グラフ表示アニメーション
+     */
+    startGraphAppearingAnimation: function(duration){
+        $('.graph-cover').css({
+            'top': '0px',
+            'height': '648px',
+        });
+        $('.graph-cover').animate({
+            'top': '648px',
+            'height': '0px',
+        }, duration, 'swing');
+    },
+
+
 
 };
 
