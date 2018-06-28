@@ -218,30 +218,46 @@ let Stat = {
         let allTotal = Stat.calculateTotalOfLogs(null, switch_type);
         let monthTotal = Stat.calculateTotalOfLogs(selected_date, switch_type);
 
+        // 本日日付分があれば排除(全平均)
+        let allTotalWoToday = [];
+        allTotal.forEach(function(log){
+            if(log.date !== selected_date.getDate()){
+                allTotalWoToday.push(log);
+            }
+        });
+
+        // 本日日付分があれば排除(当月平均)
+        let monthTotalWoToday = [];
+        monthTotal.forEach(function(log){
+            if(log.date !== selected_date.getDate()){
+                monthTotalWoToday.push(log);
+            }
+        });
+
+        // 集計(全平均)
         let allOnSumAsSeconds = 0;
         let allOffSumAsSeconds = 0;
-        allTotal.forEach(function(log){
+        allTotalWoToday.forEach(function(log){
             allOnSumAsSeconds += datetimeTools.convertToSeconds(log.on_time);
             allOffSumAsSeconds += datetimeTools.convertToSeconds(log.off_time);
         });
 
+        // 集計(当月平均)
         let monthOnSumAsSeconds = 0;
         let monthOffSumAsSeconds = 0;
-        monthTotal.forEach(function(log){
+        monthTotalWoToday.forEach(function(log){
             monthOnSumAsSeconds += datetimeTools.convertToSeconds(log.on_time);
             monthOffSumAsSeconds += datetimeTools.convertToSeconds(log.off_time);
         });
 
-
-
         return {
             all:{
-                on : datetimeTools.convertToHMS(Math.floor(allOnSumAsSeconds / allTotal.length)),
-                off : datetimeTools.convertToHMS(Math.floor(allOffSumAsSeconds / allTotal.length)),
+                on : datetimeTools.convertToHMS(Math.floor(allOnSumAsSeconds / allTotalWoToday.length)),
+                off : datetimeTools.convertToHMS(Math.floor(allOffSumAsSeconds / allTotalWoToday.length)),
             },
             month:{
-                on : datetimeTools.convertToHMS(Math.floor(monthOnSumAsSeconds / monthTotal.length)),
-                off : datetimeTools.convertToHMS(Math.floor(monthOffSumAsSeconds / monthTotal.length)),
+                on : datetimeTools.convertToHMS(Math.floor(monthOnSumAsSeconds / monthTotalWoToday.length)),
+                off : datetimeTools.convertToHMS(Math.floor(monthOffSumAsSeconds / monthTotalWoToday.length)),
             },
         }
 
