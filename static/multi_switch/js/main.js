@@ -55,7 +55,7 @@ let Main = {
      * 初期処理
      */
     init: function(){
-        $('#screen-name').text(CONST.SCREEN_NAME.MAIN);
+        $('#screen-name').text(Base.userSetting.child_name + CONST.SCREEN_NAME.MAIN);
         Main.setShowMoreDisabled(); // attachEventsより前
         Main.attachEvents();
         switchTypeTools.getSwitchTypes(function(){
@@ -289,7 +289,7 @@ let Main = {
         });
 
         // きょう、きのう、おととい変換
-        let logDateObject = new Date(targetLog.switch_time)
+        let logDateObject = new Date(targetLog.switch_time);
         let displayDate = datetimeTools.convertJapaneseDesignation(logDateObject);
         // それより前なら日付そのまま表示
         let dateTimeString = datetimeTools.convertToStringFormat(logDateObject);
@@ -843,7 +843,7 @@ let Main = {
 
         if(is_on){
             $btn_on.removeClass('disabled');
-            $btn_on.find('img').attr('src', '')
+            $btn_on.find('img').attr('src', '');
             $btn_off.addClass('disabled');
             $timer_row_switch_type.find('.caption.on').removeClass('disabled');
             $timer_row_switch_type.find('.caption.off').addClass('disabled');
@@ -919,7 +919,7 @@ let Main = {
                     'hours': delta.deltaHours,
                     'minutes': delta.deltaMinutes,
                     'seconds': delta.deltaSeconds,
-                }
+                };
                 totalTimeAsSeconds += datetimeTools.convertToSeconds(deltaTime);
             }
 
@@ -939,11 +939,7 @@ let Main = {
 
         // 画面表示セット
         let $target_on = $('.timer-row[type="' + switchType +'"]')
-                .find('.timer-contents')
-                .find('.info')
-                .find('.detail-info')
-                .find('.info-item.average')
-                .find('.time');
+                .find('.timer-contents .info .detail-info .info-item.average .time');
         $target_on.find('.hours').text(datetimeTools.padZero(average.hours, 2));
         $target_on.find('.minutes').text(datetimeTools.padZero(average.minutes, 2));
         $target_on.find('.seconds').text(datetimeTools.padZero(average.seconds, 2));
@@ -1104,4 +1100,4 @@ let Main = {
     },
 };
 
-Main.init();
+Base.init(Main.init);

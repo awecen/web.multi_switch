@@ -9,7 +9,7 @@ let Logs = {
      * 初期処理
      */
     init: function(){
-        $('#screen-name').text(CONST.SCREEN_NAME.LOGS);
+        $('#screen-name').text(Base.userSetting.child_name + CONST.SCREEN_NAME.LOGS);
         Logs.attachEvents();
         Logs.initializeMaterialize();
         Logs.initializeFlatPickr();
@@ -20,6 +20,8 @@ let Logs = {
      * イベント付加
      */
     attachEvents: function(){
+
+        let $container = $('.container');
 
         /* 日付セレクタ 前の日付 */
         $('.date-selector .previous-date').on('click', function(e){
@@ -50,10 +52,10 @@ let Logs = {
                     Logs.closeDeletionConfirmDialog(); // 確認ダイアログ非表示
                     $('.log-detail').hide(); // ログ詳細情報ダイアログ非表示
                     Base.toggleLoadingScreen("hide"); // ロード画面非表示
-                    Logs.setIconsToGraph(
-                        new Date($('.date-selector .now-date').attr('data-date'))); // アイコン再描画
-                    Logs.setLogsToList(
-                        new Date($('.date-selector .now-date').attr('data-date'))); // アイコン再描画
+                    let $nowDate = $('.date-selector .now-date');
+                    let selectedDateObj = new Date($nowDate.attr('data-date'));
+                    Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
+                    Logs.setLogsToList(selectedDateObj); // アイコン再描画
                     libraryTools.popSimpleToast('ログを削除しました。');
                 });
             });
@@ -72,10 +74,10 @@ let Logs = {
                 // 既存履歴の編集
                 Logs.updateLogInfo(row_id, function(){
                     Logs.getLogs(function(){
-                        Logs.setIconsToGraph(
-                            new Date($('.date-selector .now-date').attr('data-date')));
-                        Logs.setLogsToList(
-                            new Date($('.date-selector .now-date').attr('data-date')));
+                        let $nowDate = $('.date-selector .now-date');
+                        let selectedDateObj = new Date($nowDate.attr('data-date'));
+                        Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
+                        Logs.setLogsToList(selectedDateObj); // アイコン再描画
                         $('.log-detail').hide(); // 詳細ダイアログOFF
                         Base.toggleLoadingScreen("hide"); // ロード画面OFF
                         libraryTools.popSimpleToast('ログを更新しました。');
@@ -85,10 +87,10 @@ let Logs = {
                 // 新規追加
                 Logs.addNewLog(function(){
                     Logs.getLogs(function(){
-                        Logs.setIconsToGraph(
-                            new Date($('.date-selector .now-date').attr('data-date')));
-                        Logs.setLogsToList(
-                            new Date($('.date-selector .now-date').attr('data-date')));
+                        let $nowDate = $('.date-selector .now-date');
+                        let selectedDateObj = new Date($nowDate.attr('data-date'));
+                        Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
+                        Logs.setLogsToList(selectedDateObj); // アイコン再描画
                         $('.log-detail').hide(); // 詳細ダイアログOFF
                         Base.toggleLoadingScreen("hide"); // ロード画面OFF
                         libraryTools.popSimpleToast('ログを新規追加しました。');
@@ -114,7 +116,7 @@ let Logs = {
         });
 
         /* アイコン → ログ詳細 */
-        $('.container').on('click', '.graph-icon', function(e){
+        $container.on('click', '.graph-icon', function(e){
             let $tgt = $(e.currentTarget);
             Logs.showLogDetail($tgt.attr('row-id'));
         });
@@ -137,7 +139,7 @@ let Logs = {
         });
 
         /* リスト形式 編集ボタン */
-        $('.container').on('click', '.list-icon.edit', function(e){
+        $container.on('click', '.list-icon.edit', function(e){
             let $tgt = $(e.currentTarget);
             Logs.showLogDetail($tgt.parent().attr('row-id'));
         });
@@ -351,7 +353,7 @@ let Logs = {
 
     /**
      * アイコン表示位置の計算
-     * @param {Log[]} targetLogs
+     * @param {Array} targetLogs
      */
     calculateIconPosition: function(targetLogs){
         // 各列の高さ占有値
@@ -518,7 +520,7 @@ let Logs = {
 
         // Info
         let $info_div = $('<div></div>');
-        $info_div.addClass('info').appendTo($div)
+        $info_div.addClass('info').appendTo($div);
 
         let $info_date_div = $('<div></div>');
         $info_date_div.addClass('date')
@@ -573,19 +575,21 @@ let Logs = {
      */
     showLogDetail: function(rowId){
         // スイッチタイプ選択肢を作成
-        $('#adding-form-switch-type').empty()
+        let $switchTypeForm = $('#adding-form-switch-type');
+        let switchTypeAttributeName = 'switch-type'
+        $switchTypeForm.empty()
             .append($('<option value="" disabled selected>種類を選んでください</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.MILK, true) + '" value="' + CONST.TYPE_ID.MILK + '">' + CONST.TYPE_NAME.MILK + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.POO, true) + '" value="' + CONST.TYPE_ID.POO + '">' + CONST.TYPE_NAME.POO + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.PEE, true) + '" value="' + CONST.TYPE_ID.PEE + '">' + CONST.TYPE_NAME.PEE + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.FOOD, true) + '" value="' + CONST.TYPE_ID.FOOD + '">' + CONST.TYPE_NAME.FOOD + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.SHOWER, true) + '" value="' + CONST.TYPE_ID.SHOWER + '">' + CONST.TYPE_NAME.SHOWER + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.HELMET, true) + '" value="' + CONST.TYPE_ID.HELMET_ON + '">' + CONST.TYPE_NAME.HELMET_ON + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.HELMET, false) + '" value="' + CONST.TYPE_ID.HELMET_OFF + '">' + CONST.TYPE_NAME.HELMET_OFF + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NAPPING, true) + '" value="' + CONST.TYPE_ID.NAPPING_ON + '">' + CONST.TYPE_NAME.NAPPING_ON + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NAPPING, false) + '" value="' + CONST.TYPE_ID.NAPPING_OFF + '">' + CONST.TYPE_NAME.NAPPING_OFF + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, true) + '" value="' + CONST.TYPE_ID.NIGHT_ON + '">' + CONST.TYPE_NAME.NIGHT_ON + '</option>'))
-            .append($('<option switch-type="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, false) + '" value="' + CONST.TYPE_ID.NIGHT_OFF + '">' + CONST.TYPE_NAME.NIGHT_OFF + '</option>'));
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.MILK, true) + '" value="' + CONST.TYPE_ID.MILK + '">' + CONST.TYPE_NAME.MILK + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.POO, true) + '" value="' + CONST.TYPE_ID.POO + '">' + CONST.TYPE_NAME.POO + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.PEE, true) + '" value="' + CONST.TYPE_ID.PEE + '">' + CONST.TYPE_NAME.PEE + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.FOOD, true) + '" value="' + CONST.TYPE_ID.FOOD + '">' + CONST.TYPE_NAME.FOOD + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.SHOWER, true) + '" value="' + CONST.TYPE_ID.SHOWER + '">' + CONST.TYPE_NAME.SHOWER + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.HELMET, true) + '" value="' + CONST.TYPE_ID.HELMET_ON + '">' + CONST.TYPE_NAME.HELMET_ON + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.HELMET, false) + '" value="' + CONST.TYPE_ID.HELMET_OFF + '">' + CONST.TYPE_NAME.HELMET_OFF + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NAPPING, true) + '" value="' + CONST.TYPE_ID.NAPPING_ON + '">' + CONST.TYPE_NAME.NAPPING_ON + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NAPPING, false) + '" value="' + CONST.TYPE_ID.NAPPING_OFF + '">' + CONST.TYPE_NAME.NAPPING_OFF + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, true) + '" value="' + CONST.TYPE_ID.NIGHT_ON + '">' + CONST.TYPE_NAME.NIGHT_ON + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, false) + '" value="' + CONST.TYPE_ID.NIGHT_OFF + '">' + CONST.TYPE_NAME.NIGHT_OFF + '</option>'));
 
         // ダイアログ本体に更新時の識別属性を付与
         $('.log-detail .detail-body').attr('data-val', rowId);
@@ -606,8 +610,8 @@ let Logs = {
 
 
             // スイッチタイプ
-            $('#adding-form-switch-type').attr('disabled','disabled');
-            $('#adding-form-switch-type').children('[switch-type="' + targetLog.type + '"]').attr('selected', 'selected');
+            $switchTypeForm.attr('disabled','disabled');
+            $switchTypeForm.children('[switch-type="' + targetLog.type + '"]').attr('selected', 'selected');
 
             // 年月日時分
             let targetLogDatetimeObject = new Date(targetLog.switch_time)
@@ -645,7 +649,7 @@ let Logs = {
             $('.detail-body .header').text('しんきついか する');
 
             // スイッチタイプ選べるように
-            $('#adding-form-switch-type').attr('disabled',false);
+            $switchTypeForm.attr('disabled',false);
 
             // 時間は今時間がDefault
             let now = new Date();
@@ -835,4 +839,4 @@ let Logs = {
 };
 
 // 初期処理
-Logs.init();
+Base.init(Logs.init);

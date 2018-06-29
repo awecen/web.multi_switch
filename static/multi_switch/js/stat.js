@@ -9,7 +9,7 @@ let Stat = {
      * 初期処理
      */
     init: function(){
-        $('#screen-name').text(CONST.SCREEN_NAME.STAT);
+        $('#screen-name').text(Base.userSetting.child_name + CONST.SCREEN_NAME.STAT);
         Stat.attachEvents();
         Stat.initializeMaterialize();
         switchTypeTools.getSwitchTypes(function(){
@@ -25,13 +25,17 @@ let Stat = {
      */
     attachEvents: function()    {
 
+        let $dateSelector = $('.date-selector');
+        let $dateChanger = $('.date-changer');
+
         /* 月移動 */
-        $('.date-selector .btn-move').on('click', function(e){
+        $dateSelector.find('.btn-move').on('click', function(e){
             let $e = $(e.currentTarget);
             if(!$e.hasClass('disabled')){
                 let dataVal = parseInt($e.attr('data-val'));
-                let year = $('.date-selector .datetime .year').text();
-                let month = $('.date-selector .datetime .month').text();
+                let $dateTime = $dateSelector.find('.datetime');
+                let year = $dateTime.find('.year').text();
+                let month = $dateTime.find('.month').text();
                 let date = new Date();
                 date.setFullYear(year);
                 date.setMonth(parseInt(month) - dataVal);
@@ -48,18 +52,20 @@ let Stat = {
             Base.toggleLoadingScreen("show");
             if($('.detail-content').css('display') === 'none'){
                 // カレンダーモードのFAB
-                let year = $('.date-selector .datetime .year').text();
-                let month = $('.date-selector .datetime .month').text();
+                let $dateTime = $dateSelector.find('.datetime');
+                let year = $dateTime.find('.year').text();
+                let month = $dateTime.find('.month').text();
                 let day = 1;
                 let selectedDate = year + '/' + month + '/' + day;
                 let selectedDateObj = new Date(selectedDate);
                 Stat.changeType(selectedDateObj, $e.attr('data-val'));
             } else {
                 // グラフモードのFAB
-                let year = $('.date-changer .datetime .year').text();
-                let month = $('.date-changer .datetime .month').text();
-                let day = $('.date-changer .datetime .date') ?
-                    $('.date-changer .datetime .date').text() : 1;
+                let $dateTime = $dateChanger.find('.datetime');
+                let year = $dateTime.find('.year').text();
+                let month = $dateTime.find('.month').text();
+                let day = $dateTime.find('.date') ?
+                    $dateTime.find('.date').text() : 1;
                 let selectedDate = year + '/' + month + '/' + day;
                 let selectedDateObj = new Date(selectedDate);
                 Stat.changeType(selectedDateObj, $e.attr('data-val'));
@@ -71,8 +77,9 @@ let Stat = {
         　  let $e = $(e.currentTarget);
             if(!($e.hasClass('none') || $e.hasClass('future'))){
                 let date = $e.find('.day').text();
-                let year = $('.date-selector .datetime .year').text();
-                let month = $('.date-selector .datetime .month').text();
+                let $dateTime = $dateSelector.find('.datetime');
+                let year = $dateTime.find('.year').text();
+                let month = $dateTime.find('.month').text();
                 let selected_date = year + '/' + month + '/' + date;
                 let switch_type = $('.type-title').attr('data-val');
                 let selected_date_object = new Date(selected_date);
@@ -89,10 +96,11 @@ let Stat = {
         $('.btn-back-to-calendar').on('click', function(){
             Base.toggleLoadingScreen('show');
             $('.detail-content').hide();
-            let year = $('.date-changer .datetime .year').text();
-            let month = $('.date-changer .datetime .month').text();
-            let day = $('.date-changer .datetime .date') ?
-                    $('.date-changer .datetime .date').text() : 1;
+            let $dateTime = $dateChanger.find('.datetime');
+            let year = $dateTime.find('.year').text();
+            let month = $dateTime.find('.month').text();
+            let day = $dateTime.find('.date') ?
+                $dateTime.find('.date').text() : 1;
             let selectedDate = year + '/' + month + '/' + day;
             let selectedDateObj = new Date(selectedDate);
             let switch_type = $('.type-title').attr('data-val');
@@ -1021,4 +1029,4 @@ let Stat = {
 };
 
 // 初期処理
-Stat.init();
+Base.init(Stat.init);

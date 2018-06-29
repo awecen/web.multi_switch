@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import LifeSwitchType, LifeSwitchLog, TemporaryNote
+from .models import LifeSwitchType, LifeSwitchLog, TemporaryNote, UserSetting
 
 
 # マルチスイッチ タイプ
@@ -23,7 +23,15 @@ class TemporaryNoteAdmin(admin.ModelAdmin):
     ordering = ('id', )
 
 
+# マルチスイッチ 一時メモ
+class UserSettingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'child_name', )
+    list_display_links = ('id', )
+    ordering = ('id', )
+
+
 # 登録
 admin.site.register(LifeSwitchType, LifeSwitchTypeAdmin)
 admin.site.register(LifeSwitchLog, LifeSwitchLogAdmin)
 admin.site.register(TemporaryNote, TemporaryNoteAdmin)
+admin.site.register(UserSetting, UserSettingAdmin)

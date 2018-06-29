@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import LifeSwitchLog, LifeSwitchType, TemporaryNote
+from .models import LifeSwitchLog, LifeSwitchType, TemporaryNote, UserSetting
 
 
 class LifeSwitchTypeSerializer(serializers.ModelSerializer):
@@ -17,4 +17,12 @@ class LifeSwitchLogSerializer(serializers.ModelSerializer):
 class TemporaryNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = TemporaryNote
+        fields = '__all__'
+
+
+class UserSettingSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = UserSetting
         fields = '__all__'

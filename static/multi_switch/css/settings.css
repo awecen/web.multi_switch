@@ -1,0 +1,33 @@
+/**********/
+/* HEADER */
+/**********/
+.settings-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 8px;
+    position: fixed;
+    width: 100%;
+}
+
+.settings-header .btn{
+    margin-left: 8px;
+}
+
+
+/********/
+/* Body */
+/********/
+.settings-body{
+    padding: 16px 0;
+    margin-top: 40px;
+}
+
+.settings-body .settings-row{
+    padding: 8px;
+}
+
+.settings-body .setting-row.child-name{
+    padding: 0 16px;
+}

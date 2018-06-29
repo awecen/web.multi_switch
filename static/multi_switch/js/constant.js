@@ -37,11 +37,11 @@ const CONST = {
     },
 
     SCREEN_NAME: {
-        MAIN: 'みつき すいっち',
-        LOGS: 'いままでのきろく',
-        STAT: 'とうけい',
+        MAIN: '\'s すいっち',
+        LOGS: '\'s きろく',
+        STAT: '\'s とうけい',
         WHATSNEW: 'こうしんりれき',
         PRINT: 'いんさつ',
-        SETTINGS: 'せってい',
+        SETTINGS: '\'s せってい',
     }
-}
+};

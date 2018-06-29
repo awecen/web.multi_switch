@@ -99,6 +99,7 @@ let Whatsnew = {
     /**
      * 更新内容(1行分)のDOMを作成
      * @param {String} version_number - バージョン番号(e.g. 1.0.1)
+     * @param {String} date_string
      * @param {{screen: string, sentence: string}[]} features - 内容
      */
     appendInfoRowElement: function(version_number, date_string, features){
@@ -116,7 +117,7 @@ let Whatsnew = {
       let $titleSpan =  $('<span>' + version_number + '</span>');
       let $dateSpan =  $('<span class="date">' + date_string + '</span>');
       $titleSpan.appendTo($title);
-      $dateSpan.appendTo($title)
+      $dateSpan.appendTo($title);
 
       let $features = $('<div class="features"></div>');
       $features.appendTo($row);
@@ -146,4 +147,4 @@ let Whatsnew = {
 
 };
 
-Whatsnew.init();
+Base.init(Whatsnew.init);

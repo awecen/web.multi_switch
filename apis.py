@@ -1,7 +1,8 @@
-from .models import LifeSwitchType, LifeSwitchLog, TemporaryNote
-from .serializers import LifeSwitchTypeSerializer, LifeSwitchLogSerializer, TemporaryNoteSerializer
+from .models import LifeSwitchType, LifeSwitchLog, TemporaryNote, UserSetting
+from .serializers import LifeSwitchTypeSerializer, LifeSwitchLogSerializer, TemporaryNoteSerializer, UserSettingSerializer
 from rest_framework import generics
 from rest_framework import permissions
+from rest_framework import mixins
 
 
 class LifeSwitchLogList(generics.ListCreateAPIView):
@@ -47,4 +48,36 @@ class LifeSwitchTypeList(generics.ListAPIView):
     queryset = LifeSwitchType.objects.all()
     serializer_class = LifeSwitchTypeSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+
+class UserSettingList(generics.ListAPIView):
+    """
+    Retrieve a User Setting
+    """
+    serializer_class = UserSettingSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the usersetting
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return UserSetting.objects.filter(user=user)
+
+
+class UserSettingDetail(generics.RetrieveUpdateAPIView):
+    """
+    Retrieve a User Setting
+    """
+    serializer_class = UserSettingSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the usersetting
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return UserSetting.objects.filter(user=user)
 
