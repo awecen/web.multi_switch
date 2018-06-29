@@ -42,11 +42,9 @@ let Stat = {
             }
         });
 
-        /* FAB 【へるめっと】／【ひるね】／【よるね】*/
-        $('.btn-change-view').on('click', function(e){
+        /* タイプタブ 【へるめっと】／【ひるね】／【よるね】*/
+        $('.type-tab-item').on('click', function(e){
             let $e = $(e.currentTarget);
-            $('.btn-change-view').removeClass('invisible');
-            $e.addClass('invisible');
             Base.toggleLoadingScreen("show");
             if($('.detail-content').css('display') === 'none'){
                 // カレンダーモードのFAB
@@ -164,18 +162,15 @@ let Stat = {
      */
     setTypeTitle: function(switch_type){
         let $typeTitle = $('.type-title');
-        $typeTitle.removeClass(CONST.TYPE_ID.HELMET);
-        $typeTitle.removeClass(CONST.TYPE_ID.NAPPING);
-        $typeTitle.removeClass(CONST.TYPE_ID.NIGHT);
-        $typeTitle.addClass(switch_type);
         $typeTitle.attr('data-val', switch_type);
-        let $icon = $typeTitle.find('.switch-icon');
-        $icon.removeClass(CONST.TYPE_ID.HELMET);
-        $icon.removeClass(CONST.TYPE_ID.NAPPING);
-        $icon.removeClass(CONST.TYPE_ID.NIGHT);
-        $icon.addClass(switch_type);
-        let $name = $typeTitle.find('.switch-type-name');
-        $name.text(switchTypeTools.getJapaneseTypeName(switch_type, null));
+        $('.type-tab-item').each(function(i, e){
+            let $e = $(e);
+            if($e.hasClass(switch_type)){
+                $e.addClass('selected');
+            }else{
+                $e.removeClass('selected');
+            }
+        });
     },
 
     /**

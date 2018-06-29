@@ -13,17 +13,57 @@
     max-width: 480px;
 }
 
-.type-title.helmet{
+.type-title .type-tab-item{
+    min-width: 120px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-grow: 1;
+    cursor: pointer;
+    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
+}
+
+.type-title .type-tab-item.selected{
+    filter: drop-shadow(0 0 0 rgba(0,0,0,0));
+}
+
+.type-title .type-tab-item.helmet{
+    background-color: #e3f2fd;
+}
+
+.type-title .type-tab-item.helmet:hover{
+    background-color: #bbdefb;
+}
+
+.type-title .type-tab-item.helmet.selected{
     background-color: #90CAF9;
 }
 
-.type-title.napping{
+.type-title .type-tab-item.napping{
+    background-color: #f1f8e9;
+}
+
+.type-title .type-tab-item.napping:hover{
+    background-color: #dcedc8;
+}
+
+.type-title .type-tab-item.napping.selected{
     background-color: #c5e1a5;
 }
 
-.type-title.night{
+.type-title .type-tab-item.night{
+    background-color: #f3e5f5;
+}
+
+.type-title .type-tab-item.night:hover{
+    background-color: #e1bee7;
+}
+.type-title .type-tab-item.night.selected{
     background-color: #ce93d8;
 }
+
 
 
 .type-title .switch-icon{
@@ -41,7 +81,7 @@
 /********************/
 
 .calendar-content{
-    margin-top: 48px;
+    margin-top: 104px;
 }
 
 /*****************/
@@ -54,7 +94,13 @@
     flex-direction: row;
     justify-content: center;
     padding: 8px 0;
-    margin-top: 8px;
+    position: fixed;
+    margin-top: 40px;
+    border-bottom: 1px #f0f0f0 solid;
+    -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,0.14), 0 3px 1px -1px rgba(0,0,0,0.12), 0 1px 5px -5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,0.14), 0 3px 1px -1px rgba(0,0,0,0.12), 0 1px 5px -5px rgba(0,0,0,0.2);
+    max-width: 480px;
+    background-color: #ffffff;
 }
 
 .date-selector .btn-move{
@@ -271,6 +317,10 @@
     align-items: center;
     -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+.stat-calendar .calendar-row .cell .day:hover{
+    background-color: #AABBDD;
 }
 
 .stat-calendar .calendar-row .cell .total-time{

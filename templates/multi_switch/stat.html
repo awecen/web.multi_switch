@@ -12,29 +12,39 @@
     {% csrf_token %}
 
     <!-- Type Title -->
-    <div class="type-title helmet" data-val="helmet">
-        <div><i class="switch-icon helmet"></i></div>
-        <div class="switch-type-name">へるめっと</div>
+    <div class="type-title" data-val="">
+        <div class="type-tab-item helmet" data-val="helmet">
+            <div><i class="switch-icon helmet"></i></div>
+            <div class="switch-type-name">へるめっと</div>
+        </div>
+        <div class="type-tab-item napping" data-val="napping">
+            <div><i class="switch-icon napping"></i></div>
+            <div class="switch-type-name">ひるね</div>
+        </div>
+        <div class="type-tab-item night" data-val="night">
+            <div><i class="switch-icon night"></i></div>
+            <div class="switch-type-name">よるね</div>
+        </div>
+    </div>
+
+    <!-- Date Selector -->
+    <div class="date-selector">
+        <div class="btn-move btn-prev" data-val="2">
+            <i class="material-icons">chevron_left</i>
+        </div>
+        <div class="datetime">
+            <div class="year">0000</div>
+            <div class="year-design">年</div>
+            <div class="month">00</div>
+            <div class="month-design">月</div>
+        </div>
+        <div class="btn-move btn-next" data-val="0">
+            <i class="material-icons">chevron_right</i>
+        </div>
     </div>
 
     <!-- Calendar Content -->
     <div class="calendar-content">
-
-        <!-- Date Selector -->
-        <div class="date-selector">
-            <div class="btn-move btn-prev" data-val="2">
-                <i class="material-icons">chevron_left</i>
-            </div>
-            <div class="datetime">
-                <div class="year">0000</div>
-                <div class="year-design">年</div>
-                <div class="month">00</div>
-                <div class="month-design">月</div>
-            </div>
-            <div class="btn-move btn-next" data-val="0">
-                <i class="material-icons">chevron_right</i>
-            </div>
-        </div>
 
         <!-- Stat Data -->
         <div class="stat-data">
@@ -202,28 +212,28 @@
     </div>
 
     <!-- FAB -->
-    <div class="fixed-action-btn">
-        <a class="btn-floating btn-large amber accent-4">
-            <i class="large material-icons">cached</i>
-        </a>
-        <ul>
-            <li>
-                <a class="btn-change-view btn-floating blue lighten-3 invisible" data-val="helmet">
-                    <i class="switch-icon helmet"></i>
-                </a>
-            </li>
-            <li>
-                <a class="btn-change-view btn-floating light-green lighten-3" data-val="napping">
-                    <i class="switch-icon napping"></i>
-                </a>
-            </li>
-            <li>
-                <a class="btn-change-view btn-floating purple lighten-3" data-val="night">
-                    <i class="switch-icon night"></i>
-                </a>
-            </li>
-        </ul>
-    </div>
+{#    <div class="fixed-action-btn">#}
+{#        <a class="btn-floating btn-large amber accent-4">#}
+{#            <i class="large material-icons">cached</i>#}
+{#        </a>#}
+{#        <ul>#}
+{#            <li>#}
+{#                <a class="btn-change-view btn-floating blue lighten-3 invisible" data-val="helmet">#}
+{#                    <i class="switch-icon helmet"></i>#}
+{#                </a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a class="btn-change-view btn-floating light-green lighten-3" data-val="napping">#}
+{#                    <i class="switch-icon napping"></i>#}
+{#                </a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a class="btn-change-view btn-floating purple lighten-3" data-val="night">#}
+{#                    <i class="switch-icon night"></i>#}
+{#                </a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </div>#}
 
 {% endblock content %}
 

@@ -21,6 +21,10 @@ let Whatsnew = {
      * 表示する情報を入れ込む
      */
     setInfo: function(){
+        Whatsnew.appendInfoRowElement('1.6.1', '2018/06/28 23:00', [
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.STAT,
+                '右下からのスイッチ種類切り替えが廃止され、代わりに画面上部のタブから切り替えができるようになった'),
+        ]);
         Whatsnew.appendInfoRowElement('1.6.0', '2018/06/28 23:00', [
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.ALL,
                 '右上のメニューを開いたあとに黒背景を押した場合でもメニューが閉じるようになった'),
