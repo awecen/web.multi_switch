@@ -21,6 +21,14 @@ let Whatsnew = {
      * 表示する情報を入れ込む
      */
     setInfo: function(){
+        Whatsnew.appendInfoRowElement('1.7.0', '2018/06/29 19:00', [
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.SETTINGS,
+                '新たに追加されました'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.SETTINGS,
+                '[なまえ]の設定ができるようになりました'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.ALL,
+                '画面タイトルがユーザー設定の[なまえ]に併せて変わるようになりました'),
+        ]);
         Whatsnew.appendInfoRowElement('1.6.1', '2018/06/28 23:00', [
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.STAT,
                 '右下からのスイッチ種類切り替えが廃止され、代わりに画面上部のタブから切り替えができるようになった'),
