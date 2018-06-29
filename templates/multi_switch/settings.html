@@ -1,0 +1,29 @@
+{% extends "multi_switch/base.html" %}
+{% load i18n static %}
+
+{#{% block title %}みつき すいっち{% endblock title %}#}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'multi_switch/css/settings.css' %}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+    {% csrf_token %}
+    <div class="settings-header">
+        <div class="btn-save waves-effect waves-light btn blue darken-2">保存</div>
+        <div class="btn-cancel waves-effect waves-light btn grey darken-1">りせっと</div>
+    </div>
+    <div class="settings-body">
+        <div class="setting-row child-name">
+            <div class="input-field">
+                <input placeholder="なまえ" id="child_name" type="text" class="validate">
+                <label for="child_name">おなまえ</label>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'multi_switch/js/settings.js' %}"></script>
+{% endblock extra_js %}
