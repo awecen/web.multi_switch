@@ -258,7 +258,6 @@ html{
 }
 .detail-row .profile{
     border-radius: 50%;
-    overflow: hidden;
     width: 40px;
     height: 40px;
 }
@@ -271,6 +270,7 @@ html{
 .detail-row .balloon{
     margin-left: 16px;
     position: relative;
+    width: 100%;
 }
 
 .detail-row .balloon .balloon-tip{
