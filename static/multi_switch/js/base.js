@@ -27,6 +27,7 @@ let Base = {
         Base.attachEventsForAppMenu('stat', '/multi_switch/stat/');
         Base.attachEventsForAppMenu('whatsnew', '/multi_switch/whatsnew/');
         Base.attachEventsForAppMenu('print', '/multi_switch/print/');
+        Base.attachEventsForAppMenu('inquiry', '/multi_switch/inquiries/');
         Base.attachEventsForAppMenu('settings', '/multi_switch/settings/');
 
         // 背景押しても
@@ -89,7 +90,7 @@ let Base = {
                 'opacity': '1.0',
             },100, 'swing', function(){
                 $appMenu.find('.app-body').animate({
-                    'top': '56px',
+                    'top': '48px',
                 }, 50, 'swing', function(){
 
                 });

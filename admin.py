@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import LifeSwitchType, LifeSwitchLog, TemporaryNote, UserSetting
+from .models import LifeSwitchType, LifeSwitchLog, TemporaryNote, \
+    UserSetting, InquiryStatus, Inquiry, InquiryDetail
 
 
 # マルチスイッチ タイプ
@@ -23,9 +24,27 @@ class TemporaryNoteAdmin(admin.ModelAdmin):
     ordering = ('id', )
 
 
-# マルチスイッチ 一時メモ
+# ユーザー設定
 class UserSettingAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'child_name', )
+    list_display_links = ('id', )
+    ordering = ('id', )
+
+
+class InquiryStatusAdmin(admin.ModelAdmin):
+    list_display = ('id', 'status',)
+    list_display_links = ('id', 'status', )
+    ordering = ('id', )
+
+
+class InquiryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'target', 'status', 'updated_time', 'created_time', )
+    list_display_links = ('id', )
+    ordering = ('id', )
+
+
+class InquiryDetailAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'inquiry', 'content', 'updated_time', 'created_time', )
     list_display_links = ('id', )
     ordering = ('id', )
 
@@ -34,4 +53,7 @@ class UserSettingAdmin(admin.ModelAdmin):
 admin.site.register(LifeSwitchType, LifeSwitchTypeAdmin)
 admin.site.register(LifeSwitchLog, LifeSwitchLogAdmin)
 admin.site.register(TemporaryNote, TemporaryNoteAdmin)
+admin.site.register(InquiryStatus, InquiryStatusAdmin)
+admin.site.register(Inquiry, InquiryAdmin)
+admin.site.register(InquiryDetail, InquiryDetailAdmin)
 admin.site.register(UserSetting, UserSettingAdmin)

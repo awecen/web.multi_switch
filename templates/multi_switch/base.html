@@ -16,6 +16,9 @@
 <title>Multi Switches</title>
 </head>
 <body>
+<input id="admin-user-name" type=hidden value="{{ admin_user_name }}">
+<input id="user-id" type=hidden value="{{ user_id }}">
+<input id="user-name" type=hidden value="{{ user_name }}">
 <div class="body">
     <div class="global-bar">
         <div id="screen-name">&nbsp;</div>
@@ -42,9 +45,9 @@
                     <i class="medium material-icons">info</i>
                     <div class="title">わっつにゅう</div>
                 </div>
-                <div class="menu-item print disabled">
-                    <i class="medium material-icons">print</i>
-                    <div class="title">いんさつ</div>
+                <div class="menu-item inquiry">
+                    <i class="medium material-icons">loyalty</i>
+                    <div class="title">といあわせ</div>
                 </div>
                 <div class="menu-item settings">
                     <i class="medium material-icons">settings</i>
@@ -60,7 +63,7 @@
     </div>
     <div class="signature">
         <div class="water-mark">Copyright © 2018 Awecen All Rights Reserved</div>
-        <div class="version">version 1.7.0</div>
+        <div class="version">version 1.8.0</div>
     </div>
     <!-- ロード画面 -->
     <div id="loading-overlay">

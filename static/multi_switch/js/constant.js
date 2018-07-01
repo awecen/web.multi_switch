@@ -42,6 +42,7 @@ const CONST = {
         STAT: '\'s とうけい',
         WHATSNEW: 'こうしんりれき',
         PRINT: 'いんさつ',
+        INQUIRIES: 'といあわせ',
         SETTINGS: '\'s せってい',
-    }
+    },
 };
