@@ -7,7 +7,9 @@ let Whatsnew = {
         STAT: 'とうけい',
         WHATSNEW: 'わっつにゅう',
         SETTINGS: 'せってい',
+        INQUIRIES: 'といあわせ',
         OTHER: 'その他',
+
     },
 
     /* 初期処理 */
@@ -21,6 +23,14 @@ let Whatsnew = {
      * 表示する情報を入れ込む
      */
     setInfo: function(){
+        Whatsnew.appendInfoRowElement('1.8.0', '2018/06/29 19:00', [
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.INQUIRIES,
+                '新たに追加されました'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.INQUIRIES,
+                '管理者に改善要望が送れるようになりました'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.INQUIRIES,
+                '管理者とメッセージのやりとりができるようになりました'),
+        ]);
         Whatsnew.appendInfoRowElement('1.7.0', '2018/06/29 19:00', [
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.SETTINGS,
                 '新たに追加されました'),

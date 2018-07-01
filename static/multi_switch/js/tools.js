@@ -314,3 +314,27 @@ switchTypeTools = {
     },
 
 };
+
+/**
+ * DOM要素ツール
+ */
+elementTools = {
+
+    /**
+     * ベースDOM
+     * @param {String} tagName
+     * @param {Array} classNames
+     * @param {Object} $appendedTarget
+     */
+    createBase: function(tagName, classNames, $appendedTarget){
+        let $base = $('<' + tagName + '></' + tagName + '>');
+        classNames.forEach(function(className){
+            $base.addClass(className);
+        });
+        if($appendedTarget){
+            $base.appendTo($appendedTarget);
+        }
+        return $base;
+    },
+
+}

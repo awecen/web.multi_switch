@@ -1,0 +1,121 @@
+{% extends "multi_switch/base.html" %}
+{% load i18n static %}
+
+{#{% block title %}みつき すいっち{% endblock title %}#}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'multi_switch/css/inquiries.css' %}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+    {% csrf_token %}
+    <!-- Inquiried List -->
+    <div class="inquiries-body">
+        <!-- FAB -->
+        <div class="floating-action-btn">
+            <div class="btn-new-inquiry">
+                <i class="material-icons">add</i>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Inquiry Detail -->
+    <div class="inquiries-detail" data-val="0">
+        <div class="basic-info">
+            <div class="info-column  back-to-list">
+                <div class="info-row">
+                    <div class="info-item">
+                        <div class="btn-back-to-list">
+                            <span><i class="tiny material-icons">arrow_back</i></span>
+                            <span>戻る</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-column">
+                <div class="info-row">
+                    <div class="info-item inquiry-place">
+                        <div class="caption">ばしょ</div>
+                        <div class="value">---</div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-item inquiry-status">
+                        <div class="caption">すてーたす</div>
+                        <div class="value"><span class="status">---</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-column">
+                <div class="info-row">
+                    <div class="info-item updated-time">
+                        <div class="caption">さくせいにちじ</div>
+                         <div class="value">---</div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-item created-time">
+                        <div class="caption">こうしんにちじ</div>
+                         <div class="value">---</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="detail-row-body">
+        </div>
+        <div class="message-area">
+            <div class="input note">
+                <textarea id="adding-form-detail-contents" class="materialize-textarea"></textarea>
+            </div>
+            <div class="buttons">
+                <div class="btn-send disabled">
+                    <span><i class="tiny material-icons">send</i></span>
+                    <span>送信</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inquiry Info Dialog -->
+    <div class="inquiry-dialog">
+        <div class="dialog-body">
+            <div class="dialog-header">しんきついか</div>
+            <div class="dialog-content">
+                <div class="input-row">
+                    <div class="title">場所</div>
+                    <div class="input-field input">
+                        <select id="adding-form-switch-type" class="browser-default">
+                          <option value="0" disabled selected>選択してください</option>
+                          <option value="1">ぜんたい</option>
+                          <option value="2">とっぷ</option>
+                          <option value="3">きろく</option>
+                          <option value="4">とうけい</option>
+                          <option value="5">わっつにゅう</option>
+                          <option value="6">といあわせ</option>
+                          <option value="7">せってい</option>
+                          <option value="8">そのほか</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="title">内容</div>
+                    <div class="input note">
+                        <textarea id="adding-form-contents" class="materialize-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="dialog-footer">
+                <!--<div class="btn-delete waves-effect waves-light btn red darken-2">削除</div>-->
+                <div class="btn-save waves-effect waves-light btn blue darken-2">保存</div>
+                <div class="btn-cancel waves-effect waves-light btn grey darken-1">きゃんせる</div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'multi_switch/js/inquiries.js' %}"></script>
+{% endblock extra_js %}
