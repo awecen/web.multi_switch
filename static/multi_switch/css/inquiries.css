@@ -256,6 +256,20 @@ html{
     display: flex;
     flex-direction: row-reverse;
 }
+
+.detail-row.date{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+}
+
+.detail-row.date .date-sign{
+    background-color: #4488DD;
+    padding: 2px 10px;
+    border-radius: 16px;
+}
+
 .detail-row .profile{
     border-radius: 50%;
     width: 40px;

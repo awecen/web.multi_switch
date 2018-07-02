@@ -357,7 +357,7 @@ let Logs = {
      */
     calculateIconPosition: function(targetLogs){
         // 各列の高さ占有値
-        let laneLimits = [0];
+        let laneLimits = [-20];
         for(let i = 0; i < targetLogs.length; i++){
             // 起点
             let baseLog = targetLogs[i];
