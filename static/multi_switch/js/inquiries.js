@@ -348,7 +348,14 @@ let inquiries = {
         let $detailRowBody = $('.detail-row-body');
         let previousNumber = $('.detail-row').length;
         $detailRowBody.empty();
+
+        let tempDateObj = new Date();
         inquiries.details.forEach(function(det){
+            let detDateObj = new Date(det.created_time);
+            if(datetimeTools.compareDate(tempDateObj, detDateObj)){
+                inquiries.createDateSignElement(detDateObj);
+                tempDateObj = new Date(detDateObj.getTime());
+            }
             inquiries.createBalloonElement(det);
         });
         if(inquiries.details.length !== previousNumber){
@@ -406,6 +413,14 @@ let inquiries = {
         let $popOption = elementTools.createBase('div', ['option'], $pop);
         let $popOptionTime = elementTools.createBase('div', ['time'], $popOption);
         $popOptionTime.text(datetimeTools.convertToStringFormat(new Date(detail.created_time)).slice(11, -3));
+    },
+
+    /**
+     * 日付表示要素作成
+     * @param dateObj
+     */
+    createDateSignElement: function(dateObj){
+
     },
 
     /**
