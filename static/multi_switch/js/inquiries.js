@@ -349,7 +349,6 @@ let inquiries = {
 
         // Detail Balloons
         let $detailRowBody = $('.detail-row-body');
-        let previousNumber = $('.detail-row').length;
         $detailRowBody.empty();
 
         let tempDateObj = new Date();
@@ -361,6 +360,10 @@ let inquiries = {
             }
             inquiries.createBalloonElement(det);
         });
+
+        // 吹き出しの数は全部の詳細行要素の数から日付表示を引いた数
+        let previousNumber = $('.detail-row').length - $('.detail-row.date').length;
+        // 吹き出しの数 !== 取得してきたdetailLogの数なら下スクロール
         if(inquiries.details.length !== previousNumber){
             $detailRowBody.scrollTop(Number.MAX_SAFE_INTEGER);
         }
