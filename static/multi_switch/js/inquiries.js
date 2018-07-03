@@ -355,7 +355,7 @@ let inquiries = {
         let tempDateObj = new Date();
         inquiries.details.forEach(function(det){
             let detDateObj = new Date(det.created_time);
-            if(datetimeTools.compareDate(tempDateObj, detDateObj)){
+            if(!datetimeTools.compareDate(tempDateObj, detDateObj)){
                 inquiries.createDateSignElement(detDateObj);
                 tempDateObj = new Date(detDateObj.getTime());
             }
@@ -423,7 +423,12 @@ let inquiries = {
      * @param dateObj
      */
     createDateSignElement: function(dateObj){
-
+        let $row = elementTools.createBase('div', ['detail-row', 'date'], $('.detail-row-body'));
+        let $dateSign = elementTools.createBase('div', ['date-sign'], $row);
+        $dateSign.text(datetimeTools.convertJapaneseDateFormat(dateObj));
+        if(datetimeTools.compareDate(new Date(), dateObj)){
+            $dateSign.text('今日');
+        }
     },
 
     /**

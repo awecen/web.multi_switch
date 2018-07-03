@@ -174,8 +174,19 @@ datetimeTools = {
         }
         return result;
 
-    }
+    },
 
+    /**
+     * YYYY年MM月DD日(AAA)を返す
+     * @param {Date} date
+     * @returns {String}
+     */
+    convertJapaneseDateFormat: function(dateObj){
+        return dateObj.getFullYear() + '年' +
+            datetimeTools.padZero((dateObj.getMonth() + 1), 2) + '月' +
+            datetimeTools.padZero(dateObj.getDate(), 2) + '日(' +
+            datetimeTools.convertWeekdayString(dateObj.getDay()) + ')';
+    },
 
 };
 
