@@ -32,15 +32,69 @@ html{
     border-top: 0;
 }
 
+.inquiry-number {
+    min-width: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    width: 40%;
+}
+
+.inquiry-number .inquiry-id{
+    background-color: #BBBBFF;
+    padding: 8px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #666666;
+    border: 4px #AAAAFF solid;
+}
+
+.inquiry-number .inquiry-status{
+
+}
+
+.inquiry-number .inquiry-status .status{
+    font-size: 14px;
+    color: #ffffff;
+    border-radius: 4px;
+    background-color: #e8e8e8;
+    font-weight: bold;
+    padding: 4px;
+}
+
+.inquiry-number .inquiry-status .status.new{
+    background-color: #FF8888;
+}
+.inquiry-number .inquiry-status .status.waiting{
+    background-color: #FF996B;
+}
+.inquiry-number .inquiry-status .status.investigating{
+    background-color: #afb42b;
+}
+.inquiry-number .inquiry-status .status.working{
+    background-color: #32BB00;
+}
+.inquiry-number .inquiry-status .status.completed{
+    background-color: #0277bd;
+}
+
 .inquiry-overview{
-    min-width: 112px;
+    min-width: 96px;
     max-width: 136px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     width: 20%;
-    padding: 8px;
+    padding: 8px 0;
 }
 
 .inquiry-overview .inquiry-place{
@@ -50,41 +104,18 @@ html{
     font-weight: bold;
 }
 
-.inquiry-overview .inquiry-status{
-
-}
-
-.inquiry-overview .inquiry-status .status{
-    font-size: 14px;
-    color: #ffffff;
-    border-radius: 4px;
-    background-color: #e8e8e8;
-    font-weight: bold;
-    padding: 4px;
-}
-
-.inquiry-overview .inquiry-status .status.new{
-    background-color: #FF8888;
-}
-.inquiry-overview .inquiry-status .status.waiting{
-    background-color: #FF996B;
-}
-.inquiry-overview .inquiry-status .status.investigating{
-    background-color: #afb42b;
-}
-.inquiry-overview .inquiry-status .status.working{
-    background-color: #32BB00;
-}
-.inquiry-overview .inquiry-status .status.completed{
-    background-color: #0277bd;
-}
-
 .inquiry-row .inquiry-overview .updated-time{
     width: 100%;
     color: #999999;
     font-size: 11px;
     padding: 8px 0;
     text-align: center;
+}
+
+.inquiry-row .inquiry-overview .creator-name{
+    font-size: 12px;
+    color: #666666;
+    font-weight: bold;
 }
 
 .inquiry-row .inquiry-contents{

@@ -232,17 +232,13 @@ let inquiries = {
      * user:1
      */
     createListElement: function(inquiry){
-        let $row = elementTools.createBase('div', ['inquiry-row']);
+        let $row = elementTools.createBase('div', ['inquiry-row'], null);
         $row.attr('data-val', inquiry.id);
-
-        let $overview = elementTools.createBase('div', ['inquiry-overview']);
-        $overview.appendTo($row);
-
-        let $place = elementTools.createBase('div', ['inquiry-place']);
-        $place.appendTo($overview);
-        let $status = elementTools.createBase('div', ['inquiry-status']);
-        $status.appendTo($overview);
-        let $statusSpan = elementTools.createBase('span', ['status']);
+        let $number = elementTools.createBase('div', ['inquiry-number'], $row);
+        let $numberDiv = elementTools.createBase('div', ['inquiry-id'], $number);
+        $numberDiv.text(inquiry.id);
+        let $status = elementTools.createBase('div', ['inquiry-status'], $number);
+        let $statusSpan = elementTools.createBase('span', ['status'], $status);
         switch(inquiry.status){
             // TODO:ステータス名はDB上のものをとってくる
             case 1:
@@ -267,16 +263,26 @@ let inquiries = {
                 $statusSpan.text('未定義');
                 break;
         }
-        $statusSpan.appendTo($status);
-        let $updatedTime = elementTools.createBase('div', ['updated-time']);
+        let $overview = elementTools.createBase('div', ['inquiry-overview'], $row);
+        let $place = elementTools.createBase('div', ['inquiry-place'], $overview);
+        $place.text(inquiry.target);
+        let $updatedTime = elementTools.createBase('div', ['updated-time'], $overview);
         let updatedTimeObj = new Date(inquiry.updated_time);
         $updatedTime.text(datetimeTools.convertToStringFormat(updatedTimeObj));
-        $updatedTime.appendTo($overview);
+        let userId = parseInt($('#user-id').val());
+        if(userId === 1){
+            // 管理者視点で起票者名の表示
+            let $creator = elementTools.createBase('div', ['creator-name'], $overview);
+            inquiries.userList.some(function(e, i){
+               if(e.id === inquiry.user){
+                   $creator.text(e.username);
+                   return true;
+               }
+            });
+        }
 
-        let $contents = elementTools.createBase('div', ['inquiry-contents']);
-        $contents.appendTo($row);
-        let $sentence = elementTools.createBase('div', ['sentence']);
-        $sentence.appendTo($contents);
+        let $contents = elementTools.createBase('div', ['inquiry-contents'], $row);
+        let $sentence = elementTools.createBase('div', ['sentence'], $contents);
         $sentence.text('---');
         inquiries.details.some(function(det){
            if(inquiry.id === det.inquiry){
@@ -285,13 +291,10 @@ let inquiries = {
            }
         });
 
-        let $toDetail = elementTools.createBase('div', ['inquiry-to-detail']);
-        $toDetail.appendTo($row);
-        let $detailIcon = elementTools.createBase('div', ['to-detail-icon']);
-        $detailIcon.appendTo($toDetail);
-        let $icon = elementTools.createBase('i', ['material-icons']);
+        let $toDetail = elementTools.createBase('div', ['inquiry-to-detail'], $row);
+        let $detailIcon = elementTools.createBase('div', ['to-detail-icon'], $toDetail);
+        let $icon = elementTools.createBase('i', ['material-icons'], $detailIcon);
         $icon.text('comment');
-        $icon.appendTo($detailIcon);
 
         return $row;
     },
