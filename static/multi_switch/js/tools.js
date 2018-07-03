@@ -163,7 +163,8 @@ datetimeTools = {
      */
     convertJapaneseDesignation: function(date){
         let now = new Date();
-        let delta = now.getDate() - date.getDate();
+        let diff = now.getTime() - date.getTime();
+        let delta = Math.floor(diff / (1000 * 60 * 60 * 24));
         let result = '';
         if(delta < 1){
             result = '今日';
