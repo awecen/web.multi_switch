@@ -137,7 +137,7 @@ let inquiries = {
                 after();
             },
             "error": function (e) {
-                alert('Error:問い合わせ詳細取得APIエラー\r' + e.responseText);
+                libraryTools.popSimpleToast('Error:問い合わせ詳細取得APIエラー\r' + e.responseText);
             }
         })
     },

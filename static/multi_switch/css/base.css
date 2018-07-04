@@ -121,7 +121,7 @@ html{
 .container{
     width: 100%;
     max-width: 480px;
-    min-width: 320px;
+    min-width: 360px;
     border: 1px #f0f0f0 solid;
     border-radius: 16px;
     margin-top: 48px;

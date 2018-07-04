@@ -350,8 +350,8 @@
 .info{
     display: flex;
     flex-direction: column;
-    width: 240px;
-    margin-right: 24px;
+    width: 60%;
+    margin: 0 12px;
 }
 
 .basic-info .previous-time {
