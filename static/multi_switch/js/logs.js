@@ -789,8 +789,8 @@ let Logs = {
      */
     openDeletionConfirmDialog: function(){
         $('.confirmation .dialog .contents.delete').show();
-        $('.confirmation .dialog .footer btn-delete-ok').show();
-        $('.confirmation .dialog .footer btn-delete-cancel').show();
+        $('.confirmation .dialog .footer .btn-delete-ok').show();
+        $('.confirmation .dialog .footer .btn-delete-cancel').show();
         $('.confirmation').show();
     },
 
@@ -800,7 +800,7 @@ let Logs = {
     closeDeletionConfirmDialog: function(){
         $('.confirmation').hide();
         $('.confirmation .dialog .contents').hide();
-        $('.confirmation .dialog .contents .footer .btn').hide();
+        $('.confirmation .dialog .footer .btn').hide();
 
     },
 
@@ -820,7 +820,7 @@ let Logs = {
     closeCancelConfirmDialog: function(){
         $('.confirmation').hide();
         $('.confirmation .dialog .contents').hide();
-        $('.confirmation .dialog .contents .footer .btn').hide();
+        $('.confirmation .dialog .footer .btn').hide();
     },
 
 
