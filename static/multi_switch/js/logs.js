@@ -102,17 +102,28 @@ let Logs = {
 
         /* ログ詳細 キャンセルボタン */
         $('.btn-cancel').on('click', function(){
-           $('.log-detail').hide();
+            Logs.openCancelConfirmDialog();
         });
 
         /* 背景にも キャンセルボタン と同じ効果*/
         $('.log-detail').on('click', function(){
-           $('.log-detail').hide();
+            Logs.openCancelConfirmDialog();
         });
 
         /* 本体くりっくを　背景にでんぱさせない(バブリング解除) */
         $('.log-detail .detail-body').on('click', function(e){
             e.stopPropagation();
+        });
+
+        /* キャンセル OK */
+        $('.btn-cancel-ok').on('click', function(e){
+            Logs.closeCancelConfirmDialog();
+            $('.log-detail').hide();
+        });
+
+        /* キャンセル キャンセル */
+        $('.btn-cancel-cancel').on('click', function(e){
+            Logs.closeCancelConfirmDialog();
         });
 
         /* アイコン → ログ詳細 */
@@ -774,18 +785,44 @@ let Logs = {
     },
 
     /**
-     * 確認ダイアログ表示
+     * 削除確認ダイアログ表示
      */
     openDeletionConfirmDialog: function(){
+        $('.confirmation .dialog .contents.delete').show();
+        $('.confirmation .dialog .footer btn-delete-ok').show();
+        $('.confirmation .dialog .footer btn-delete-cancel').show();
         $('.confirmation').show();
     },
 
     /**
-     * 確認ダイアログ非表示
+     * 削除確認ダイアログ非表示
      */
     closeDeletionConfirmDialog: function(){
         $('.confirmation').hide();
+        $('.confirmation .dialog .contents').hide();
+        $('.confirmation .dialog .contents .footer .btn').hide();
+
     },
+
+    /**
+     * キャンセル確認ダイアログ表示
+     */
+    openCancelConfirmDialog: function(){
+        $('.confirmation .dialog .contents.cancel').show();
+        $('.confirmation .dialog .footer .btn-cancel-ok').show();
+        $('.confirmation .dialog .footer .btn-cancel-cancel').show();
+        $('.confirmation').show();
+    },
+
+    /**
+     * きゃんせる確認ダイアログ非表示
+     */
+    closeCancelConfirmDialog: function(){
+        $('.confirmation').hide();
+        $('.confirmation .dialog .contents').hide();
+        $('.confirmation .dialog .contents .footer .btn').hide();
+    },
+
 
     /**
      * 表示形式切り替え
