@@ -57,12 +57,14 @@ let inquiries = {
 
         /* メッセージ入力エリアにフォーカスがあたったときのリサイズ */
         $container.on('focusin', '#adding-form-detail-contents', function(){
+            inquiries.toggleMessageArea();
             setTimeout(inquiries.setConversationsAreaHeight, 150);
         });
         $container.on('input', '#adding-form-detail-contents', function(){
             setTimeout(inquiries.setConversationsAreaHeight, 150);
         });
         $container.on('focusout', '#adding-form-detail-contents', function(){
+            inquiries.toggleMessageArea();
             setTimeout(inquiries.setConversationsAreaHeight, 150);
         });
         // コメント欄右送信ボタン
@@ -117,7 +119,7 @@ let inquiries = {
                 after();
             },
             "error": function (e) {
-                alert('Error:問い合わせ取得APIエラー\r' + e.responseText);
+                libraryTools.popSimpleToast('Error:問い合わせ取得APIエラー\r' + e.responseText);
             }
         });
     },
@@ -440,11 +442,12 @@ let inquiries = {
     setConversationsAreaHeight: function(){
         let height = $(window).height()
         - parseInt($('.global-bar').css('height').slice(0, -2))
-        - parseInt($('.basic-info').css('height').slice(0, -2))
+        - ($('.basic-info').attr('display') !== 'true' ? 0 : parseInt($('.basic-info').css('height').slice(0, -2)))
         - parseInt($('.message-area').css('height').slice(0, -2));
         let $detailRowBody = $('.detail-row-body');
         $detailRowBody.css('height', height + 'px');
         $detailRowBody.scrollTop(Number.MAX_SAFE_INTEGER);
+        $('#screen-name').text(parseInt($('.detail-row-body').css('height'))); //test
     },
 
     /**
@@ -594,6 +597,22 @@ let inquiries = {
         M.textareaAutoResize($('#adding-form-contents'));
     },
 
+    /**
+     * メッセージエリアにフォーカスがあたってるときにいろいろ隠すやつ
+     */
+    toggleMessageArea: function(){
+        let $globalBar = $('.global-bar');
+        let $basicInfo = $('.basic-info');
+        if($basicInfo.attr('display') === 'true'){
+            // $globalBar.attr('display', 'false').hide();
+            $basicInfo.attr('display', 'false').hide();
+        } else {
+            // $globalBar.attr('display', 'true').show();
+            $basicInfo.attr('display', 'true').show();
+
+        }
+
+    },
 
 };
 
