@@ -241,7 +241,7 @@ let Stat = {
         // 本日日付分があれば排除(全平均)
         let allTotalWoToday = [];
         allTotal.forEach(function(log){
-            if(log.date !== selected_date.getDate()){
+            if(!datetimeTools.compareDate(log.dateObj, new Date())){
                 allTotalWoToday.push(log);
             }
         });
@@ -249,7 +249,7 @@ let Stat = {
         // 本日日付分があれば排除(当月平均)
         let monthTotalWoToday = [];
         monthTotal.forEach(function(log){
-            if(log.date !== selected_date.getDate()){
+            if(!datetimeTools.compareDate(log.dateObj, new Date())){
                 monthTotalWoToday.push(log);
             }
         });
@@ -521,6 +521,7 @@ let Stat = {
                 // 日毎ログを集計用配列に格納
                 targetLogsByDate.push({
                    date: tempDate,
+                   dateObj: logDateObj,
                    logs: logsByDate.concat(),
                 });
 
@@ -543,6 +544,7 @@ let Stat = {
             if(i === targetLogs.length - 1){
                 targetLogsByDate.push({
                    date: tempDate,
+                   dateObj: logDateObj,
                    logs: logsByDate.concat(),
                 });
             }
@@ -625,6 +627,7 @@ let Stat = {
 
             totalTimes.push({
                 date: date,
+                dateObj: logsByDate.dateObj,
                 on_time: datetimeTools.convertToHMS(on_time_seconds),
                 off_time: datetimeTools.convertToHMS(off_time_seconds),
             });
