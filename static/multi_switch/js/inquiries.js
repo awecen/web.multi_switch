@@ -447,7 +447,7 @@ let inquiries = {
         let $detailRowBody = $('.detail-row-body');
         $detailRowBody.css('height', height + 'px');
         $detailRowBody.scrollTop(Number.MAX_SAFE_INTEGER);
-        $('#screen-name').text(parseInt($('.detail-row-body').css('height'))); //test
+        // $('#screen-name').text(parseInt($('.detail-row-body').css('height'))); //test
     },
 
     /**
