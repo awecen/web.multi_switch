@@ -23,6 +23,18 @@ let Whatsnew = {
      * 表示する情報を入れ込む
      */
     setInfo: function(){
+        Whatsnew.appendInfoRowElement('1.8.1', '2018/07/08 19:00', [
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.STAT,
+                '平均値算出の不具合を修正しました'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.INQUIRIES,
+                '会話画面から抜ける時に発生するエラー表示を修正しました'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.INQUIRIES,
+                '会話画面に発言した日付が表示されるようになりました'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.INQUIRIES,
+                'リスト画面に「問い合わせ番号」「場所」が表示されるようになりました'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.LOGS,
+                '新規追加／編集のダイアログが閉じてしまうときに確認画面が出るようになりました'),
+        ]);
         Whatsnew.appendInfoRowElement('1.8.0', '2018/06/29 19:00', [
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.INQUIRIES,
                 '新たに追加されました'),
