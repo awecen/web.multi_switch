@@ -70,32 +70,41 @@ let Logs = {
         $('.btn-save').on('click', function(){
             Base.toggleLoadingScreen("show");// ロード画面ON
             let row_id = parseInt($('.log-detail .detail-body').attr('data-val'));
-            if(row_id !== 0) {
-                // 既存履歴の編集
-                Logs.updateLogInfo(row_id, function(){
-                    Logs.getLogs(function(){
-                        let $nowDate = $('.date-selector .now-date');
-                        let selectedDateObj = new Date($nowDate.attr('data-date'));
-                        Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
-                        Logs.setLogsToList(selectedDateObj); // アイコン再描画
-                        $('.log-detail').hide(); // 詳細ダイアログOFF
-                        Base.toggleLoadingScreen("hide"); // ロード画面OFF
-                        libraryTools.popSimpleToast('ログを更新しました。');
+            let validationResults = Logs.validateLogInfo();
+            if(validationResults.length === 0){
+                // エラー０(＝バリデーションOK)
+                if(row_id !== 0) {
+                    // 既存履歴の編集
+                    Logs.updateLogInfo(row_id, function(){
+                        Logs.getLogs(function(){
+                            let $nowDate = $('.date-selector .now-date');
+                            let selectedDateObj = new Date($nowDate.attr('data-date'));
+                            Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
+                            Logs.setLogsToList(selectedDateObj); // アイコン再描画
+                            $('.log-detail').hide(); // 詳細ダイアログOFF
+                            Base.toggleLoadingScreen("hide"); // ロード画面OFF
+                            libraryTools.popSimpleToast('ログを更新しました。');
+                        });
                     });
-                });
+                } else {
+                    // 新規追加
+                    Logs.addNewLog(function(){
+                        Logs.getLogs(function(){
+                            let $nowDate = $('.date-selector .now-date');
+                            let selectedDateObj = new Date($nowDate.attr('data-date'));
+                            Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
+                            Logs.setLogsToList(selectedDateObj); // アイコン再描画
+                            $('.log-detail').hide(); // 詳細ダイアログOFF
+                            Base.toggleLoadingScreen("hide"); // ロード画面OFF
+                            libraryTools.popSimpleToast('ログを新規追加しました。');
+                        });
+                    });
+                }
             } else {
-                // 新規追加
-                Logs.addNewLog(function(){
-                    Logs.getLogs(function(){
-                        let $nowDate = $('.date-selector .now-date');
-                        let selectedDateObj = new Date($nowDate.attr('data-date'));
-                        Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
-                        Logs.setLogsToList(selectedDateObj); // アイコン再描画
-                        $('.log-detail').hide(); // 詳細ダイアログOFF
-                        Base.toggleLoadingScreen("hide"); // ロード画面OFF
-                        libraryTools.popSimpleToast('ログを新規追加しました。');
-                    });
+                validationResults.forEach(function(result){
+                    libraryTools.popSimpleToast(result);
                 });
+                Base.toggleLoadingScreen("hide");
             }
 
         });
@@ -871,6 +880,24 @@ let Logs = {
                 break;
         }
 
+    },
+
+    /**
+     * ログ入力値バリデーション
+     * @returns {Array}
+     */
+    validateLogInfo: function(){
+        let results = [];
+        let inputType = parseInt($('#adding-form-switch-type').children(':selected').attr('switch-type'));
+        let inputDate = new Date($('#adding-form-datetime').val() +":"+ ('0' + $('#adding-form-datetime-seconds').val()).slice(-2));
+        let inputNote = $('#adding-form-note').val();
+        if(!inputType){
+            results.push('すいっちの種類を選択してください');
+        }
+        if(new Date() - inputDate < 0){
+            results.push('未来日時を入力することはできません。');
+        }
+        return results;
     },
 
 };
