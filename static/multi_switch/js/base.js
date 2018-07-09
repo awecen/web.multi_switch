@@ -8,10 +8,13 @@ let Base = {
         Base.attachEvents();
         Base.initializeMaterializeComponents();
         Base.initializeLoaderComponents();
-        Base.getUserSetting(function(){
-           $('title').html(Base.userSetting.child_name + "すいっち");
-           after();
+        Base.getInquiryStatus(function(){
+            Base.getUserSetting(function(){
+               $('title').html(Base.userSetting.child_name + "すいっち");
+               after();
+            });
         });
+
     },
 
     // 各種イベント処理 付加
@@ -123,6 +126,26 @@ let Base = {
                 $target.addClass('no-screen');
             });
         }
+    },
+
+    /**
+     * 問い合わせステータス取得API
+     * @param after
+     */
+    getInquiryStatus: function(after){
+        $.ajax({
+            "url": "/multi_switch/api/inquiry_status/",
+            "cache": false,
+            "dataType": "json",
+            "success": function (result) {
+                Base.inquiryStatus = result;
+                after();
+            },
+            "error": function (e) {
+                alert('Error:問い合わせステータス取得APIエラー\r' + e.responseText);
+            }
+        });
+
     },
 
     /**

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import LifeSwitchLog, LifeSwitchType, TemporaryNote, UserSetting, Inquiry, InquiryDetail
+from .models import LifeSwitchLog, LifeSwitchType, TemporaryNote, UserSetting, Inquiry, InquiryDetail, InquiryStatus
 from django.contrib.auth.models import User
 
 
@@ -38,6 +38,12 @@ class InquirySerializer(serializers.ModelSerializer):
 class InquiryDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = InquiryDetail
+        fields = '__all__'
+
+
+class InquiryStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InquiryStatus
         fields = '__all__'
 
 
