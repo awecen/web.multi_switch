@@ -5,6 +5,10 @@ html{
     overflow-y: hidden;
 }
 
+body{
+    /*height: 100%;*/
+}
+
 .signature{
     margin-bottom: 48px;
 }
@@ -168,6 +172,7 @@ html{
     display: none;
     flex-direction: column;
     position: relative;
+    height: 100%;
 }
 
 .inquiries-detail .basic-info{
@@ -183,6 +188,8 @@ html{
     max-width: 478px;
     min-width: 320px;
     z-index: 400;
+    position: absolute;
+    top: 0;
 }
 .inquiries-detail .basic-info .info-column{
     display: flex;
@@ -273,7 +280,7 @@ html{
 .detail-row-body{
     padding: 8px;
     border-top: 1px #f0f0f0 solid;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .detail-row{
@@ -382,7 +389,7 @@ html{
 /* Message Area */
 /****************/
 .inquiries-detail .message-area{
-    position: fixed;
+    position: absolute;
     width: 100%;
     left: 0;
     bottom: 0;

@@ -20,6 +20,7 @@ let inquiries = {
      * イベント付加
      */
     attachEvents: function() {
+
         let $container = $('.container');
         /* 詳細画面へ */
         $container.on('click', '.to-detail-icon', function(e){
@@ -109,17 +110,16 @@ let inquiries = {
         });
 
         /* メッセージ入力エリアにフォーカスがあたったときのリサイズ */
-        $container.on('focusin', '#adding-form-detail-contents', function(){
-            inquiries.toggleMessageArea();
-            setTimeout(inquiries.setConversationsAreaHeight, 150);
-        });
+        $container.on('focusin', '#adding-form-detail-contents', inquiries.hideForMessageArea);
+        /* メッセージ入力エリアのフォーカスがはずれたときのリサイズ */
+        $container.on('focusout', '#adding-form-detail-contents', inquiries.showForMessageArea);
+        /* メッセージ入力エリアに何かしら入力しているときのリサイズ */
         $container.on('input', '#adding-form-detail-contents', function(){
+
             setTimeout(inquiries.setConversationsAreaHeight, 150);
         });
-        $container.on('focusout', '#adding-form-detail-contents', function(){
-            inquiries.toggleMessageArea();
-            setTimeout(inquiries.setConversationsAreaHeight, 150);
-        });
+
+
         // コメント欄右送信ボタン
         $container.on('input', '#adding-form-detail-contents', function(e){
             let content = $(e.currentTarget).val();
@@ -450,14 +450,34 @@ let inquiries = {
      * 会話エリアの高さを現在の複数要素の高さから算出して調節する
      */
     setConversationsAreaHeight: function(){
-        let height = $(window).height()
-        - parseInt($('.global-bar').css('height').slice(0, -2))
-        - ($('.basic-info').attr('display') !== 'true' ? 0 : parseInt($('.basic-info').css('height').slice(0, -2)))
-        - parseInt($('.message-area').css('height').slice(0, -2));
+        let $container = $('.container');
         let $detailRowBody = $('.detail-row-body');
-        $detailRowBody.css('height', height + 'px');
-        $detailRowBody.scrollTop(Number.MAX_SAFE_INTEGER);
-        // $('#screen-name').text(parseInt($('.detail-row-body').css('height'))); //test
+
+        let globalBarHeight = parseInt($('.global-bar').css('height').slice(0, -2));
+        let basicInfoHeight = ($('.basic-info').css('display') === 'none' && $('.message-area').attr('active') ==="true" ? 0 : parseInt($('.basic-info').css('height').slice(0, -2)));
+        let messageAreaHeight = parseInt($('.message-area').css('height').slice(0, -2));
+        let height = window.innerHeight - globalBarHeight - basicInfoHeight - messageAreaHeight;
+
+        if(systemTools.isIOS()){
+            basicInfoHeight = ($('.basic-info').css('display') === 'none' && $('.message-area').attr('active') ==="false" ? 0 : parseInt($('.basic-info').css('height').slice(0, -2)));
+            height = window.innerHeight - globalBarHeight - basicInfoHeight - messageAreaHeight;
+            $('body').scrollTop(0);
+        }
+
+        console.log('window.innerHeight:' + window.innerHeight);
+        console.log('global-bar height:' + globalBarHeight);
+        console.log('basic-info height:' + basicInfoHeight);
+        console.log('message area height:' + messageAreaHeight);
+        console.log('height:' + height);
+        console.log('===========================');
+
+        $detailRowBody.css({
+            'height': height + 'px',
+            'marginTop': ($('.basic-info').css('display') === 'none' ? 0 : parseInt($('.basic-info').css('height').slice(0, -2))) + 'px',
+            'marginBottom': messageAreaHeight + 'px',
+        });
+        $('.detail-row-body').scrollTop(999999);
+
     },
 
     /**
@@ -541,6 +561,9 @@ let inquiries = {
             $('.inquiries-body').css({
               'display':'flex',
             });
+            // $('body').css({
+            //     'height':'initial',
+            // });
             inquiries.getUserList(function(){
                 inquiries.getInquiriesList(function(){
                     inquiries.getInquiryDetailsList(rowId, function(){
@@ -559,6 +582,7 @@ let inquiries = {
             $('.inquiries-detail').css({
               'display':'flex',
             });
+            // $('body').height(window.innerHeight);
             inquiries.getUserList(function(){
                 inquiries.getInquiriesList(function() {
                     inquiries.getInquiryDetailsList(rowId, function () {
@@ -566,6 +590,7 @@ let inquiries = {
                         inquiries.setConversationsAreaHeight();
                         inquiries.autoUpdatingTimer(true);
                         Base.toggleLoadingScreen("hide");//ロード画面OFF
+                        inquiries.setConversationsAreaHeight();
 
                     });
                 });
@@ -608,19 +633,62 @@ let inquiries = {
     },
 
     /**
-     * TODO:メッセージエリアにフォーカスがあたってるときにいろいろ隠すやつ
+     * メッセージエリアにフォーカスイン(他の要素を隠す)
      */
-    toggleMessageArea: function(){
+    hideForMessageArea: function(){
         let $globalBar = $('.global-bar');
         let $basicInfo = $('.basic-info');
-        if($basicInfo.attr('display') === 'true'){
-            // $globalBar.attr('display', 'false').hide();
-            $basicInfo.attr('display', 'false').hide();
-        } else {
-            // $globalBar.attr('display', 'true').show();
-            $basicInfo.attr('display', 'true').show();
+        let $container = $('.container');
+        let $conversationArea = $('.conversation-area');
+        let $detailRowBody = $('.detail-row-body');
+        let $messageArea = $('.message-area');
+        $basicInfo.hide();
+        setTimeout(function(){
+            inquiries.setConversationsAreaHeight();
 
+            let globalBarHeight = parseInt($('.global-bar').css('height').slice(0, -2));
+            let basicInfoHeight =  ($('.basic-info').css('display') === 'none' && $messageArea.attr('active') === "false" ? 0 : parseInt($('.basic-info').css('height').slice(0, -2)));
+            let messageAreaHeight = parseInt($('.message-area').css('height').slice(0, -2));
+            let height = window.innerHeight - globalBarHeight - basicInfoHeight - messageAreaHeight;
+            if(systemTools.isIOS()){
+                height += 24;
+                $globalBar.hide();
+                $container.css('margin-top', 0);
+                // $('body').height(window.innerHeight);
+                $('body').scrollTop(0);
+                setTimeout(function(){
+                    $('.detail-row-body').scrollTop(999999);
+                }, 150);
+            }
+            $detailRowBody.css({
+                'height': height + 'px',
+                'marginTop': ($('.basic-info').css('display') === 'none' ? 0 : parseInt($('.basic-info').css('height').slice(0, -2))) + 'px',
+                'marginBottom': messageAreaHeight + 'px',
+            });
+            $messageArea.attr('active','true');
+        }, 150);
+    },
+
+    /**
+     * メッセージエリアからフォーカスアウト(他の要素を表示する)
+     */
+    showForMessageArea: function(){
+        let $globalBar = $('.global-bar');
+        let $basicInfo = $('.basic-info');
+        let $container = $('.container');
+        let $conversationArea = $('.conversation-area');
+        let $messageArea = $('.message-area');
+        // $globalBar.css('position', '');
+        $basicInfo.show();
+        // $('.message-area').css('position', 'fixed');
+        if(systemTools.isIOS()){
+            $globalBar.show(100);
+            $('.container').css('margin-top', '48px');
         }
+        setTimeout(function(){
+            inquiries.setConversationsAreaHeight();
+            $messageArea.attr('active','false');
+        }, 150);
 
     },
 

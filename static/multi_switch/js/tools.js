@@ -349,4 +349,18 @@ elementTools = {
         return $base;
     },
 
-}
+};
+
+/**
+ * システム系ツール
+ */
+systemTools = {
+
+    /**
+     * iPhone/iPod touch/iPad 判定
+     * @returns {boolean}
+     */
+    isIOS: function(){
+      return /[ \(]iP/.test(navigator.userAgent);
+    },
+};
