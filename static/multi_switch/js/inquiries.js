@@ -20,6 +20,7 @@ let inquiries = {
      * イベント付加
      */
     attachEvents: function() {
+
         let $container = $('.container');
         /* 詳細画面へ */
         $container.on('click', '.to-detail-icon', function(e){
@@ -55,16 +56,69 @@ let inquiries = {
             });
         });
 
-        /* メッセージ入力エリアにフォーカスがあたったときのリサイズ */
-        $container.on('focusin', '#adding-form-detail-contents', function(){
-            setTimeout(inquiries.setConversationsAreaHeight, 150);
+        /* ステータス変更ダイアログ(管理者専用) */
+        $container.on('click', '.inquiry-status .status', function(e){
+            let userId = parseInt($('#user-id').val());
+            let $e = $(e.currentTarget);
+            let inquiryStatusNameEn = "";
+            let rowId = parseInt($e.parent().parent().find('.inquiry-id').text());
+            Base.inquiryStatus.forEach(function(status){
+               if($e.hasClass(status.status_en)){
+                   inquiryStatusNameEn = status.status_en;
+               }
+            });
+            if(userId === 1){
+                inquiries.toggleStatusDialog(true, rowId, inquiryStatusNameEn);
+            }
         });
+
+        /* ステータス変更 */
+        $('.status-select-button').on('click', function(e){
+           let $e = $(e.currentTarget);
+           if(!$e.hasClass('selected')){
+               $('.status-select-button').removeClass('selected');
+               $e.addClass('selected');
+           }
+        });
+
+        /* ステータス保存 */
+        $('.status-dialog-body .dialog-footer .btn-save').on('click', function () {
+            Base.toggleLoadingScreen('show');
+            let rowId = parseInt($('.status-dialog').attr('data-val'));
+            let selectedStatusId = 0;
+            $('.status-select-button').each(function(i, e){
+               let $e = $(e);
+               if($e.hasClass('selected')){
+                   Base.inquiryStatus.forEach(function(status){
+                       if($e.hasClass(status.status_en)){
+                           selectedStatusId = status.id;
+                       }
+                   });
+               };
+           });
+           inquiries.updateInquiryStatus(rowId, selectedStatusId, function(){
+               inquiries.toggleStatusDialog(false, 0, 0);
+               libraryTools.popSimpleToast('問い合わせ番号[' + rowId + ']のステータスを更新しました');
+               inquiries.changeView(true, 0);
+               Base.toggleLoadingScreen('hide');
+           });
+        });
+
+        /* ステータスダイアログキャンセル*/
+        $('.status-dialog-body .dialog-footer .btn-cancel').on('click', function () {
+           inquiries.toggleStatusDialog(false, 0, 0);
+        });
+
+        /* メッセージ入力エリアにフォーカスがあたったときのリサイズ */
+        $container.on('focusin', '#adding-form-detail-contents', inquiries.hideForMessageArea);
+        /* メッセージ入力エリアのフォーカスがはずれたときのリサイズ */
+        $container.on('focusout', '#adding-form-detail-contents', inquiries.showForMessageArea);
+        /* メッセージ入力エリアに何かしら入力しているときのリサイズ */
         $container.on('input', '#adding-form-detail-contents', function(){
             setTimeout(inquiries.setConversationsAreaHeight, 150);
         });
-        $container.on('focusout', '#adding-form-detail-contents', function(){
-            setTimeout(inquiries.setConversationsAreaHeight, 150);
-        });
+
+
         // コメント欄右送信ボタン
         $container.on('input', '#adding-form-detail-contents', function(e){
             let content = $(e.currentTarget).val();
@@ -117,7 +171,7 @@ let inquiries = {
                 after();
             },
             "error": function (e) {
-                alert('Error:問い合わせ取得APIエラー\r' + e.responseText);
+                libraryTools.popSimpleToast('Error:問い合わせ取得APIエラー\r' + e.responseText);
             }
         });
     },
@@ -216,20 +270,6 @@ let inquiries = {
     /**
      * リスト要素作成
      * @param {Object} inquiry
-     * [List]
-     * created_time:"2018-06-29T20:36:01+09:00"
-     * id:1
-     * status:5
-     * target:"とっぷ"
-     * updated_time:"2018-06-29T20:36:01+09:00"
-     * user:1
-     * [Detail]
-     * content:"修正済みです"
-     * created_time:"2018-06-29T22:48:22+09:00"
-     * id:4
-     * inquiry:2
-     * updated_time:"2018-06-29T22:48:22+09:00"
-     * user:1
      */
     createListElement: function(inquiry){
         let $row = elementTools.createBase('div', ['inquiry-row'], null);
@@ -239,30 +279,16 @@ let inquiries = {
         $numberDiv.text(inquiry.id);
         let $status = elementTools.createBase('div', ['inquiry-status'], $number);
         let $statusSpan = elementTools.createBase('span', ['status'], $status);
-        switch(inquiry.status){
-            // TODO:ステータス名はDB上のものをとってくる
-            case 1:
-                $statusSpan.addClass('waiting').text('未着手');
-                break;
-            case 2:
-                $statusSpan.addClass('investigating').text('調査中');
-                break;
-            case 3:
-                $statusSpan.addClass('working').text('対応中');
-                break;
-            case 4:
-                $statusSpan.addClass('completed').text('修正完了');
-                break;
-            case 5:
-                $statusSpan.addClass('new').text('新規');
-                break;
-            case 6:
-                $statusSpan.addClass('discontinued').text('中止');
-                break;
-            default:
-                $statusSpan.text('未定義');
-                break;
-        }
+        let statusName = "未定義";
+        let statusClassName = "undefined";
+        Base.inquiryStatus.forEach(function(status){
+           if(status.id === inquiry.status){
+               statusName = status.status;
+               statusClassName = status.status_en;
+           }
+        });
+        $statusSpan.addClass(statusClassName).text(statusName);
+
         let $overview = elementTools.createBase('div', ['inquiry-overview'], $row);
         let $place = elementTools.createBase('div', ['inquiry-place'], $overview);
         $place.text(inquiry.target);
@@ -318,30 +344,15 @@ let inquiries = {
         $('.info-column .info-row .info-item.inquiry-place .value').text(targetInquiry.target);
         let $status = $('.info-column .info-row .info-item.inquiry-status .value span');
         $status.removeClass('new').removeClass('waiting').removeClass('investigating').removeClass('working').removeClass('completed').removeClass('discontinued');
-        switch(targetInquiry.status){
-            // TODO:ステータス名はDB上のものをとってくる
-            case 1:
-                $status.addClass('waiting').text('未着手');
-                break;
-            case 2:
-                $status.addClass('investigating').text('調査中');
-                break;
-            case 3:
-                $status.addClass('working').text('対応中');
-                break;
-            case 4:
-                $status.addClass('completed').text('修正完了');
-                break;
-            case 5:
-                $status.addClass('new').text('新規');
-                break;
-            case 6:
-                $status.addClass('discontinued').text('中止');
-                break;
-            default:
-                $status.text('未定義');
-                break;
-        }
+        let statusName = "未定義";
+        let statusClassName = "undefined";
+        Base.inquiryStatus.forEach(function(status){
+           if(status.id === targetInquiry.status){
+               statusName = status.status;
+               statusClassName = status.status_en;
+           }
+        });
+        $status.addClass(statusClassName).text(statusName);
         $('.info-column .info-row .info-item.updated-time .value').text(
             datetimeTools.convertToStringFormat(new Date(targetInquiry.updated_time)));
         $('.info-column .info-row .info-item.created-time .value').text(
@@ -438,13 +449,33 @@ let inquiries = {
      * 会話エリアの高さを現在の複数要素の高さから算出して調節する
      */
     setConversationsAreaHeight: function(){
-        let height = $(window).height()
-        - parseInt($('.global-bar').css('height').slice(0, -2))
-        - parseInt($('.basic-info').css('height').slice(0, -2))
-        - parseInt($('.message-area').css('height').slice(0, -2));
+        let $container = $('.container');
         let $detailRowBody = $('.detail-row-body');
-        $detailRowBody.css('height', height + 'px');
-        $detailRowBody.scrollTop(Number.MAX_SAFE_INTEGER);
+
+        let globalBarHeight = parseInt($('.global-bar').css('height').slice(0, -2));
+        let basicInfoHeight = ($('.basic-info').css('display') === 'none' && $('.message-area').attr('active') ==="true" ? 0 : parseInt($('.basic-info').css('height').slice(0, -2)));
+        let messageAreaHeight = parseInt($('.message-area').css('height').slice(0, -2));
+        let height = window.innerHeight - globalBarHeight - basicInfoHeight - messageAreaHeight;
+
+        if(systemTools.isIOS()){
+            basicInfoHeight = ($('.basic-info').css('display') === 'none' && $('.message-area').attr('active') ==="false" ? 0 : parseInt($('.basic-info').css('height').slice(0, -2)));
+            height = window.innerHeight - globalBarHeight - basicInfoHeight - messageAreaHeight;
+            $('body').scrollTop(0);
+        }
+
+        console.log('window.innerHeight:' + window.innerHeight);
+        console.log('global-bar height:' + globalBarHeight);
+        console.log('basic-info height:' + basicInfoHeight);
+        console.log('message area height:' + messageAreaHeight);
+        console.log('height:' + height);
+        console.log('===========================');
+
+        $detailRowBody.css({
+            'height': height + 'px',
+            'marginTop': ($('.basic-info').css('display') === 'none' ? 0 : parseInt($('.basic-info').css('height').slice(0, -2))) + 'px',
+            'marginBottom': messageAreaHeight + 'px',
+        });
+        $('.detail-row-body').scrollTop(999999);
     },
 
     /**
@@ -528,6 +559,9 @@ let inquiries = {
             $('.inquiries-body').css({
               'display':'flex',
             });
+            // $('body').css({
+            //     'height':'initial',
+            // });
             inquiries.getUserList(function(){
                 inquiries.getInquiriesList(function(){
                     inquiries.getInquiryDetailsList(rowId, function(){
@@ -546,6 +580,7 @@ let inquiries = {
             $('.inquiries-detail').css({
               'display':'flex',
             });
+            // $('body').height(window.innerHeight);
             inquiries.getUserList(function(){
                 inquiries.getInquiriesList(function() {
                     inquiries.getInquiryDetailsList(rowId, function () {
@@ -553,6 +588,7 @@ let inquiries = {
                         inquiries.setConversationsAreaHeight();
                         inquiries.autoUpdatingTimer(true);
                         Base.toggleLoadingScreen("hide");//ロード画面OFF
+                        inquiries.setConversationsAreaHeight();
 
                     });
                 });
@@ -594,6 +630,111 @@ let inquiries = {
         M.textareaAutoResize($('#adding-form-contents'));
     },
 
+    /**
+     * メッセージエリアにフォーカスイン(他の要素を隠す)
+     */
+    hideForMessageArea: function(){
+        let $globalBar = $('.global-bar');
+        let $basicInfo = $('.basic-info');
+        let $container = $('.container');
+        let $conversationArea = $('.conversation-area');
+        let $detailRowBody = $('.detail-row-body');
+        let $messageArea = $('.message-area');
+        $basicInfo.hide();
+        setTimeout(function(){
+            inquiries.setConversationsAreaHeight();
+
+            let globalBarHeight = parseInt($('.global-bar').css('height').slice(0, -2));
+            let basicInfoHeight =  ($('.basic-info').css('display') === 'none' && $messageArea.attr('active') === "false" ? 0 : parseInt($('.basic-info').css('height').slice(0, -2)));
+            let messageAreaHeight = parseInt($('.message-area').css('height').slice(0, -2));
+            let height = window.innerHeight - globalBarHeight - basicInfoHeight - messageAreaHeight;
+            if(systemTools.isIOS()){
+                height += 24;
+                $globalBar.hide();
+                $container.css('margin-top', 0);
+                // $('body').height(window.innerHeight);
+                $('body').scrollTop(0);
+                setTimeout(function(){
+                    $('.detail-row-body').scrollTop(999999);
+                }, 150);
+            }
+            $detailRowBody.css({
+                'height': height + 'px',
+                'marginTop': ($('.basic-info').css('display') === 'none' ? 0 : parseInt($('.basic-info').css('height').slice(0, -2))) + 'px',
+                'marginBottom': messageAreaHeight + 'px',
+            });
+            $messageArea.attr('active','true');
+        }, 150);
+    },
+
+    /**
+     * メッセージエリアからフォーカスアウト(他の要素を表示する)
+     */
+    showForMessageArea: function(){
+        let $globalBar = $('.global-bar');
+        let $basicInfo = $('.basic-info');
+        let $container = $('.container');
+        let $conversationArea = $('.conversation-area');
+        let $messageArea = $('.message-area');
+        // $globalBar.css('position', '');
+        $basicInfo.show();
+        // $('.message-area').css('position', 'fixed');
+        if(systemTools.isIOS()){
+            $globalBar.show(100);
+            $('.container').css('margin-top', '48px');
+        }
+        setTimeout(function(){
+            inquiries.setConversationsAreaHeight();
+            $messageArea.attr('active','false');
+        }, 150);
+    },
+
+    /**
+     * ステータス変更ダイアログ開閉
+     * @param is_open
+     */
+    toggleStatusDialog: function(is_open, rowId, inquiryStatusNameEn){
+        $('.status-dialog').attr('data-val', rowId);
+        if(is_open){
+
+            $('.status-select-button').removeClass('selected');
+            $('.status-dialog').css('display', 'flex');
+            $('.status-select-button').each(function(i, e){
+               let $e = $(e);
+               if($e.hasClass(inquiryStatusNameEn)){
+                   $e.addClass('selected');
+               }
+            });
+        } else {
+            $('.status-dialog').hide();
+        }
+    },
+    /**
+     *
+     * @param {function} after
+     */
+    updateInquiryStatus: function(inquiryId, statusId, after){
+            let updateData = {
+                updated_time: datetimeTools.convertToDbFormat(new Date()),
+                status: statusId,
+            }
+            $.ajax({
+                "url": "/multi_switch/api/inquiry_list/" + inquiryId + "/",
+                "type": "PATCH",
+                "cache": false,
+                "dataType": "json",
+                "headers": {
+                    "X-CSRFToken": $("input[name='csrfmiddlewaretoken']").val()
+                },
+                "data": updateData,
+                "success": function() {
+                    after();
+                },
+                "error": function (e) {
+                    alert('Error: 問い合わせ情報更新APIエラー\r' + e.responseText);
+                }
+            });
+    },
 
 };
 

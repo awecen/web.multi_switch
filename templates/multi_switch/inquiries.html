@@ -22,7 +22,7 @@
 
     <!-- The Inquiry Detail -->
     <div class="inquiries-detail" data-val="0">
-        <div class="basic-info">
+        <div class="basic-info" display="true">
             <div class="info-column  back-to-list">
                 <div class="info-row">
                     <div class="info-item">
@@ -62,16 +62,18 @@
                 </div>
             </div>
         </div>
-        <div class="detail-row-body">
+        <div class="conversation-area">
+            <div class="detail-row-body">
+            </div>
         </div>
-        <div class="message-area">
+        <div class="message-area" active="false">
             <div class="input note">
                 <textarea id="adding-form-detail-contents" class="materialize-textarea"></textarea>
             </div>
             <div class="buttons">
                 <div class="btn-send disabled">
                     <span><i class="tiny material-icons">send</i></span>
-                    <span>送信</span>
+                    <span class="send-character">送信</span>
                 </div>
             </div>
         </div>
@@ -113,6 +115,28 @@
         </div>
     </div>
 
+    <!-- Status Dialog -->
+    <div class="status-dialog" data-val="1">
+        <div class="status-dialog-body">
+            <div class="dialog-header">ステータス変更</div>
+            <div class="dialog-content">
+                <div class="status-row">
+                    <div class="status-select-button new selected">新規</div>
+                    <div class="status-select-button waiting">未着手</div>
+                    <div class="status-select-button investigating">調査中</div>
+                </div>
+                <div class="status-row">
+                    <div class="status-select-button working">対応中</div>
+                    <div class="status-select-button completed">修正完了</div>
+                    <div class="status-select-button discontinued">中止</div>
+                </div>
+            </div>
+            <div class="dialog-footer">
+                <div class="btn-save waves-effect waves-light btn blue darken-2">保存</div>
+                <div class="btn-cancel waves-effect waves-light btn grey darken-1">きゃんせる</div>
+            </div>
+        </div>
+    </div>
 
 {% endblock content %}
 
