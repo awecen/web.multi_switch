@@ -23,6 +23,10 @@ let Whatsnew = {
      * 表示する情報を入れ込む
      */
     setInfo: function(){
+        Whatsnew.appendInfoRowElement('1.8.2', '2018/07/12 23:00', [
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.INQUIRIES,
+                '会話画面にて文字入力時に発生する表示の不具合が修正されました'),
+        ]);
         Whatsnew.appendInfoRowElement('1.8.1', '2018/07/08 19:00', [
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.STAT,
                 '平均値算出の不具合を修正しました'),
