@@ -28,8 +28,10 @@ urlpatterns = [
     path('api/user_setting/', apis.UserSettingList.as_view()),
     path('api/user_setting/<int:pk>/', apis.UserSettingDetail.as_view()),
     path('api/inquiry_list/', apis.InquiryList.as_view()),
+    path('api/inquiry_list/<int:pk>/', apis.InquiryListDetail.as_view()),
     path('api/inquiry_detail_list/', apis.InquiryDetailList.as_view()),
     path('api/user_list/', apis.UserList.as_view()),
+    path('api/inquiry_status/', apis.InquiryStatusList.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -1,5 +1,5 @@
-from .models import LifeSwitchType, LifeSwitchLog, TemporaryNote, UserSetting, Inquiry, InquiryDetail
-from .serializers import LifeSwitchTypeSerializer, LifeSwitchLogSerializer, TemporaryNoteSerializer, UserSettingSerializer, InquirySerializer, InquiryDetailSerializer, UserSerializer
+from .models import LifeSwitchType, LifeSwitchLog, TemporaryNote, UserSetting, Inquiry, InquiryDetail, InquiryStatus
+from .serializers import LifeSwitchTypeSerializer, LifeSwitchLogSerializer, TemporaryNoteSerializer, UserSettingSerializer, InquirySerializer, InquiryDetailSerializer, UserSerializer, InquiryStatusSerializer
 from django.db.models import Q
 from rest_framework import generics
 from rest_framework import permissions
@@ -103,6 +103,26 @@ class InquiryList(generics.ListCreateAPIView):
         return Inquiry.objects.filter(user__in=[user, 1]).order_by('-updated_time')
 
 
+class InquiryListDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve one Inquiry
+    """
+    serializer_class = InquirySerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the inquiry
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        user_id = self.request.user.id
+        if user_id == 1:
+            return Inquiry.objects.all().order_by('-updated_time')
+
+        return Inquiry.objects.filter(user__in=[user, 1]).order_by('-updated_time')
+
+
 class InquiryDetailList(generics.ListCreateAPIView):
     """
     Retrieve Inquiry Detail List
@@ -133,7 +153,7 @@ class InquiryDetailList(generics.ListCreateAPIView):
 
 class UserList(generics.ListAPIView):
     """
-    Retrieve Inquiry Detail List
+    Retrieve User List
     """
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated, )
@@ -142,3 +162,16 @@ class UserList(generics.ListAPIView):
         user_id = self.request.user.id
         if user_id == 1:
             return User.objects.all()
+
+
+class InquiryStatusList(generics.ListAPIView):
+    """
+    Retrieve Inquiry Status List
+    """
+    serializer_class = InquiryStatusSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        if user_id == 1:
+            return InquiryStatus.objects.all()

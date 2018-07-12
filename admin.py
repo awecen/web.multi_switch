@@ -32,7 +32,7 @@ class UserSettingAdmin(admin.ModelAdmin):
 
 
 class InquiryStatusAdmin(admin.ModelAdmin):
-    list_display = ('id', 'status',)
+    list_display = ('id', 'status', 'status_en', )
     list_display_links = ('id', 'status', )
     ordering = ('id', )
 

@@ -70,49 +70,69 @@ let Logs = {
         $('.btn-save').on('click', function(){
             Base.toggleLoadingScreen("show");// ロード画面ON
             let row_id = parseInt($('.log-detail .detail-body').attr('data-val'));
-            if(row_id !== 0) {
-                // 既存履歴の編集
-                Logs.updateLogInfo(row_id, function(){
-                    Logs.getLogs(function(){
-                        let $nowDate = $('.date-selector .now-date');
-                        let selectedDateObj = new Date($nowDate.attr('data-date'));
-                        Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
-                        Logs.setLogsToList(selectedDateObj); // アイコン再描画
-                        $('.log-detail').hide(); // 詳細ダイアログOFF
-                        Base.toggleLoadingScreen("hide"); // ロード画面OFF
-                        libraryTools.popSimpleToast('ログを更新しました。');
+            let validationResults = Logs.validateLogInfo();
+            if(validationResults.length === 0){
+                // エラー０(＝バリデーションOK)
+                if(row_id !== 0) {
+                    // 既存履歴の編集
+                    Logs.updateLogInfo(row_id, function(){
+                        Logs.getLogs(function(){
+                            let $nowDate = $('.date-selector .now-date');
+                            let selectedDateObj = new Date($nowDate.attr('data-date'));
+                            Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
+                            Logs.setLogsToList(selectedDateObj); // アイコン再描画
+                            $('.log-detail').hide(); // 詳細ダイアログOFF
+                            Base.toggleLoadingScreen("hide"); // ロード画面OFF
+                            libraryTools.popSimpleToast('ログを更新しました。');
+                        });
                     });
-                });
+                } else {
+                    // 新規追加
+                    Logs.addNewLog(function(){
+                        Logs.getLogs(function(){
+                            let $nowDate = $('.date-selector .now-date');
+                            let selectedDateObj = new Date($nowDate.attr('data-date'));
+                            Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
+                            Logs.setLogsToList(selectedDateObj); // アイコン再描画
+                            $('.log-detail').hide(); // 詳細ダイアログOFF
+                            Base.toggleLoadingScreen("hide"); // ロード画面OFF
+                            libraryTools.popSimpleToast('ログを新規追加しました。');
+                        });
+                    });
+                }
             } else {
-                // 新規追加
-                Logs.addNewLog(function(){
-                    Logs.getLogs(function(){
-                        let $nowDate = $('.date-selector .now-date');
-                        let selectedDateObj = new Date($nowDate.attr('data-date'));
-                        Logs.setIconsToGraph(selectedDateObj); // アイコン再描画
-                        Logs.setLogsToList(selectedDateObj); // アイコン再描画
-                        $('.log-detail').hide(); // 詳細ダイアログOFF
-                        Base.toggleLoadingScreen("hide"); // ロード画面OFF
-                        libraryTools.popSimpleToast('ログを新規追加しました。');
-                    });
+                validationResults.forEach(function(result){
+                    libraryTools.popSimpleToast(result);
                 });
+                Base.toggleLoadingScreen("hide");
             }
 
         });
 
         /* ログ詳細 キャンセルボタン */
         $('.btn-cancel').on('click', function(){
-           $('.log-detail').hide();
+            Logs.openCancelConfirmDialog();
         });
 
         /* 背景にも キャンセルボタン と同じ効果*/
         $('.log-detail').on('click', function(){
-           $('.log-detail').hide();
+            Logs.openCancelConfirmDialog();
         });
 
         /* 本体くりっくを　背景にでんぱさせない(バブリング解除) */
         $('.log-detail .detail-body').on('click', function(e){
             e.stopPropagation();
+        });
+
+        /* キャンセル OK */
+        $('.btn-cancel-ok').on('click', function(e){
+            Logs.closeCancelConfirmDialog();
+            $('.log-detail').hide();
+        });
+
+        /* キャンセル キャンセル */
+        $('.btn-cancel-cancel').on('click', function(e){
+            Logs.closeCancelConfirmDialog();
         });
 
         /* アイコン → ログ詳細 */
@@ -774,18 +794,44 @@ let Logs = {
     },
 
     /**
-     * 確認ダイアログ表示
+     * 削除確認ダイアログ表示
      */
     openDeletionConfirmDialog: function(){
+        $('.confirmation .dialog .contents.delete').show();
+        $('.confirmation .dialog .footer .btn-delete-ok').show();
+        $('.confirmation .dialog .footer .btn-delete-cancel').show();
         $('.confirmation').show();
     },
 
     /**
-     * 確認ダイアログ非表示
+     * 削除確認ダイアログ非表示
      */
     closeDeletionConfirmDialog: function(){
         $('.confirmation').hide();
+        $('.confirmation .dialog .contents').hide();
+        $('.confirmation .dialog .footer .btn').hide();
+
     },
+
+    /**
+     * キャンセル確認ダイアログ表示
+     */
+    openCancelConfirmDialog: function(){
+        $('.confirmation .dialog .contents.cancel').show();
+        $('.confirmation .dialog .footer .btn-cancel-ok').show();
+        $('.confirmation .dialog .footer .btn-cancel-cancel').show();
+        $('.confirmation').show();
+    },
+
+    /**
+     * きゃんせる確認ダイアログ非表示
+     */
+    closeCancelConfirmDialog: function(){
+        $('.confirmation').hide();
+        $('.confirmation .dialog .contents').hide();
+        $('.confirmation .dialog .footer .btn').hide();
+    },
+
 
     /**
      * 表示形式切り替え
@@ -834,6 +880,24 @@ let Logs = {
                 break;
         }
 
+    },
+
+    /**
+     * ログ入力値バリデーション
+     * @returns {Array}
+     */
+    validateLogInfo: function(){
+        let results = [];
+        let inputType = parseInt($('#adding-form-switch-type').children(':selected').attr('switch-type'));
+        let inputDate = new Date($('#adding-form-datetime').val() +":"+ ('0' + $('#adding-form-datetime-seconds').val()).slice(-2));
+        let inputNote = $('#adding-form-note').val();
+        if(!inputType){
+            results.push('すいっちの種類を選択してください');
+        }
+        if(new Date() - inputDate < 0){
+            results.push('未来日時を入力することはできません。');
+        }
+        return results;
     },
 
 };

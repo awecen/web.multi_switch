@@ -195,10 +195,13 @@
         <!-- 確認ダイアログ -->
         <div class="confirmation">
             <div class="dialog">
-                <div class="contents">元には戻せんぞ。<br>...良いのだな？</div>
+                <div class="contents delete" style="display: none">削除した記録は元には戻せません。<br>よろしいですか？</div>
+                <div class="contents cancel" style="display: none">保存していない情報は消えます。<br>よろしいですか？</div>
                 <div class="footer">
-                    <div class="btn-delete-ok waves-effect waves-light btn red darken-2">消え去れ！</div>
-                    <div class="btn-delete-cancel waves-effect waves-light btn grey darken-1">やめます...</div>
+                    <div class="btn-delete-ok waves-effect waves-light btn red darken-2" style="display: none">消え去れ！</div>
+                    <div class="btn-delete-cancel waves-effect waves-light btn grey darken-1" style="display: none">やめます...</div>
+                    <div class="btn-cancel-ok waves-effect waves-light btn blue darken-2" style="display: none">構わぬ！</div>
+                    <div class="btn-cancel-cancel waves-effect waves-light btn grey darken-1" style="display: none">困るよ...</div>
                 </div>
             </div>
         </div>

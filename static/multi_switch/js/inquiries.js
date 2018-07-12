@@ -115,6 +115,7 @@ let inquiries = {
         $container.on('focusout', '#adding-form-detail-contents', inquiries.showForMessageArea);
         /* メッセージ入力エリアに何かしら入力しているときのリサイズ */
         $container.on('input', '#adding-form-detail-contents', function(){
+
             setTimeout(inquiries.setConversationsAreaHeight, 150);
         });
 
@@ -476,6 +477,7 @@ let inquiries = {
             'marginBottom': messageAreaHeight + 'px',
         });
         $('.detail-row-body').scrollTop(999999);
+
     },
 
     /**
@@ -687,6 +689,7 @@ let inquiries = {
             inquiries.setConversationsAreaHeight();
             $messageArea.attr('active','false');
         }, 150);
+
     },
 
     /**

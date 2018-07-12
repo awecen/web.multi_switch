@@ -29,6 +29,7 @@ class TemporaryNote(models.Model):
 # 改善要望ステータス
 class InquiryStatus(models.Model):
     status = models.CharField('ステータス', null=False, blank=False, max_length=255)
+    status_en = models.CharField('ステータス(en)', null=False, blank=False, max_length=255)
 
     def __str__(self):
         return self.status
