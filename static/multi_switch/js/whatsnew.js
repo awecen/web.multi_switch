@@ -23,6 +23,12 @@ let Whatsnew = {
      * 表示する情報を入れ込む
      */
     setInfo: function(){
+        Whatsnew.appendInfoRowElement('1.9.0', '2018/07/25 22:00', [
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.ALL,
+                '新しいスイッチ「そのほか」が追加されました'),
+            Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.LOGS,
+                'スイッチの種類を選択する時の表示順を変更しました。'),
+        ]);
         Whatsnew.appendInfoRowElement('1.8.2', '2018/07/12 23:00', [
             Whatsnew.createInfoObject(Whatsnew.SCREEN_NAME.INQUIRIES,
                 '会話画面にて文字入力時に発生する表示の不具合が修正されました'),
