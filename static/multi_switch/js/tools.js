@@ -321,6 +321,9 @@ switchTypeTools = {
                     name = CONST.TYPE_NAME.NIGHT;
                 }
                 break;
+            case CONST.TYPE_ID.OTHER:
+                name = CONST.TYPE_NAME.OTHER;
+                break;
         }
         return name;
     },

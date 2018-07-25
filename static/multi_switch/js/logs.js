@@ -609,7 +609,8 @@ let Logs = {
             .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NAPPING, true) + '" value="' + CONST.TYPE_ID.NAPPING_ON + '">' + CONST.TYPE_NAME.NAPPING_ON + '</option>'))
             .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NAPPING, false) + '" value="' + CONST.TYPE_ID.NAPPING_OFF + '">' + CONST.TYPE_NAME.NAPPING_OFF + '</option>'))
             .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, true) + '" value="' + CONST.TYPE_ID.NIGHT_ON + '">' + CONST.TYPE_NAME.NIGHT_ON + '</option>'))
-            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, false) + '" value="' + CONST.TYPE_ID.NIGHT_OFF + '">' + CONST.TYPE_NAME.NIGHT_OFF + '</option>'));
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.NIGHT, false) + '" value="' + CONST.TYPE_ID.NIGHT_OFF + '">' + CONST.TYPE_NAME.NIGHT_OFF + '</option>'))
+            .append($('<option ' + switchTypeAttributeName + '="' + switchTypeTools.getTypeId(CONST.TYPE_ID.OTHER, true) + '" value="' + CONST.TYPE_ID.OTHER + '">' + CONST.TYPE_NAME.OTHER + '</option>'));
 
         // ダイアログ本体に更新時の識別属性を付与
         $('.log-detail .detail-body').attr('data-val', rowId);

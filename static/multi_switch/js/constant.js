@@ -17,6 +17,7 @@ const CONST = {
         NIGHT : 'よるね',
         NIGHT_ON: 'よるね(開始)',
         NIGHT_OFF: 'よるね(終了)',
+        OTHER: 'そのほか',
     },
 
     TYPE_ID: {
@@ -34,6 +35,7 @@ const CONST = {
         NIGHT : 'night',
         NIGHT_ON: 'night-on',
         NIGHT_OFF: 'night-off',
+        OTHER: 'other',
     },
 
     SCREEN_NAME: {
